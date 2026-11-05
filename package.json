@@ -14,7 +14,9 @@
     "db:seed": "tsx scripts/seed.ts",
     "worker": "tsx scripts/worker.ts",
     "demo:reset": "tsx --conditions=react-server scripts/demo-reset.ts",
-    "test:integration": "vitest run --config vitest.integration.config.mts"
+    "test:integration": "vitest run --config vitest.integration.config.mts",
+    "video": "remotion studio",
+    "video:render": "remotion render LaunchVideo out/relaycare-launch-1080p.mp4 && remotion render LaunchVideo out/relaycare-launch-4k.mp4 --scale=2"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -47,6 +49,10 @@
   },
   "devDependencies": {
     "@playwright/test": "^1.64.1",
+    "@remotion/cli": "^4.0.541",
+    "@remotion/google-fonts": "^4.0.541",
+    "@remotion/tailwind-v4": "^4.0.541",
+    "@remotion/transitions": "^4.0.541",
     "@tailwindcss/turbopack": "^4",
     "@types/node": "^22.20.5",
     "@types/react": "^19",
@@ -55,6 +61,7 @@
     "drizzle-kit": "^0.31.11",
     "eslint": "^9",
     "eslint-config-next": "16.4.5",
+    "remotion": "^4.0.541",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "^5",
