@@ -137,7 +137,10 @@ export function connect(getToken: TokenSource = backendToken): Promise<string> {
         new TranslateHandler({
           onTranslationCompleted: ({ results }) => {
             const map: Record<string, string> = {};
-            for (const r of results) if (r.translateInfo?.translatedText) map[r.identifier] = r.translateInfo.translatedText;
+            for (const r of results) {
+              if (r.translateInfo?.translatedText) map[r.identifier] = r.translateInfo.translatedText;
+              else console.warn("[chat] translation failed", r.identifier, r.code, r.translateInfo?.status);
+            }
             if (Object.keys(map).length) listeners.translations.forEach((l) => l(map));
           },
         }),
