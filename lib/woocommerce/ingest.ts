@@ -18,18 +18,21 @@ import type { NormalizedOrder } from "./normalize";
 export async function ingestOrder(organizationId: string, n: NormalizedOrder): Promise<string | null> {
   return db.transaction(async (tx) => {
     // ---- customer ---------------------------------------------------------------
-    const byWcId = n.customer.wcCustomerId
-      ? await tx
-          .select({ id: customers.id })
-          .from(customers)
-          .where(and(eq(customers.organizationId, organizationId), eq(customers.wcCustomerId, n.customer.wcCustomerId)))
-      : [];
-    const [existing] = byWcId.length
-      ? byWcId
-      : await tx
-          .select({ id: customers.id })
-          .from(customers)
-          .where(and(eq(customers.organizationId, organizationId), sql`lower(${customers.email}) = ${n.customer.email}`));
+    const findExisting = async () => {
+      const byWcId = n.customer.wcCustomerId
+        ? await tx
+            .select({ id: customers.id })
+            .from(customers)
+            .where(and(eq(customers.organizationId, organizationId), eq(customers.wcCustomerId, n.customer.wcCustomerId)))
+        : [];
+      if (byWcId.length) return byWcId[0];
+      const [byEmail] = await tx
+        .select({ id: customers.id })
+        .from(customers)
+        .where(and(eq(customers.organizationId, organizationId), sql`lower(${customers.email}) = ${n.customer.email}`));
+      return byEmail;
+    };
+    let existing = await findExisting();
 
     // A RelayCare user who already verified this email (OTP) owns this customer record.
     const [verifiedUser] = await tx
@@ -44,16 +47,27 @@ export async function ingestOrder(organizationId: string, n: NormalizedOrder): P
       address: n.customer.address,
       ...(n.customer.wcCustomerId ? { wcCustomerId: n.customer.wcCustomerId } : {}),
     };
+    let inserted: (typeof customers.$inferSelect)[] = [];
+    if (!existing) {
+      try {
+        // Savepoint: order.created and order.updated for a NEW customer often arrive together and
+        // are processed concurrently. The loser of that race hits the unique key; recover by
+        // re-reading the row the winner created instead of failing the job.
+        inserted = await tx.transaction((sp) =>
+          sp
+            .insert(customers)
+            .values({ organizationId, ...customerValues, ...(verifiedUser ? { userId: verifiedUser.id, verifiedAt: new Date() } : {}) })
+            .returning(),
+        );
+      } catch (err) {
+        if ((err as { cause?: { code?: string } }).cause?.code !== "23505") throw err;
+        existing = await findExisting();
+        if (!existing) throw err;
+      }
+    }
     const [customer] = existing
       ? await tx.update(customers).set(customerValues).where(eq(customers.id, existing.id)).returning()
-      : await tx
-          .insert(customers)
-          .values({
-            organizationId,
-            ...customerValues,
-            ...(verifiedUser ? { userId: verifiedUser.id, verifiedAt: new Date() } : {}),
-          })
-          .returning();
+      : inserted;
     if (!customer.userId && verifiedUser) {
       await tx.update(customers).set({ userId: verifiedUser.id, verifiedAt: new Date() }).where(eq(customers.id, customer.id));
     }
