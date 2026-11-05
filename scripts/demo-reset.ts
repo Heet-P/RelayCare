@@ -24,6 +24,12 @@ async function main() {
   const [org] = await sql`select id from organizations where slug = 'demo-electronics'`;
   if (!org) throw new Error("Demo org not found; run pnpm db:seed first");
 
+  // Dismiss the Nexconn group chats of the cases being removed (rehearsals start clean).
+  const { dismissGroup } = await import("../lib/nexconn/server");
+  const groups = await sql`select t.nexconn_group_id from chat_threads t join service_cases c on c.id = t.case_id
+    where c.organization_id = ${org.id} and t.nexconn_group_id is not null`;
+  for (const g of groups) await dismissGroup(g.nexconn_group_id).catch(() => undefined);
+
   const removed = await sql.begin(async (tx) => {
     const cases = tx`select id from service_cases where organization_id = ${org.id}`;
     await tx`alter table case_events disable trigger case_events_no_update`;
@@ -32,6 +38,7 @@ async function main() {
     }
     const gone = await tx`delete from service_cases where organization_id = ${org.id} returning id`;
     await tx`alter table case_events enable trigger case_events_no_update`;
+    await tx`delete from jobs where status <> 'running' and (payload->>'caseId') is not null and not exists (select 1 from service_cases c where c.id::text = jobs.payload->>'caseId')`;
     await tx`
       insert into case_counters (organization_id, year, last_value)
       values (${org.id}, extract(year from now())::smallint, ${NEXT_CASE - 1})
@@ -52,7 +59,7 @@ async function main() {
       files += paths.length;
     }
   }
-  console.log(`Removed ${removed} case(s) and ${files} evidence file(s). Next case number: ${String(NEXT_CASE).padStart(4, "0")}.`);
+  console.log(`Dismissed ${groups.length} group chat(s). Removed ${removed} case(s) and ${files} evidence file(s). Next case number: ${String(NEXT_CASE).padStart(4, "0")}.`);
 }
 
 main()
