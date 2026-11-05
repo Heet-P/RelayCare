@@ -40,3 +40,12 @@ export const AttachmentRequest = z.discriminatedUnion("intent", [
   }),
 ]);
 export type AttachmentRequest = z.infer<typeof AttachmentRequest>;
+
+/** PATCH /api/cases/:id/status — request a state-machine transition. */
+export const TransitionRequest = z.object({
+  to: z.enum(["submitted", "under_triage", "warranty_review", "awaiting_assignment", "assigned", "scheduled", "in_progress", "resolution_pending", "awaiting_customer", "resolved", "closed", "escalated", "rejected", "cancelled", "reopened"]),
+  reason: z.string().trim().max(2000).optional(),
+  resolutionType: z.enum(["repair", "replacement", "return", "refund", "no_fault_found", "not_covered"]).optional(),
+  resolutionNotes: z.string().trim().max(4000).optional(),
+});
+export type TransitionRequest = z.infer<typeof TransitionRequest>;
