@@ -2,51 +2,71 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-/* next-themes puts `.dark` on <html>; colours below switch through `color-scheme` + light-dark(). */
+/* next-themes puts `.dark` on <html>; colours switch through `color-scheme` + light-dark(). */
 @custom-variant dark (&:is(.dark *));
 
 /*
- * RelayCare tokens
- * - Porcelain/slate neutrals (appliance enamel), petrol for actions.
- * - Signal yellow ("baton") is reserved for ONE meaning: who holds the case right now.
- * - Text contrast (WCAG AA) checked in both schemes: body ≥ 12:1, muted ≥ 5.8:1, primary button ≥ 7.2:1.
+ * RelayCare — "Peacock & Marigold"
+ *
+ * Peacock (deep blue-green) carries the brand and every action. Marigold is the BATON: it only
+ * ever marks who holds a case right now. Terracotta, leaf and peacock-neck blue live in the
+ * illustrations. Content sits on solid panels; navigation and controls float on glass over a
+ * soft peacock mesh (the Apple "materials" approach: glass for chrome, never for dense data).
+ *
+ * WCAG AA verified in both schemes: ink/mist 14.7, muted/mist 5.7, white/peacock 6.3,
+ * ink/marigold 8.0; dark fg/night 15.1, muted/panel 7.2, night/peacock 8.4.
  */
 :root {
   color-scheme: light;
-  --radius: 0.75rem; /* 12px containers → 8px inner → 4px chips */
 
-  --background: light-dark(#f2f5f7, #0e1920);
-  --foreground: light-dark(#13212b, #e4ecf0);
-  --card: light-dark(#ffffff, #15242d);
+  --background: light-dark(#eef4f2, #061a1c);
+  --foreground: light-dark(#0b2326, #e3eeec);
+  --card: light-dark(#ffffff, #0d2629);
   --card-foreground: var(--foreground);
-  --popover: light-dark(#ffffff, #15242d);
+  --popover: light-dark(#ffffff, #0f2b2e);
   --popover-foreground: var(--foreground);
-  --primary: light-dark(#145b6f, #5fb3c9);
-  --primary-foreground: light-dark(#ffffff, #0e1920);
-  --secondary: light-dark(#e3eaee, #1e3039);
+  --primary: light-dark(#0a6b68, #4cc4b8);
+  --primary-foreground: light-dark(#ffffff, #061a1c);
+  --secondary: light-dark(#e2ecea, #15343a);
   --secondary-foreground: var(--foreground);
-  --muted: light-dark(#e8eef1, #1a2b34);
-  --muted-foreground: light-dark(#52626e, #9db0bb);
-  --accent: light-dark(#dce7ec, #213641);
+  --muted: light-dark(#e7efed, #12302f);
+  --muted-foreground: light-dark(#4b6466, #9bb4b1);
+  --accent: light-dark(#dbe9e6, #173a3d);
   --accent-foreground: var(--foreground);
-  --destructive: light-dark(#b42318, #f97066);
-  --border: light-dark(#d3dde3, #26404c);
-  --input: light-dark(#c3d0d8, #2e4b58);
-  --ring: light-dark(#145b6f, #5fb3c9);
+  --destructive: light-dark(#b42318, #ff8a7a);
+  --border: light-dark(#d4e0dd, #1d3f42);
+  --input: light-dark(#c6d6d2, #26494c);
+  --ring: light-dark(#0a6b68, #4cc4b8);
 
-  --baton: #f5b800;
-  --baton-foreground: #13212b;
-  --success: light-dark(#1f7a4d, #4acb8b);
-  --warning: light-dark(#b54708, #fdb022);
+  --baton: #f4a51c;
+  --baton-foreground: #0b2326;
+  --success: light-dark(#18794e, #4fd18b);
+  --warning: light-dark(#a15c07, #fdb022);
 
-  /* Data colour, validated (dataviz validator): chroma, lightness band and 3:1 vs card surface in both modes. */
+  /* Illustration palette (never used for UI meaning). */
+  --ill-peacock: light-dark(#0a6b68, #3fb3a7);
+  --ill-neck: light-dark(#1f4e9b, #6f9cf0);
+  --ill-leaf: light-dark(#2f8f5b, #5cc28a);
+  --ill-terracotta: light-dark(#d9653b, #ef8a62);
+  --ill-marigold: #f4a51c;
+  --ill-ink: light-dark(#0b2326, #e3eeec);
+  --ill-paper: light-dark(#ffffff, #12302f);
+  --ill-shade: light-dark(#d9e6e3, #1a3b3e);
+
+  /* Data colour (validated with the dataviz checker in both modes). */
   --chart-1: light-dark(#1d8aa6, #2f9bb8);
-  --chart-2: light-dark(#1f7a4d, #4acb8b);
-  --chart-3: light-dark(#b54708, #fdb022);
+  --chart-2: var(--success);
+  --chart-3: var(--warning);
   --chart-4: light-dark(#6941c6, #b692f6);
-  --chart-5: light-dark(#52626e, #9db0bb);
+  --chart-5: var(--muted-foreground);
 
-  --sidebar: light-dark(#e9eff2, #111f27);
+  /* Glass material. */
+  --glass: light-dark(rgb(255 255 255 / 0.62), rgb(13 38 41 / 0.58));
+  --glass-strong: light-dark(rgb(255 255 255 / 0.82), rgb(13 38 41 / 0.82));
+  --glass-edge: light-dark(rgb(255 255 255 / 0.85), rgb(255 255 255 / 0.09));
+  --glass-shadow: light-dark(0 1px 0 0 rgb(255 255 255 / 0.7) inset, 0 1px 0 0 rgb(255 255 255 / 0.06) inset), 0 10px 30px -12px rgb(6 26 28 / 0.28);
+
+  --sidebar: var(--glass);
   --sidebar-foreground: var(--foreground);
   --sidebar-primary: var(--primary);
   --sidebar-primary-foreground: var(--primary-foreground);
@@ -54,6 +74,19 @@
   --sidebar-accent-foreground: var(--foreground);
   --sidebar-border: var(--border);
   --sidebar-ring: var(--ring);
+
+  /*
+   * Radius scale (Apple continuous corners where `corner-shape` is supported).
+   * Inner = outer - padding: panel 24 with 12 padding → inner 12; panel 24 with 16 → 8.
+   */
+  --radius: 1.5rem; /* 24px panels */
+
+  /* Motion (Emil Kowalski): short, responsive, ease-out for things that react to you. */
+  --ease-out: cubic-bezier(0.23, 1, 0.32, 1);
+  --ease-in-out: cubic-bezier(0.77, 0, 0.175, 1);
+  --ease-drawer: cubic-bezier(0.32, 0.72, 0, 1);
+  --dur-press: 160ms;
+  --dur-ui: 220ms;
 }
 
 .dark {
@@ -61,10 +94,10 @@
 }
 
 @theme inline {
-  --font-sans: var(--font-archivo), var(--font-mukta), var(--font-hind-vadodara), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-instrument), var(--font-mukta), var(--font-hind-vadodara), ui-sans-serif, system-ui, sans-serif;
   --font-heading: var(--font-sans);
 
-  /* Major-third scale: 13 / 16 / 20 / 25 / 32, line-height 1.4–1.6 */
+  /* Major-third scale: 13 / 16 / 20 / 25 / 32 / 40, line-height 1.2–1.6 */
   --text-xs: 0.8125rem;
   --text-xs--line-height: 1.25rem;
   --text-sm: 0.875rem;
@@ -72,11 +105,15 @@
   --text-base: 1rem;
   --text-base--line-height: 1.5rem;
   --text-lg: 1.25rem;
-  --text-lg--line-height: 1.875rem;
+  --text-lg--line-height: 1.75rem;
   --text-xl: 1.5625rem;
-  --text-xl--line-height: 2.25rem;
+  --text-xl--line-height: 2rem;
   --text-2xl: 2rem;
-  --text-2xl--line-height: 3rem;
+  --text-2xl--line-height: 2.5rem;
+  --text-3xl: 2.5rem;
+  --text-3xl--line-height: 3rem;
+  --text-4xl: 3.5rem;
+  --text-4xl--line-height: 4rem;
 
   --color-background: var(--background);
   --color-foreground: var(--foreground);
@@ -105,6 +142,8 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
   --color-chart-5: var(--chart-5);
+  --color-glass: var(--glass);
+  --color-glass-strong: var(--glass-strong);
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-primary: var(--sidebar-primary);
@@ -114,29 +153,134 @@
   --color-sidebar-border: var(--sidebar-border);
   --color-sidebar-ring: var(--sidebar-ring);
 
-  --radius-sm: calc(var(--radius) - 8px); /* 4px chips */
-  --radius-md: calc(var(--radius) - 4px); /* 8px inner */
-  --radius-lg: var(--radius); /* 12px containers */
-  --radius-xl: calc(var(--radius) + 4px);
+  --radius-sm: 0.625rem; /* 10px chips */
+  --radius-md: 0.875rem; /* 14px controls */
+  --radius-lg: 1.25rem; /* 20px cards */
+  --radius-xl: var(--radius); /* 24px panels */
+  --radius-2xl: 2rem; /* 32px hero surfaces */
+
+  --ease-out: var(--ease-out);
 }
 
 @layer base {
   * {
     @apply border-border outline-ring/50;
   }
+  html {
+    -webkit-tap-highlight-color: transparent;
+  }
   body {
     @apply bg-background text-foreground font-sans text-base antialiased;
+    font-feature-settings: "ss01", "cv11";
+  }
+  /* Continuous ("squircle") corners where the browser supports them. */
+  @supports (corner-shape: squircle) {
+    [class*="rounded-"] {
+      corner-shape: squircle;
+    }
+  }
+  ::selection {
+    background: color-mix(in oklab, var(--baton) 45%, transparent);
   }
 }
 
-/* "Service tag" voice: semi-condensed Archivo with tabular figures for case numbers and IDs. */
+/* "Service tag" voice: condensed Instrument Sans with tabular figures for case numbers and IDs. */
 @utility font-tag {
-  font-variation-settings: "wdth" 87.5;
+  font-variation-settings: "wdth" 85;
   font-variant-numeric: tabular-nums;
   letter-spacing: 0.01em;
 }
 
+/* Glass: navigation, controls and overlays only. Content stays on solid panels. */
+@utility glass {
+  background: var(--glass);
+  -webkit-backdrop-filter: blur(22px) saturate(170%);
+  backdrop-filter: blur(22px) saturate(170%);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-shadow);
+}
+@utility glass-strong {
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-shadow);
+}
+
+/* Solid content panel: quiet hairline, soft long shadow, no glass. */
+@utility panel {
+  background: var(--card);
+  border: 1px solid var(--border);
+  box-shadow: 0 1px 2px rgb(6 26 28 / 0.04), 0 12px 32px -20px rgb(6 26 28 / 0.18);
+}
+
+/* Press feedback for anything tappable (buttons, rows, tiles). */
+@utility pressable {
+  transition:
+    transform var(--dur-press) var(--ease-out),
+    background-color var(--dur-ui) var(--ease-out),
+    box-shadow var(--dur-ui) var(--ease-out),
+    opacity var(--dur-ui) var(--ease-out);
+  &:active:not(:disabled) {
+    transform: scale(0.97);
+  }
+}
+
+/* Peacock mesh backdrop behind the glass (fixed, decorative). */
+@utility mesh {
+  background:
+    radial-gradient(60rem 40rem at 8% -10%, color-mix(in oklab, var(--ill-peacock) 22%, transparent), transparent 60%),
+    radial-gradient(40rem 32rem at 100% 0%, color-mix(in oklab, var(--ill-neck) 14%, transparent), transparent 60%),
+    radial-gradient(36rem 28rem at 85% 100%, color-mix(in oklab, var(--ill-marigold) 12%, transparent), transparent 60%),
+    var(--background);
+}
+
+/* Content entering after streaming: one quiet rise, never on every section. */
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+}
+@utility rise {
+  animation: rise 360ms var(--ease-out) both;
+}
+
+/* Sonner toasts on glass (Emil Kowalski's toaster; styled, not replaced). */
+[data-sonner-toaster] [data-sonner-toast] {
+  background: var(--glass-strong);
+  -webkit-backdrop-filter: blur(28px) saturate(180%);
+  backdrop-filter: blur(28px) saturate(180%);
+  border: 1px solid var(--glass-edge);
+  box-shadow: var(--glass-shadow);
+  border-radius: 18px;
+  color: var(--foreground);
+  font-family: var(--font-sans);
+}
+[data-sonner-toaster] [data-sonner-toast] [data-description] {
+  color: var(--muted-foreground);
+}
+
+/* Lenis */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  *,
+  ::before,
+  ::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+  }
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none !important;
