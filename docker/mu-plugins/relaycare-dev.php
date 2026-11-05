@@ -13,3 +13,8 @@ add_filter('http_request_args', function ($args, $url) {
     }
     return $args;
 }, 10, 2);
+
+// The plugin's server-to-server status calls go to RelayCare on the host machine.
+add_filter('relaycare_api_url', function ($url) {
+    return str_replace(['//localhost:', '//127.0.0.1:'], '//host.docker.internal:', $url);
+});

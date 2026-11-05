@@ -101,3 +101,89 @@ function relaycare_settings_page(): void
     </div>
     <?php
 }
+
+/*
+ * ---------------------------------------------------------------------------------------
+ * Support status on My Account > Orders (server-to-server, signed, cached for a minute).
+ * ---------------------------------------------------------------------------------------
+ */
+function relaycare_order_status(WC_Order $order): ?array
+{
+    $s = relaycare_settings();
+    if (!$s['app_url'] || !$s['integration_id'] || !$s['link_secret']) {
+        return null;
+    }
+    $key = 'relaycare_status_' . $order->get_id();
+    $cached = get_transient($key);
+    if (is_array($cached)) {
+        return $cached;
+    }
+    $exp = (string) (time() + 300);
+    $sig = hash_hmac('sha256', implode('|', ['status', $s['integration_id'], (string) $order->get_id(), $exp]), $s['link_secret']);
+    // Filterable so a local Docker store can reach RelayCare on the host machine.
+    $base = apply_filters('relaycare_api_url', untrailingslashit($s['app_url']));
+    $res = wp_remote_get($base . '/api/public/order-status?' . http_build_query(['i' => $s['integration_id'], 'o' => $order->get_id(), 'exp' => $exp, 'sig' => $sig]), ['timeout' => 3]);
+    if (is_wp_error($res) || wp_remote_retrieve_response_code($res) !== 200) {
+        return null;
+    }
+    $data = json_decode(wp_remote_retrieve_body($res), true);
+    $result = is_array($data) ? $data : null;
+    set_transient($key, $result ?? [], MINUTE_IN_SECONDS);
+    return $result;
+}
+
+add_filter('woocommerce_account_orders_columns', function (array $columns) {
+    $actions = $columns['order-actions'] ?? null;
+    unset($columns['order-actions']);
+    $columns['relaycare-support'] = __('Support', 'relaycare');
+    if ($actions) {
+        $columns['order-actions'] = $actions;
+    }
+    return $columns;
+});
+
+add_action('woocommerce_my_account_my_orders_column_relaycare-support', function (WC_Order $order) {
+    $status = relaycare_order_status($order);
+    if (!empty($status['caseNumber'])) {
+        printf('<strong>%s</strong><br><span>%s</span>', esc_html($status['caseNumber']), esc_html($status['status']));
+    } else {
+        echo '&ndash;';
+    }
+});
+
+/*
+ * ---------------------------------------------------------------------------------------
+ * Serial number field on each order line in WooCommerce admin. Stored as line-item meta
+ * `serial_number`, which RelayCare reads from order webhooks (spec §5: serials are not a
+ * standard line-item field).
+ * ---------------------------------------------------------------------------------------
+ */
+add_action('woocommerce_after_order_itemmeta', function ($item_id, $item) {
+    if (!$item instanceof WC_Order_Item_Product || !is_admin()) {
+        return;
+    }
+    printf(
+        '<p class="relaycare-serial"><label>%s <input type="text" name="relaycare_serial[%d]" value="%s" placeholder="AW7-0000-0000" style="width:14em"></label></p>',
+        esc_html__('Serial number', 'relaycare'),
+        (int) $item_id,
+        esc_attr((string) $item->get_meta('serial_number'))
+    );
+}, 10, 2);
+
+add_action('woocommerce_process_shop_order_meta', function ($order_id) {
+    if (empty($_POST['relaycare_serial']) || !is_array($_POST['relaycare_serial']) || !current_user_can('edit_shop_orders')) {
+        return;
+    }
+    $order = wc_get_order($order_id);
+    if (!$order) {
+        return;
+    }
+    foreach (wp_unslash($_POST['relaycare_serial']) as $item_id => $serial) {
+        $item = $order->get_item((int) $item_id);
+        if ($item instanceof WC_Order_Item_Product) {
+            $item->update_meta_data('serial_number', sanitize_text_field($serial));
+            $item->save();
+        }
+    }
+    $order->save(); // fires order.updated, so RelayCare picks up the serial
+}, 20);
