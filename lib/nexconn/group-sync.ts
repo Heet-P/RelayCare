@@ -54,7 +54,22 @@ export async function syncCaseGroup({ caseId, assignmentId }: Record<string, unk
       .values({ caseId: kase.id, threadType: "group", nexconnGroupId: channelId })
       .onConflictDoNothing();
   }
-  await addGroupMembers(channelId, [ids.get(owner.userId)!, ...members]);
+  const create = () =>
+    createGroupChannel({
+      channelId,
+      name: `RelayCare ${kase.caseNumber}`,
+      owner: ids.get(owner.userId)!,
+      userIds: members,
+      introduction: `Service conversation for ${kase.caseNumber}`,
+    });
+  try {
+    await addGroupMembers(channelId, [ids.get(owner.userId)!, ...members]);
+  } catch (err) {
+    // 25410 "Group channel ID does not exist": the group was dismissed (demo reset, clean-up)
+    // while RelayCare still has its thread. Recreate it rather than failing forever.
+    if (!(err instanceof NexconnError) || err.code !== 25410) throw err;
+    await create();
+  }
   const removed = people.filter((p) => p.removedAt && !active.some((a) => a.userId === p.userId)).map((p) => ids.get(p.userId)!);
   await removeGroupMembers(channelId, removed);
 
