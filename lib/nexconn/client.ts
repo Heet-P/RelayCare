@@ -146,8 +146,10 @@ export function connect(getToken: TokenSource = backendToken): Promise<string> {
     currentUserId = result.data!.userId;
 
     // Per-user translation settings live in Nexconn; keep them in sync with the profile locale.
-    await NCEngine.translateModule.setTranslationLanguage(locale);
-    await NCEngine.translateModule.setAutoTranslateEnabled(true);
+    // Translation failing must not block chat, but it must be visible (needs Console enablement).
+    const lang = await NCEngine.translateModule.setTranslationLanguage(locale);
+    const auto = await NCEngine.translateModule.setAutoTranslateEnabled(true);
+    if (!lang.isOk || !auto.isOk) console.warn("[chat] translation setup failed", { lang: lang.code, auto: auto.code });
 
     setState("connected");
     return currentUserId;
@@ -201,8 +203,9 @@ export async function translateHistory(messages: ChatMessage[], target: string) 
   const texts = messages.filter((m) => m.kind === "text" && !m.mine && m.text);
   if (!texts.length) return;
   const { NCEngine, TranslateMessageParam } = await sdk();
-  await NCEngine.translateModule.translateMessages({
+  const res = await NCEngine.translateModule.translateMessages({
     list: texts.map((m) => new TranslateMessageParam(m.id, undefined, target, m.text)),
     force: false,
   } as Chat.TranslateMessagesParams);
+  if (!res.isOk) console.warn("[chat] translateMessages failed", res.code, res.msg);
 }
