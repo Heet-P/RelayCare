@@ -114,6 +114,15 @@ async function main() {
     ]);
   }
 
+  // Private evidence bucket (name must match EVIDENCE_BUCKET in lib/storage). Storage enforces the
+  // same type/size limits as the API, as a second line of defence.
+  const bucket = await supabase.storage.createBucket("case-evidence", {
+    public: false,
+    fileSizeLimit: "50MB",
+    allowedMimeTypes: ["image/jpeg", "image/png", "image/webp", "image/heic", "video/mp4", "video/quicktime", "application/pdf"],
+  });
+  if (bucket.error && !/already exists/i.test(bucket.error.message)) throw bucket.error;
+
   console.log(`Seeded org ${org.slug} (${org.id}). Demo password: ${PASSWORD}`);
 }
 
