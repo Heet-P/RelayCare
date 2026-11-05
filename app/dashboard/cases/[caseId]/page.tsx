@@ -162,6 +162,38 @@ async function StaffCase({ caseId }: { caseId: string }) {
             )}
           </section>
 
+          {(() => {
+            const done = view.assignments.find((a) => a.assignmentStatus === "completed" && a.report);
+            const r = done?.report as { resolutionType: string; findings: string; workPerformed: string; partsReplaced: string[]; notes?: string } | undefined;
+            return r ? (
+              <section className="space-y-2 rounded-lg border bg-card p-4">
+                <h2 className="font-semibold">Repair report by {view.people[done!.technicianId]?.name ?? "the technician"}</h2>
+                <dl className="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-[140px_1fr]">
+                  <dt className="text-muted-foreground">Outcome</dt>
+                  <dd>{r.resolutionType.replace(/_/g, " ")}</dd>
+                  <dt className="text-muted-foreground">Found</dt>
+                  <dd>{r.findings}</dd>
+                  <dt className="text-muted-foreground">Work done</dt>
+                  <dd>{r.workPerformed}</dd>
+                  {r.partsReplaced.length > 0 && (
+                    <>
+                      <dt className="text-muted-foreground">Parts</dt>
+                      <dd>{r.partsReplaced.join(", ")}</dd>
+                    </>
+                  )}
+                  {c.csatScore && (
+                    <>
+                      <dt className="text-muted-foreground">Customer rating</dt>
+                      <dd>
+                        {c.csatScore} out of 5{c.csatComment ? `: “${c.csatComment}”` : ""}
+                      </dd>
+                    </>
+                  )}
+                </dl>
+              </section>
+            ) : null;
+          })()}
+
           {latestHandoff && (
             <section className="space-y-3">
               <h2 className="text-lg font-semibold">Handoff</h2>
