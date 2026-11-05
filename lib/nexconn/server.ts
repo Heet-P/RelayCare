@@ -86,8 +86,11 @@ export async function removeGroupMembers(channelId: string, userIds: string[]) {
   if (userIds.length) await call("/v4/group-channel/leave", { channelId, userIds });
 }
 
-export async function listGroupMembers(channelId: string) {
-  return call<{ result?: { members?: { userId: string }[] } }>("/v4/group-channel/member/list", { channelId });
+/** User ids in a group (first 100). The member array may sit at the top level or under `result`. */
+export async function listGroupMembers(channelId: string): Promise<string[]> {
+  type M = { members?: { userId: string }[] };
+  const res = await call<M & { result?: M }>("/v4/group-channel/member/list", { channelId, pageSize: 100 });
+  return (res.members ?? res.result?.members ?? []).map((m) => m.userId);
 }
 
 /**
