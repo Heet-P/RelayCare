@@ -1,5 +1,6 @@
 import "server-only";
 import { and, eq, isNull, sql } from "drizzle-orm";
+import { connection } from "next/server";
 import { cache } from "react";
 import { db } from "@/lib/db/client";
 import { customers, organizationMemberships, users } from "@/lib/db/schema";
@@ -21,6 +22,8 @@ export type Actor = {
  * Supabase `getUser()` re-validates the JWT with the auth server (never trust the cookie alone).
  */
 export const getActor = cache(async (): Promise<Actor | null> => {
+  // Session data is per-request: opt out of prerendering before the auth client reads the clock.
+  await connection();
   const supabase = await supabaseServer();
   const { data } = await supabase.auth.getUser();
   const authUser = data.user;
