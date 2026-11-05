@@ -489,4 +489,7 @@ export type Address = {
   postcode?: string;
   country?: string;
   phone?: string;
+  /** Filled by the geocode job (Mapbox) for the dispatch map. */
+  lat?: number;
+  lng?: number;
 };

@@ -130,6 +130,7 @@ export async function createCase(actor: Actor, input: CreateCaseInput): Promise<
       metadata: { category: input.category, agentId },
     });
     await enqueue("case.notify", { caseId: kase.id, kind: "case_created" }, { tx });
+    await enqueue("case.geocode", { caseId: kase.id }, { tx });
     return { caseId: kase.id, caseNumber };
   });
 }
