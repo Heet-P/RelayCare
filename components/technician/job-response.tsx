@@ -6,9 +6,10 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { Messages } from "@/lib/i18n";
 
 /** Accept the job (optionally booking the visit) or decline it with a reason for dispatch. */
-export function JobResponse({ caseId, proposedAt }: { caseId: string; proposedAt: string | null }) {
+export function JobResponse({ caseId, proposedAt, t }: { caseId: string; proposedAt: string | null; t: Messages }) {
   const router = useRouter();
   const [pending, start] = useTransition();
   const [declining, setDeclining] = useState(false);
@@ -68,10 +69,10 @@ export function JobResponse({ caseId, proposedAt }: { caseId: string; proposedAt
           disabled={pending}
           onClick={() => send({ action: "accept", scheduledAt: when ? new Date(when).toISOString() : undefined }, "Job accepted")}
         >
-          {pending ? "Saving…" : "Accept job"}
+          {pending ? "…" : t.acceptJob}
         </Button>
         <Button variant="outline" className="h-11" onClick={() => setDeclining(true)} disabled={pending}>
-          Decline
+          {t.decline}
         </Button>
       </div>
     </section>

@@ -16,6 +16,7 @@ import { resolveCaseAccess } from "@/lib/auth/access";
 import { requireActor } from "@/lib/auth/session";
 import { chatChannelsFor } from "@/lib/cases/chat-channels";
 import { getCaseView } from "@/lib/db/queries/case-view";
+import { tr } from "@/lib/i18n";
 
 export const metadata: Metadata = { title: "Job" };
 
@@ -64,6 +65,7 @@ async function Job({ caseId }: { caseId: string }) {
   const phone = view.customer.phone ?? c.serviceAddress?.phone ?? null;
   const address = c.serviceAddress ? [c.serviceAddress.line1, c.serviceAddress.line2, c.serviceAddress.city, c.serviceAddress.postcode].filter(Boolean).join(", ") : null;
   const accepted = mine?.assignmentStatus === "accepted";
+  const t = tr(actor.user.locale);
 
   return (
     <div className="space-y-6">
@@ -77,7 +79,7 @@ async function Job({ caseId }: { caseId: string }) {
         <StatusChip status={c.status} />
       </header>
 
-      {mine?.assignmentStatus === "assigned" && <JobResponse caseId={c.id} proposedAt={mine.scheduledAt ? localInput(mine.scheduledAt) : null} />}
+      {mine?.assignmentStatus === "assigned" && <JobResponse t={t} caseId={c.id} proposedAt={mine.scheduledAt ? localInput(mine.scheduledAt) : null} />}
 
       {handoff ? (
         <HandoffCard snapshot={handoff.contextSnapshot} compact />
@@ -101,7 +103,7 @@ async function Job({ caseId }: { caseId: string }) {
           {address && <p className="text-muted-foreground">{address}</p>}
           {phone && (
             <a href={`tel:${phone.replace(/\s/g, "")}`} className="mt-3 inline-flex h-11 items-center gap-2 rounded-md bg-primary px-4 font-medium text-primary-foreground">
-              <Phone className="size-4" aria-hidden /> Call {phone}
+              <Phone className="size-4" aria-hidden /> {t.call} {phone}
             </a>
           )}
         </div>
@@ -109,6 +111,7 @@ async function Job({ caseId }: { caseId: string }) {
 
       {accepted && (
         <WorkPanel
+          t={t}
           caseId={c.id}
           status={c.status}
           photoCount={view.attachments.filter((a) => a.uploadedBy === actor.user.id && (a.purpose === "inspection" || a.purpose === "repair")).length}

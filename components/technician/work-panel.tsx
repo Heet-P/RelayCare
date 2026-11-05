@@ -7,6 +7,7 @@ import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import type { Messages } from "@/lib/i18n";
 
 const OUTCOMES = [
   { value: "repair", label: "Repaired" },
@@ -21,7 +22,7 @@ const area = "w-full rounded-md border border-input bg-background px-3 py-2 outl
  * Spec Journey E: start work at the visit, then file the completion report. The case moves to
  * "awaiting customer confirmation"; only the customer can mark it resolved.
  */
-export function WorkPanel({ caseId, status, photoCount }: { caseId: string; status: string; photoCount: number }) {
+export function WorkPanel({ caseId, status, photoCount, t }: { caseId: string; status: string; photoCount: number; t: Messages }) {
   const router = useRouter();
   const [pending, start] = useTransition();
   const [outcome, setOutcome] = useState<string>("repair");
@@ -48,7 +49,7 @@ export function WorkPanel({ caseId, status, photoCount }: { caseId: string; stat
       <section className="rounded-lg border bg-card p-4">
         <p className="mb-3 text-muted-foreground">At the customer&apos;s? Start the job so they can see you&apos;re working on it.</p>
         <Button className="h-11 w-full" disabled={pending} onClick={() => call(`/api/cases/${caseId}/status`, "PATCH", { to: "in_progress" }, "Work started")}>
-          {pending ? "Starting…" : "Start work"}
+          {pending ? "…" : t.startWork}
         </Button>
       </section>
     );
@@ -135,7 +136,7 @@ export function WorkPanel({ caseId, status, photoCount }: { caseId: string; stat
       </div>
       {photoCount === 0 && <p className="rounded-md bg-warning/10 px-3 py-2 text-sm text-warning">Add at least one photo of your inspection or repair (below) before sending the report.</p>}
       <Button type="submit" className="h-11 w-full" disabled={pending || photoCount === 0 || findings.trim().length < 5 || work.trim().length < 5}>
-        {pending ? "Sending…" : "Mark work complete"}
+        {pending ? "…" : t.completeWork}
       </Button>
     </form>
   );

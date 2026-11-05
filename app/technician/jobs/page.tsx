@@ -6,6 +6,7 @@ import { LiveRefresh } from "@/components/shared/live-refresh";
 import { Skeleton } from "@/components/ui/skeleton";
 import { requireActor } from "@/lib/auth/session";
 import { listMyJobs, type Job } from "@/lib/db/queries/technician";
+import { tr } from "@/lib/i18n";
 
 export const metadata: Metadata = { title: "Your jobs" };
 
@@ -31,12 +32,13 @@ export default function JobsPage() {
 async function Jobs() {
   const actor = await requireActor();
   const jobs = await listMyJobs(actor.authUserId, actor.user.id);
+  const t = tr(actor.user.locale);
   const groups: [string, Job[]][] = [
-    ["New, waiting for you to accept", jobs.filter((j) => j.assignmentStatus === "assigned")],
-    ["Upcoming visits", jobs.filter((j) => j.assignmentStatus === "accepted" && (j.status === "assigned" || j.status === "scheduled"))],
-    ["In progress", jobs.filter((j) => j.status === "in_progress")],
-    ["Waiting for the customer to confirm", jobs.filter((j) => j.status === "resolution_pending")],
-    ["Done", jobs.filter((j) => j.assignmentStatus === "completed" && j.status !== "resolution_pending")],
+    [t.newJobs, jobs.filter((j) => j.assignmentStatus === "assigned")],
+    [t.upcoming, jobs.filter((j) => j.assignmentStatus === "accepted" && (j.status === "assigned" || j.status === "scheduled"))],
+    [t.inProgress, jobs.filter((j) => j.status === "in_progress")],
+    [t.awaitingConfirm, jobs.filter((j) => j.status === "resolution_pending")],
+    [t.done, jobs.filter((j) => j.assignmentStatus === "completed" && j.status !== "resolution_pending")],
   ];
 
   return (
@@ -44,7 +46,7 @@ async function Jobs() {
       <LiveRefresh table="service_cases" />
       {jobs.length === 0 && (
         <div className="rounded-lg border bg-card p-6">
-          <p className="font-medium">No jobs yet</p>
+          <p className="font-medium">{t.noJobs}</p>
           <p className="mt-1 text-muted-foreground">When dispatch assigns you a repair, it appears here with the full case history.</p>
         </div>
       )}
