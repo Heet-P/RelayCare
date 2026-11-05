@@ -53,7 +53,9 @@ export function useChannel(ref: ChannelRef | null, locale: string) {
     setMessages((prev) => {
       const seen = new Set(prev.map((m) => m.id));
       const fresh = incoming.filter((m) => !seen.has(m.id));
-      return where === "start" ? [...fresh, ...prev] : [...prev, ...fresh];
+      const next = where === "start" ? [...fresh, ...prev] : [...prev, ...fresh];
+      // Order by send time: SDK page order and live-delivery order are not guaranteed.
+      return next.sort((a, b) => a.sentTime - b.sentTime);
     });
   }, []);
 
@@ -62,8 +64,7 @@ export function useChannel(ref: ChannelRef | null, locale: string) {
     const res = await query.current.loadNextPage();
     if (!res.isOk) throw new Error(`History failed (${res.code})`);
     const me = getUserId();
-    // Query returns newest-first; the UI renders oldest-first.
-    const page = res.data!.data.map((m) => toChatMessage(m, me)).reverse();
+    const page = res.data!.data.map((m) => toChatMessage(m, me));
     merge(page, "start");
     setHasMore(query.current.hasNext);
     await translateHistory(page, locale);
