@@ -46,7 +46,7 @@ export function WorkPanel({ caseId, status, photoCount, t }: { caseId: string; s
 
   if (status === "scheduled") {
     return (
-      <section className="rounded-lg border bg-card p-4">
+      <section className="panel rounded-xl p-4">
         <p className="mb-3 text-muted-foreground">At the customer&apos;s? Start the job so they can see you&apos;re working on it.</p>
         <Button className="h-11 w-full" disabled={pending} onClick={() => call(`/api/cases/${caseId}/status`, "PATCH", { to: "in_progress" }, "Work started")}>
           {pending ? "…" : t.startWork}
@@ -58,7 +58,7 @@ export function WorkPanel({ caseId, status, photoCount, t }: { caseId: string; s
 
   return (
     <form
-      className="space-y-4 rounded-lg border-2 border-primary bg-card p-4"
+      className="space-y-4 panel rounded-xl ring-2 ring-primary p-4"
       onSubmit={(e) => {
         e.preventDefault();
         call(

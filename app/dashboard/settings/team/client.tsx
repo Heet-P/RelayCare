@@ -73,7 +73,7 @@ export function InviteForm() {
   }, {});
 
   return (
-    <section className="space-y-4 rounded-lg border bg-card p-6">
+    <section className="space-y-4 panel rounded-xl p-6">
       <h2 className="text-lg font-semibold">Add a team member</h2>
       <form action={action} className="grid gap-4 sm:grid-cols-[1fr_1fr_180px]">
         <div className="space-y-2">

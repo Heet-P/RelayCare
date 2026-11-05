@@ -11,7 +11,7 @@ export function HandoffCard({ snapshot, compact = false }: { snapshot: unknown; 
   if (!parsed.success) return <p className="text-sm text-muted-foreground">This handoff uses an older format.</p>;
   const h = parsed.data;
   return (
-    <article className="overflow-hidden rounded-lg border bg-card">
+    <article className="overflow-hidden panel rounded-xl">
       <header className="flex flex-wrap items-baseline justify-between gap-2 border-b bg-secondary/60 px-4 py-3">
         <p className="font-tag text-base font-semibold">{h.case}</p>
         <p className="text-xs text-muted-foreground">

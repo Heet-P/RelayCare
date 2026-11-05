@@ -75,7 +75,7 @@ async function Stats() {
     { label: "Average time to resolve", value: s.avgResolutionHours == null ? "—" : s.avgResolutionHours < 48 ? `${s.avgResolutionHours} h` : `${Math.round(s.avgResolutionHours / 24)} d` },
   ];
   return (
-    <dl className="grid grid-cols-2 divide-x divide-y rounded-lg border bg-card sm:grid-cols-3 lg:grid-cols-6 lg:divide-y-0">
+    <dl className="grid grid-cols-2 divide-x divide-y panel rounded-xl sm:grid-cols-3 lg:grid-cols-6 lg:divide-y-0">
       {items.map((i) => (
         <div key={i.label} className="space-y-1 p-4">
           <dt className="text-sm text-muted-foreground">{i.label}</dt>
@@ -91,7 +91,7 @@ async function Activity() {
   const events = await recentActivity(actor.authUserId);
   if (!events.length) return <p className="text-muted-foreground">No activity yet.</p>;
   return (
-    <ol className="divide-y rounded-lg border bg-card">
+    <ol className="divide-y panel rounded-xl">
       {events.map((e) => (
         <li key={e.id} className="flex items-baseline gap-3 px-4 py-3 text-sm">
           <Link href={`/dashboard/cases/${e.caseId}`} className="font-tag shrink-0 font-medium underline-offset-4 hover:underline">
@@ -125,7 +125,7 @@ async function Analytics() {
         })}
       />
       <BarList title="Open jobs per technician" unit="open jobs" empty="No technician jobs yet." rows={a.workload.map((w) => ({ label: w.name, value: w.open, note: `${w.done} completed` }))} />
-      <section className="space-y-1 rounded-lg border bg-card p-4">
+      <section className="space-y-1 panel rounded-xl p-4">
         <h3 className="font-semibold">Customer rating</h3>
         <p className="font-tag text-2xl font-semibold">{a.csat?.avg != null ? `${a.csat.avg} / 5` : "No ratings yet"}</p>
         <p className="text-sm text-muted-foreground">{a.csat?.n ? `From ${a.csat.n} resolved case${a.csat.n === 1 ? "" : "s"}` : "Customers rate the service after confirming a fix."}</p>

@@ -37,7 +37,7 @@ async function Wizard({ item, order }: { item?: string; order?: string }) {
   );
   if (!items.length) {
     return (
-      <div className="space-y-2 rounded-lg border bg-card p-6">
+      <div className="space-y-2 panel rounded-xl p-6">
         <p className="font-medium">Nothing to report right now</p>
         <p className="text-muted-foreground">Every product already has an open case, or no purchases match your email.</p>
         <Link href="/my-cases" className="inline-flex h-11 items-center font-medium text-primary underline-offset-4 hover:underline">

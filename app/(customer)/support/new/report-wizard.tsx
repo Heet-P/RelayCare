@@ -111,7 +111,7 @@ export function ReportWizard({ items, preselected, t }: { items: WizardItem[]; p
               <label
                 key={i.id}
                 className={cn(
-                  "flex min-h-16 cursor-pointer items-center gap-3 rounded-lg border bg-card px-4 py-3 has-checked:border-primary has-checked:ring-2 has-checked:ring-primary/20",
+                  "flex min-h-16 cursor-pointer items-center gap-3 panel rounded-xl px-4 py-3 has-checked:border-primary has-checked:ring-2 has-checked:ring-primary/20",
                 )}
               >
                 <input type="radio" name="item" className="size-5 accent-[var(--primary)]" checked={itemId === i.id} onChange={() => chooseItem(i.id)} />
@@ -132,7 +132,7 @@ export function ReportWizard({ items, preselected, t }: { items: WizardItem[]; p
             {ISSUE_CATEGORIES.map((c) => (
               <label
                 key={c.key}
-                className="flex min-h-14 cursor-pointer items-center rounded-lg border bg-card px-4 py-3 text-sm font-medium has-checked:border-primary has-checked:bg-primary has-checked:text-primary-foreground"
+                className="flex min-h-14 cursor-pointer items-center panel rounded-xl px-4 py-3 text-sm font-medium has-checked:border-primary has-checked:bg-primary has-checked:text-primary-foreground"
               >
                 <input type="radio" name="category" className="sr-only" checked={category === c.key} onChange={() => setCategory(c.key)} />
                 {c.label}
@@ -228,7 +228,7 @@ export function ReportWizard({ items, preselected, t }: { items: WizardItem[]; p
       {step === 4 && (
         <div className="space-y-4">
           <h2 className="text-xl font-semibold tracking-tight">{t.checkAndSend}</h2>
-          <dl className="divide-y rounded-lg border bg-card">
+          <dl className="divide-y panel rounded-xl">
             <Row label="Product" value={`${item?.name} (Order #${item?.orderNumber})`} />
             <Row label="Problem" value={ISSUE_CATEGORIES.find((c) => c.key === category)?.label ?? ""} />
             <Row label="Description" value={description} />

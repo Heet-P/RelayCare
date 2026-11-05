@@ -38,7 +38,7 @@ async function Rules() {
             Used to suggest cover dates when orders arrive. The highest-priority matching rule wins. A person still verifies every claim.
           </p>
         </div>
-        <ul className="divide-y rounded-lg border bg-card">
+        <ul className="divide-y panel rounded-xl">
           {policies.map((p) => (
             <li key={p.id} className="flex flex-wrap items-center gap-3 px-4 py-3">
               <div className="min-w-0 flex-1">

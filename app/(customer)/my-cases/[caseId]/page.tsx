@@ -59,7 +59,7 @@ async function CustomerCase({ caseId }: { caseId: string }) {
         <p className="text-muted-foreground">{categoryLabel(c.category)}</p>
       </header>
 
-      <section className="space-y-4 rounded-lg border bg-card p-4" aria-label="Progress">
+      <section className="space-y-4 panel rounded-xl p-4" aria-label="Progress">
         <ol className="grid grid-cols-5 gap-1">
           {t.steps.map((s, i) => (
             <li key={s} className="space-y-2" aria-current={i === status.step ? "step" : undefined}>
@@ -111,7 +111,7 @@ async function CustomerCase({ caseId }: { caseId: string }) {
 
       <section className="space-y-3">
         <h2 className="text-lg font-semibold">{t.yourReport}</h2>
-        <dl className="divide-y rounded-lg border bg-card">
+        <dl className="divide-y panel rounded-xl">
           <div className="space-y-1 px-4 py-3">
             <dt className="text-sm text-muted-foreground">{t.whatHappened}</dt>
             <dd className="whitespace-pre-line">{c.description}</dd>

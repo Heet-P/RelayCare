@@ -45,7 +45,7 @@ async function Jobs() {
     <div className="space-y-8">
       <LiveRefresh table="service_cases" />
       {jobs.length === 0 && (
-        <div className="rounded-lg border bg-card p-6">
+        <div className="panel rounded-xl p-6">
           <p className="font-medium">{t.noJobs}</p>
           <p className="mt-1 text-muted-foreground">When dispatch assigns you a repair, it appears here with the full case history.</p>
         </div>
@@ -58,7 +58,7 @@ async function Jobs() {
             <ul className="space-y-2">
               {list.map((j) => (
                 <li key={j.caseId}>
-                  <Link href={`/technician/jobs/${j.caseId}`} className="block rounded-lg border bg-card p-4 hover:border-primary">
+                  <Link href={`/technician/jobs/${j.caseId}`} className="block panel rounded-xl p-4 hover:border-primary">
                     <div className="flex items-baseline justify-between gap-2">
                       <span className="font-tag text-sm text-muted-foreground">{j.caseNumber}</span>
                       <PriorityMark priority={j.priority} />

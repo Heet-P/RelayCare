@@ -36,7 +36,7 @@ async function Team() {
             Support agents review reports, dispatchers assign technicians, technicians see only the jobs given to them.
           </p>
         </div>
-        <ul className="divide-y rounded-lg border bg-card">
+        <ul className="divide-y panel rounded-xl">
           {members.map((m) => (
             <MemberRow key={m.userId} member={{ ...m, signedUp: !!m.signedUp }} editable={isOwner && m.userId !== actor.user.id} />
           ))}

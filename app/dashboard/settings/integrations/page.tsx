@@ -37,14 +37,14 @@ async function Integration() {
   const org = actor && primaryOrg(actor);
   if (!org || org.role !== "owner") {
     return (
-      <p className="rounded-lg border bg-card p-6 text-muted-foreground">Only the store owner can manage the store connection.</p>
+      <p className="panel rounded-xl p-6 text-muted-foreground">Only the store owner can manage the store connection.</p>
     );
   }
 
   const [row] = await db.select().from(storeIntegrations).where(eq(storeIntegrations.organizationId, org.organizationId));
   if (!row) {
     return (
-      <section className="space-y-4 rounded-lg border bg-card p-6">
+      <section className="space-y-4 panel rounded-xl p-6">
         <h2 className="text-lg font-semibold">Connect WooCommerce</h2>
         <ConnectSteps />
         <ConnectStoreForm />
@@ -65,7 +65,7 @@ async function Integration() {
 
   return (
     <div className="space-y-6">
-      <section className="rounded-lg border bg-card">
+      <section className="panel rounded-xl">
         <div className="flex flex-wrap items-center justify-between gap-4 border-b p-6">
           <div className="min-w-0">
             <p className="flex items-center gap-2 font-semibold">
@@ -94,7 +94,7 @@ async function Integration() {
         </dl>
       </section>
 
-      <section className="space-y-4 rounded-lg border bg-card p-6">
+      <section className="space-y-4 panel rounded-xl p-6">
         <div className="space-y-1">
           <h2 className="text-lg font-semibold">Get Support button</h2>
           <p className="text-muted-foreground">
@@ -114,7 +114,7 @@ async function Integration() {
         </dl>
       </section>
 
-      <details className="rounded-lg border bg-card p-6">
+      <details className="panel rounded-xl p-6">
         <summary className="cursor-pointer font-semibold">Reconnect with new API keys</summary>
         <div className="mt-4 space-y-4">
           <ConnectSteps />

@@ -37,7 +37,7 @@ async function Cases() {
     return (
       <div className="space-y-6">
         {heading}
-        <div className="rounded-lg border bg-card p-6">
+        <div className="panel rounded-xl p-6">
           <p className="font-medium">{t.noCases}</p>
           <p className="mt-1 text-muted-foreground">{t.noCasesHint}</p>
           <Link href="/my-orders" className="mt-2 inline-flex h-11 items-center font-medium text-primary underline-offset-4 hover:underline">
@@ -50,7 +50,7 @@ async function Cases() {
   return (
     <div className="space-y-6">
     {heading}
-    <ul className="divide-y rounded-lg border bg-card">
+    <ul className="divide-y panel rounded-xl">
       <LiveRefresh table="service_cases" />
       {cases.map((c) => {
         const s = customerStatusIn(actor.user.locale, c.status);

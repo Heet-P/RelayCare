@@ -65,11 +65,11 @@ async function Board({ view }: { view: DispatchView }) {
       {!canDispatch && <p className="text-sm text-muted-foreground">You can see the board; assigning technicians is for dispatchers and the store owner.</p>}
 
       {rows.length === 0 ? (
-        <p className="rounded-lg border bg-card p-6 text-muted-foreground">
+        <p className="panel rounded-xl p-6 text-muted-foreground">
           {view === "queue" ? "Nothing waiting for a technician. Cases appear here when support hands them over." : "No cases in this view."}
         </p>
       ) : (
-        <div className="overflow-x-auto rounded-lg border bg-card">
+        <div className="overflow-x-auto panel rounded-xl">
           <table className="w-full min-w-[960px] text-sm">
             <thead className="border-b text-left text-muted-foreground">
               <tr>

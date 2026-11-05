@@ -33,14 +33,14 @@ export function ChatPanel({
 
   if (!channel) {
     return (
-      <div className={cn("rounded-lg border bg-card p-6 text-muted-foreground", className)}>
+      <div className={cn("panel rounded-xl p-6 text-muted-foreground", className)}>
         The conversation opens once a support agent is assigned.
       </div>
     );
   }
 
   return (
-    <section className={cn("flex min-h-0 flex-col rounded-lg border bg-card", className)} aria-label="Conversation">
+    <section className={cn("flex min-h-0 flex-col panel rounded-xl", className)} aria-label="Conversation">
       <header className="flex items-center gap-1 border-b px-2">
         {channels.map((c) => (
           <button

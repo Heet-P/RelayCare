@@ -27,9 +27,9 @@ export default function ConversationsPage() {
 async function Threads() {
   const { actor } = await requireOrgRole(["owner", "support_agent", "dispatcher"]);
   const threads = await listConversations(actor.authUserId);
-  if (!threads.length) return <p className="rounded-lg border bg-card p-6 text-muted-foreground">No conversations yet. A chat opens when a customer reports a problem.</p>;
+  if (!threads.length) return <p className="panel rounded-xl p-6 text-muted-foreground">No conversations yet. A chat opens when a customer reports a problem.</p>;
   return (
-    <ul className="divide-y rounded-lg border bg-card">
+    <ul className="divide-y panel rounded-xl">
       {threads.map((t) => {
         const Icon = t.threadType === "group" ? Users : MessagesSquare;
         return (

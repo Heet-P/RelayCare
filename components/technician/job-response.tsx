@@ -36,7 +36,7 @@ export function JobResponse({ caseId, proposedAt, t }: { caseId: string; propose
   if (declining) {
     return (
       <form
-        className="space-y-3 rounded-lg border bg-card p-4"
+        className="space-y-3 panel rounded-xl p-4"
         onSubmit={(e) => {
           e.preventDefault();
           send({ action: "reject", reason }, "Job declined. Dispatch will reassign it.");
@@ -57,7 +57,7 @@ export function JobResponse({ caseId, proposedAt, t }: { caseId: string; propose
   }
 
   return (
-    <section className="space-y-3 rounded-lg border-2 border-baton bg-card p-4" aria-label="New job">
+    <section className="space-y-3 panel rounded-xl ring-2 ring-baton p-4" aria-label="New job">
       <p className="font-semibold">Dispatch has offered you this job</p>
       <div className="space-y-2">
         <Label htmlFor="visit">Visit time (optional)</Label>

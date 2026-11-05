@@ -50,7 +50,7 @@ export function ResolutionReview({ t, caseId, technician, report, deskNotes }: {
     });
 
   return (
-    <section className="space-y-4 rounded-lg border-2 border-baton bg-card p-4" aria-label="Confirm the repair">
+    <section className="space-y-4 panel rounded-xl ring-2 ring-baton p-4" aria-label="Confirm the repair">
       <h2 className="text-lg font-semibold">{technician ? `${technician}'s report` : "Proposed resolution"}</h2>
       {report ? (
         <dl className="space-y-2 text-sm">
@@ -130,9 +130,9 @@ export function RateService({ t, caseId, existing }: { t: Messages; caseId: stri
   const [sent, setSent] = useState(existing != null);
   const [pending, start] = useTransition();
 
-  if (sent) return <p className="rounded-lg border bg-card p-4 text-sm">Thanks for rating us {score} out of 5.</p>;
+  if (sent) return <p className="panel rounded-xl p-4 text-sm">Thanks for rating us {score} out of 5.</p>;
   return (
-    <section className="space-y-3 rounded-lg border bg-card p-4" aria-label="Rate the service">
+    <section className="space-y-3 panel rounded-xl p-4" aria-label="Rate the service">
       <p className="font-semibold">{t.rate}</p>
       <div className="flex gap-1" role="radiogroup" aria-label="Rating">
         {[1, 2, 3, 4, 5].map((n) => (

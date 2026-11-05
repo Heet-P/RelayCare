@@ -101,7 +101,7 @@ async function StaffCase({ caseId }: { caseId: string }) {
 
       <div className="grid gap-6 xl:grid-cols-[300px_minmax(0,1fr)_380px]">
         <aside className="space-y-6">
-          <section className="space-y-3 rounded-lg border bg-card p-4">
+          <section className="space-y-3 panel rounded-xl p-4">
             <CaseActions caseId={c.id} status={c.status} actions={actions} />
             {dispatcher && (c.status === "awaiting_assignment" || assigned) && (
               <div className="flex flex-wrap gap-2">
@@ -127,7 +127,7 @@ async function StaffCase({ caseId }: { caseId: string }) {
             )}
           </section>
           <Facts view={view} />
-          <section className="rounded-lg border bg-card p-4">
+          <section className="panel rounded-xl p-4">
             <WarrantyPanel
               caseId={c.id}
               canEdit={staffEditor && open}
@@ -146,7 +146,7 @@ async function StaffCase({ caseId }: { caseId: string }) {
         </aside>
 
         <div className="min-w-0 space-y-8">
-          <section className="space-y-2 rounded-lg border bg-card p-4">
+          <section className="space-y-2 panel rounded-xl p-4">
             <h2 className="font-semibold">Original complaint</h2>
             <p className="text-sm text-muted-foreground">{categoryLabel(c.category)}</p>
             <p className="whitespace-pre-line">{c.description}</p>
@@ -166,7 +166,7 @@ async function StaffCase({ caseId }: { caseId: string }) {
             const done = view.assignments.find((a) => a.assignmentStatus === "completed" && a.report);
             const r = done?.report as { resolutionType: string; findings: string; workPerformed: string; partsReplaced: string[]; notes?: string } | undefined;
             return r ? (
-              <section className="space-y-2 rounded-lg border bg-card p-4">
+              <section className="space-y-2 panel rounded-xl p-4">
                 <h2 className="font-semibold">Repair report by {view.people[done!.technicianId]?.name ?? "the technician"}</h2>
                 <dl className="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-[140px_1fr]">
                   <dt className="text-muted-foreground">Outcome</dt>
@@ -218,7 +218,7 @@ async function StaffCase({ caseId }: { caseId: string }) {
 function Facts({ view }: { view: CaseView }) {
   const a = view.case.serviceAddress;
   return (
-    <section className="divide-y rounded-lg border bg-card text-sm">
+    <section className="divide-y panel rounded-xl text-sm">
       <Fact label="Customer">
         <p className="font-medium">{view.customer.name}</p>
         <p className="text-muted-foreground">{view.customer.email}</p>

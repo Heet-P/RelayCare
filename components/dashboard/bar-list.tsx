@@ -6,7 +6,7 @@
 export function BarList({ title, unit, rows, empty }: { title: string; unit: string; rows: { label: string; value: number; note?: string }[]; empty: string }) {
   const max = Math.max(1, ...rows.map((r) => r.value));
   return (
-    <section className="space-y-3 rounded-lg border bg-card p-4">
+    <section className="space-y-3 panel rounded-xl p-4">
       <h3 className="font-semibold">{title}</h3>
       {rows.length === 0 ? (
         <p className="text-sm text-muted-foreground">{empty}</p>

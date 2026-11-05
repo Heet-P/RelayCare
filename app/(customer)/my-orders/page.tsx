@@ -31,7 +31,7 @@ async function Purchases() {
     return (
       <div className="space-y-6">
         {heading}
-      <div className="rounded-lg border bg-card p-6">
+      <div className="panel rounded-xl p-6">
         <p className="font-medium">No purchases found for {actor.user.email}</p>
         <p className="mt-1 text-muted-foreground">
           We show orders placed with this email address. If you used a different one, sign out and verify that email instead.

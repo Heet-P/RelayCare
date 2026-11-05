@@ -84,13 +84,13 @@ async function Job({ caseId }: { caseId: string }) {
       {handoff ? (
         <HandoffCard snapshot={handoff.contextSnapshot} compact />
       ) : (
-        <section className="rounded-lg border bg-card p-4">
+        <section className="panel rounded-xl p-4">
           <h2 className="font-semibold">Customer complaint</h2>
           <p className="whitespace-pre-line">{c.description}</p>
         </section>
       )}
 
-      <section className="space-y-3 rounded-lg border bg-card p-4" aria-label="Visit and contact">
+      <section className="space-y-3 panel rounded-xl p-4" aria-label="Visit and contact">
         <div className="flex flex-wrap items-center justify-between gap-3">
           <div>
             <p className="text-sm text-muted-foreground">Visit</p>

@@ -49,7 +49,7 @@ async function OrdersTable() {
 
   if (!orders.length) {
     return (
-      <div className="rounded-lg border bg-card p-8">
+      <div className="panel rounded-xl p-8">
         <LiveRefresh table="orders" />
         <p className="font-medium">No orders yet</p>
         <p className="mt-1 text-muted-foreground">
@@ -63,7 +63,7 @@ async function OrdersTable() {
   }
 
   return (
-    <div className="overflow-x-auto rounded-lg border bg-card">
+    <div className="overflow-x-auto panel rounded-xl">
       <LiveRefresh table="orders" />
       <table className="w-full min-w-[760px] text-sm">
         <thead className="border-b text-left text-muted-foreground">
@@ -118,7 +118,7 @@ async function OrdersTable() {
 
 function OrdersSkeleton() {
   return (
-    <div className="rounded-lg border bg-card" aria-busy aria-label="Loading orders">
+    <div className="panel rounded-xl" aria-busy aria-label="Loading orders">
       <div className="h-12 border-b" />
       {Array.from({ length: 4 }, (_, i) => (
         <div key={i} className="grid grid-cols-[1fr_1.2fr_1.4fr_1fr_0.6fr] gap-4 border-b px-4 py-3 last:border-0">

@@ -30,7 +30,7 @@ export function ProfileForm({ name, phone, locale, email }: { name: string; phon
   }, [state, router]);
 
   return (
-    <form action={action} className="space-y-4 rounded-lg border bg-card p-6">
+    <form action={action} className="space-y-4 panel rounded-xl p-6">
       <h2 className="text-lg font-semibold">Your profile</h2>
       <p className="text-sm text-muted-foreground">Signed in as {email}</p>
       <div className="space-y-2">
@@ -66,7 +66,7 @@ export function PasswordForm() {
     if (state.ok) toast.success("Password changed");
   }, [state]);
   return (
-    <form action={action} className="space-y-4 rounded-lg border bg-card p-6">
+    <form action={action} className="space-y-4 panel rounded-xl p-6">
       <h2 className="text-lg font-semibold">Password</h2>
       <div className="grid gap-4 sm:grid-cols-2">
         <div className="space-y-2">

@@ -36,7 +36,7 @@ export function PolicyForm() {
     return res;
   }, {});
   return (
-    <form action={action} className="space-y-4 rounded-lg border bg-card p-6">
+    <form action={action} className="space-y-4 panel rounded-xl p-6">
       <h2 className="text-lg font-semibold">Add a rule</h2>
       <div className="space-y-2">
         <Label htmlFor="p-name">Name</Label>

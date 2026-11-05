@@ -5,9 +5,9 @@ import { PriorityMark, StatusChip } from "./status-chip";
 
 /** Staff case list. The yellow dot marks who holds the case right now (the baton). */
 export function CaseTable({ rows, empty }: { rows: CaseRow[]; empty: string }) {
-  if (!rows.length) return <p className="rounded-lg border bg-card p-6 text-muted-foreground">{empty}</p>;
+  if (!rows.length) return <p className="panel rounded-xl p-6 text-muted-foreground">{empty}</p>;
   return (
-    <div className="overflow-x-auto rounded-lg border bg-card">
+    <div className="overflow-x-auto panel rounded-xl">
       <table className="w-full min-w-[720px] text-sm">
         <thead className="border-b text-left text-muted-foreground">
           <tr>
@@ -56,7 +56,7 @@ export function CaseTable({ rows, empty }: { rows: CaseRow[]; empty: string }) {
 
 export function CaseTableSkeleton({ rows = 4 }: { rows?: number }) {
   return (
-    <div className="rounded-lg border bg-card" aria-busy aria-label="Loading cases">
+    <div className="panel rounded-xl" aria-busy aria-label="Loading cases">
       <div className="h-12 border-b" />
       {Array.from({ length: rows }, (_, i) => (
         <div key={i} className="grid grid-cols-[1fr_1.6fr_1fr_1fr] gap-4 border-b px-4 py-3 last:border-0">

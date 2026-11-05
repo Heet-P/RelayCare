@@ -21,7 +21,7 @@ function warrantyLine(status: string | null, expires: string | null) {
 
 export function PurchaseCard({ purchase, getHelp = "Get help with this" }: { purchase: Purchase; getHelp?: string }) {
   return (
-    <section className="rounded-lg border bg-card">
+    <section className="panel rounded-xl">
       <header className="flex items-baseline justify-between gap-4 border-b px-4 py-3">
         <Link href={`/my-orders/${purchase.id}`} className="font-tag text-base font-semibold underline-offset-4 hover:underline">
           Order #{purchase.orderNumber}
@@ -65,7 +65,7 @@ export function PurchaseCard({ purchase, getHelp = "Get help with this" }: { pur
 
 export function PurchaseSkeleton() {
   return (
-    <div className="rounded-lg border bg-card" aria-hidden>
+    <div className="panel rounded-xl" aria-hidden>
       <div className="flex justify-between border-b px-4 py-3">
         <span className="h-6 w-32 animate-pulse rounded bg-muted" />
         <span className="h-5 w-36 animate-pulse rounded bg-muted" />
