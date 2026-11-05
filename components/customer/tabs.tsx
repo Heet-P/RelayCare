@@ -42,8 +42,8 @@ function Tabs({ path, labels }: { path: string; labels: Labels }) {
             href={href}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "pressable flex h-12 items-center justify-center gap-2 rounded-full px-4 text-sm font-medium text-muted-foreground hover:text-foreground sm:h-11",
-              active && "bg-[color-mix(in_oklab,var(--primary)_16%,transparent)] font-semibold text-foreground",
+              "pressable flex h-12 items-center justify-center gap-2 rounded-full px-4 text-sm font-medium whitespace-nowrap text-muted-foreground hover:text-foreground sm:h-10",
+              active && "bg-[color-mix(in_oklab,var(--foreground)_9%,transparent)] font-semibold text-foreground",
             )}
           >
             <Icon className="size-5 sm:size-4" aria-hidden />

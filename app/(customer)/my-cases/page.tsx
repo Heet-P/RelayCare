@@ -14,7 +14,7 @@ export const metadata: Metadata = { title: "Your cases" };
 
 export default function MyCasesPage() {
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-2xl space-y-6">
       <Suspense
         fallback={
           <div className="space-y-2">

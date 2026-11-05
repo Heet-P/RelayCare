@@ -12,11 +12,13 @@ export const metadata: Metadata = { title: "Report a problem" };
 
 export default function NewCasePage({ searchParams }: PageProps<"/support/new">) {
   return (
-    <Suspense fallback={<WizardSkeleton />}>
-      {searchParams.then((sp) => (
-        <Wizard item={typeof sp.item === "string" ? sp.item : undefined} order={typeof sp.order === "string" ? sp.order : undefined} />
-      ))}
-    </Suspense>
+    <div className="mx-auto max-w-2xl">
+      <Suspense fallback={<WizardSkeleton />}>
+        {searchParams.then((sp) => (
+          <Wizard item={typeof sp.item === "string" ? sp.item : undefined} order={typeof sp.order === "string" ? sp.order : undefined} />
+        ))}
+      </Suspense>
+    </div>
   );
 }
 

@@ -43,7 +43,7 @@ async function Purchases() {
   return (
     <div className="space-y-6">
       {heading}
-      <div className="space-y-4">
+      <div className="grid gap-4 lg:grid-cols-2 lg:items-start">
         {purchases.map((p) => (
           <PurchaseCard key={p.id} purchase={p} getHelp={t.getHelp} />
         ))}

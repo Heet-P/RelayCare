@@ -11,7 +11,7 @@ export const metadata: Metadata = { title: "Order" };
 
 export default function OrderPage({ params }: PageProps<"/my-orders/[orderId]">) {
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-2xl space-y-6">
       <Link href="/my-orders" className="inline-flex h-11 items-center text-sm text-muted-foreground hover:text-foreground">
         All purchases
       </Link>

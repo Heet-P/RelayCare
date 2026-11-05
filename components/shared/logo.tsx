@@ -25,7 +25,7 @@ export function Logo({ href = "/", className, sub }: { href?: string; className?
   return (
     <Link href={href} className={cn("pressable inline-flex items-center gap-2.5 rounded-md", className)}>
       <LogoMark />
-      <span className="leading-tight">
+      <span className="leading-tight whitespace-nowrap">
         <span className="block text-[17px] font-semibold tracking-tight">RelayCare</span>
         {sub && <span className="block text-xs text-muted-foreground">{sub}</span>}
       </span>
