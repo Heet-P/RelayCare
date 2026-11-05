@@ -12,6 +12,7 @@ import {
   technicianProfiles,
   users,
 } from "@/lib/db/schema";
+import type { CompletionReport } from "@/lib/contracts/dispatch";
 import { HttpError } from "@/lib/http";
 import { enqueue } from "@/lib/jobs/queue";
 import { transitionCase } from "./transitions";
@@ -174,5 +175,23 @@ export async function respondToAssignment(
     await transitionCase(access, { to: "awaiting_assignment", reason: input.reason }, tx);
     await enqueue("nexconn.group.sync", { caseId: access.kase.id }, { tx });
     return { status: "rejected" as const };
+  });
+}
+
+/**
+ * Technician submits the completion report (spec Journey E steps 6–8). The report is stored on
+ * the assignment first so the state machine can check it, together with at least one
+ * inspection/repair photo, before the case moves to resolution_pending.
+ */
+export async function completeWork(access: CaseAccess, report: CompletionReport) {
+  return db.transaction(async (tx) => {
+    const a = await activeAssignment(tx, access.kase.id);
+    if (!a || a.technicianId !== access.actor.user.id) throw new HttpError(404, "Job not found", "not_found");
+    await tx.update(caseAssignments).set({ report: { ...report, submittedAt: new Date().toISOString() } }).where(eq(caseAssignments.id, a.id));
+    const summary = `${report.workPerformed}${report.partsReplaced.length ? ` Parts: ${report.partsReplaced.join(", ")}.` : ""}`;
+    await transitionCase(access, { to: "resolution_pending", resolutionType: report.resolutionType, resolutionNotes: summary }, tx);
+    await tx.update(caseAssignments).set({ assignmentStatus: "completed", completedAt: new Date() }).where(eq(caseAssignments.id, a.id));
+    await tx.insert(caseEvents).values({ caseId: access.kase.id, actorId: access.actor.user.id, eventType: "work_completed", metadata: { resolutionType: report.resolutionType } });
+    await enqueue("case.notify", { caseId: access.kase.id, kind: "resolution_pending" }, { tx });
   });
 }

@@ -21,3 +21,16 @@ export const AssignmentResponse = z.discriminatedUnion("action", [
   z.object({ action: z.literal("accept"), scheduledAt: futureDate.optional() }),
   z.object({ action: z.literal("reject"), reason: z.string().trim().min(3, "Tell dispatch why.").max(500) }),
 ]);
+
+/** POST /api/cases/:id/resolution — the technician's completion report (spec Journey E). */
+export const CompletionReport = z.object({
+  resolutionType: z.enum(["repair", "replacement", "return", "refund", "no_fault_found", "not_covered"]),
+  findings: z.string().trim().min(5, "Describe what you found.").max(2000),
+  workPerformed: z.string().trim().min(5, "Describe the work you did.").max(2000),
+  partsReplaced: z.array(z.string().trim().min(1).max(120)).max(20).default([]),
+  notes: z.string().trim().max(1000).optional(),
+});
+export type CompletionReport = z.infer<typeof CompletionReport>;
+
+/** POST /api/cases/:id/feedback — customer rating after confirming the fix. */
+export const Feedback = z.object({ score: z.number().int().min(1).max(5), comment: z.string().trim().max(1000).optional() });
