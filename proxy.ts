@@ -17,7 +17,8 @@ export async function proxy(request: NextRequest) {
       },
     },
   });
-  await supabase.auth.getUser();
+  // Refreshes an expired session (writing new cookies); verifies locally via the project JWKS.
+  await supabase.auth.getClaims();
   return response;
 }
 
