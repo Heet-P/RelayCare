@@ -159,6 +159,23 @@ export function connect(getToken: TokenSource = backendToken): Promise<string> {
   return connectPromise;
 }
 
+/**
+ * Resolves once a connection exists. Channel hooks wait on this instead of calling connect()
+ * themselves: child effects run before the parent's, so the connection owner (useConnection)
+ * must be the one that chooses the token source.
+ */
+export function whenConnected(): Promise<string> {
+  if (state === "connected" && currentUserId) return Promise.resolve(currentUserId);
+  return new Promise((resolve) => {
+    const off = subscribe("state", (s) => {
+      if (s === "connected" && currentUserId) {
+        off();
+        resolve(currentUserId);
+      }
+    });
+  });
+}
+
 /** Call on sign-out so the next user on this browser gets a fresh connection. */
 export async function disconnect() {
   if (!connectPromise) return;

@@ -6,6 +6,7 @@ import {
   channelFor,
   channelKey,
   connect,
+  whenConnected,
   getState,
   getUserId,
   identifierFor,
@@ -75,7 +76,7 @@ export function useChannel(ref: ChannelRef | null, locale: string) {
     const offTr = subscribe("translations", (map) => setTranslations((t) => ({ ...t, ...map })));
 
     (async () => {
-      await connect();
+      await whenConnected();
       const { BaseChannel } = await sdk();
       if (cancelled) return;
       query.current = BaseChannel.createMessagesQuery({
