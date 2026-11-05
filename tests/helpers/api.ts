@@ -34,6 +34,7 @@ export async function deleteCases(ids: string[]) {
       await tx`delete from ${tx(t)} where case_id in ${tx(ids)}`;
     }
     await tx`delete from service_cases where id in ${tx(ids)}`;
+    await tx`delete from jobs where payload->>'caseId' in ${tx(ids)}`;
     await tx`alter table case_events enable trigger case_events_no_update`;
   });
 }
