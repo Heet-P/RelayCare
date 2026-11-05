@@ -39,3 +39,12 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# keep the template, never real env files
+!.env.example
+
+# local tooling
+/docker/data
+/test-results
+/playwright-report
+/scratch
