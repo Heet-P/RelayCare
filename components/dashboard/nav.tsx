@@ -3,6 +3,7 @@
 import { Building2, ClipboardList, Inbox, LayoutGrid, MessagesSquare, Route, Settings } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 import { cn } from "@/lib/utils";
 
 /** Spec §4 main navigation. */
@@ -16,7 +17,19 @@ export const NAV = [
 ] as const;
 
 export function DashboardNav({ onNavigate }: { onNavigate?: () => void }) {
-  const path = usePathname();
+  // Active state needs the URL (request-time data), so it streams in behind Suspense.
+  return (
+    <Suspense fallback={<NavLinks path="" onNavigate={onNavigate} />}>
+      <ActiveNav onNavigate={onNavigate} />
+    </Suspense>
+  );
+}
+
+function ActiveNav({ onNavigate }: { onNavigate?: () => void }) {
+  return <NavLinks path={usePathname()} onNavigate={onNavigate} />;
+}
+
+function NavLinks({ path, onNavigate }: { path: string; onNavigate?: () => void }) {
   return (
     <nav aria-label="Main" className="flex flex-col gap-1">
       {NAV.map(({ href, label, icon: Icon }) => {

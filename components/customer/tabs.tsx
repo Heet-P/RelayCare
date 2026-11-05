@@ -3,6 +3,7 @@
 import { ClipboardList, ShoppingBag } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Suspense } from "react";
 import { cn } from "@/lib/utils";
 
 const TABS = [
@@ -12,7 +13,19 @@ const TABS = [
 
 /** Bottom tab bar on phones, inline links on wider screens. */
 export function CustomerTabs() {
-  const path = usePathname();
+  // The active tab depends on the URL, which is request-time data: stream it in.
+  return (
+    <Suspense fallback={<Tabs path="" />}>
+      <ActiveTabs />
+    </Suspense>
+  );
+}
+
+function ActiveTabs() {
+  return <Tabs path={usePathname()} />;
+}
+
+function Tabs({ path }: { path: string }) {
   return (
     <nav
       aria-label="Main"
