@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { EvidenceGrid } from "@/components/cases/evidence";
+import { InfoRequest } from "@/components/customer/info-request";
 import { ChatPanel } from "@/components/chat/chat-panel";
 import { LiveRefresh } from "@/components/shared/live-refresh";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -80,6 +81,16 @@ async function CustomerCase({ caseId }: { caseId: string }) {
           </p>
         )}
       </section>
+
+      {c.status === "awaiting_customer" && (
+        <InfoRequest
+          caseId={c.id}
+          agent={view.agent?.name ?? "Support"}
+          question={
+            ([...view.events].reverse().find((e) => e.newStatus === "awaiting_customer")?.metadata as { reason?: string } | undefined)?.reason ?? null
+          }
+        />
+      )}
 
       <ChatPanel channels={channels} names={names} locale={actor.user.locale} className="h-[28rem]" />
 
