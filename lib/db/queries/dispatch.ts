@@ -33,6 +33,8 @@ export async function listDispatch(authUserId: string, view: DispatchView) {
         productName: orderItems.name,
         customerName: customers.name,
         city: sql<string | null>`${serviceCases.serviceAddress}->>'city'`,
+        lat: sql<string | null>`${serviceCases.serviceAddress}->>'lat'`,
+        lng: sql<string | null>`${serviceCases.serviceAddress}->>'lng'`,
         technicianId: tech.id,
         technicianName: tech.name,
         assignmentStatus: caseAssignments.assignmentStatus,

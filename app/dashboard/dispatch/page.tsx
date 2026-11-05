@@ -4,6 +4,7 @@ import { Suspense } from "react";
 import { CaseTableSkeleton } from "@/components/cases/case-table";
 import { PriorityMark, StatusChip } from "@/components/cases/status-chip";
 import { AssignDialog, ScheduleDialog } from "@/components/dispatch/assign-dialog";
+import { DispatchMap } from "@/components/dispatch/dispatch-map";
 import { LiveRefresh } from "@/components/shared/live-refresh";
 import { requireOrgRole } from "@/lib/auth/access";
 import { age } from "@/lib/cases/labels";
@@ -54,6 +55,12 @@ async function Board({ view }: { view: DispatchView }) {
           </Link>
         ))}
       </nav>
+
+      <DispatchMap
+        pins={rows
+          .filter((r) => r.lat != null && r.lng != null)
+          .map((r) => ({ id: r.id, caseNumber: r.caseNumber, label: `${r.productName}, ${r.customerName}`, lat: Number(r.lat), lng: Number(r.lng), needsTechnician: r.status === "awaiting_assignment" }))}
+      />
 
       {!canDispatch && <p className="text-sm text-muted-foreground">You can see the board; assigning technicians is for dispatchers and the store owner.</p>}
 
