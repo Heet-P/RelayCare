@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { Suspense } from "react";
 import { EvidenceGrid } from "@/components/cases/evidence";
 import { InfoRequest } from "@/components/customer/info-request";
+import { RateService, ResolutionReview, type RepairReport } from "@/components/customer/resolution-review";
 import { ChatPanel } from "@/components/chat/chat-panel";
 import { LiveRefresh } from "@/components/shared/live-refresh";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -81,6 +82,16 @@ async function CustomerCase({ caseId }: { caseId: string }) {
           </p>
         )}
       </section>
+
+      {c.status === "resolution_pending" && (
+        <ResolutionReview
+          caseId={c.id}
+          technician={view.people[view.assignments.find((a) => a.assignmentStatus === "completed")?.technicianId ?? ""]?.name ?? null}
+          report={(view.assignments.find((a) => a.assignmentStatus === "completed")?.report as RepairReport | null) ?? null}
+          deskNotes={c.resolutionNotes}
+        />
+      )}
+      {(c.status === "resolved" || c.status === "closed") && <RateService caseId={c.id} existing={c.csatScore} />}
 
       {c.status === "awaiting_customer" && (
         <InfoRequest
