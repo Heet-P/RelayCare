@@ -16,7 +16,8 @@
     "demo:reset": "tsx --conditions=react-server scripts/demo-reset.ts",
     "test:integration": "vitest run --config vitest.integration.config.mts",
     "video": "remotion studio",
-    "video:render": "remotion render LaunchVideo out/relaycare-launch-1080p.mp4 && remotion render LaunchVideo out/relaycare-launch-4k.mp4 --scale=2"
+    "video:render": "remotion render LaunchVideo out/relaycare-launch-1080p.mp4 && remotion render LaunchVideo out/relaycare-launch-4k.mp4 --scale=2",
+    "video:score": "tsx remotion/score.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
@@ -51,6 +52,7 @@
     "@playwright/test": "^1.64.1",
     "@remotion/cli": "^4.0.541",
     "@remotion/google-fonts": "^4.0.541",
+    "@remotion/media": "4.0.541",
     "@remotion/tailwind-v4": "^4.0.541",
     "@remotion/transitions": "^4.0.541",
     "@tailwindcss/turbopack": "^4",

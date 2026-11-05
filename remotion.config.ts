@@ -4,6 +4,7 @@ import { enableTailwind } from "@remotion/tailwind-v4";
 
 // The launch video renders the app's real components, so it shares Tailwind and the "@/" alias.
 Config.setEntryPoint("remotion/index.ts");
+Config.setPublicDir("remotion/public");
 Config.overrideWebpackConfig((config) => {
   const withTw = enableTailwind(config);
   return {

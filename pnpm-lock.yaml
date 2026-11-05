@@ -99,6 +99,9 @@ importers:
       '@remotion/google-fonts':
         specifier: ^4.0.541
         version: 4.0.541(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
+      '@remotion/media':
+        specifier: 4.0.541
+        version: 4.0.541(react-dom@19.3.0(react@19.3.0))(react@19.3.0)
       '@remotion/tailwind-v4':
         specifier: ^4.0.541
         version: 4.0.541(@remotion/bundler@4.0.541(@swc/helpers@0.5.23)(postcss@8.5.32)(react-dom@19.3.0(react@19.3.0))(react@19.3.0))(@rspack/core@2.3.0(@swc/helpers@0.5.23))(webpack@5.105.0(esbuild@0.28.2)(postcss@8.5.32))
