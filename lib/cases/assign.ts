@@ -2,7 +2,16 @@ import "server-only";
 import { and, desc, eq, inArray, isNull, sql } from "drizzle-orm";
 import type { CaseAccess } from "@/lib/auth/access";
 import { db, type Tx } from "@/lib/db/client";
-import { caseAssignments, caseEvents, caseHandoffs, caseParticipants, organizationMemberships, technicianProfiles, users } from "@/lib/db/schema";
+import {
+  caseAssignments,
+  caseEvents,
+  caseHandoffs,
+  caseParticipants,
+  organizationMemberships,
+  serviceCases,
+  technicianProfiles,
+  users,
+} from "@/lib/db/schema";
 import { HttpError } from "@/lib/http";
 import { enqueue } from "@/lib/jobs/queue";
 import { transitionCase } from "./transitions";
@@ -105,3 +114,59 @@ export const openJobsSql = sql<number>`(
   select count(*) from ${caseAssignments} a
   where a.technician_id = "users"."id" and a.assignment_status in ('assigned', 'accepted')
 )`.mapWith(Number);
+
+async function activeAssignment(tx: Tx, caseId: string) {
+  const [a] = await tx
+    .select()
+    .from(caseAssignments)
+    .where(and(eq(caseAssignments.caseId, caseId), inArray(caseAssignments.assignmentStatus, ["assigned", "accepted"])))
+    .for("update");
+  return a ?? null;
+}
+
+/** Book or move the visit. Dispatch, or the assigned technician themselves. */
+export async function scheduleVisit(access: CaseAccess, scheduledAt: Date, outer?: Tx) {
+  const run = async (tx: Tx) => {
+    const a = await activeAssignment(tx, access.kase.id);
+    if (!a) throw new HttpError(409, "Assign a technician before booking a visit.", "no_assignment");
+    if (access.role === "technician" && a.technicianId !== access.actor.user.id) throw new HttpError(403, "This job is not yours.", "forbidden");
+    await tx.update(caseAssignments).set({ scheduledAt }).where(eq(caseAssignments.id, a.id));
+    await tx.insert(caseEvents).values({
+      caseId: access.kase.id,
+      actorId: access.actor.user.id,
+      eventType: "visit_scheduled",
+      metadata: { scheduledAt: scheduledAt.toISOString(), rescheduled: !!a.scheduledAt },
+    });
+    const [now] = await tx.select({ status: serviceCases.status }).from(serviceCases).where(eq(serviceCases.id, access.kase.id));
+    if (now.status === "assigned") await transitionCase(access, { to: "scheduled" }, tx);
+  };
+  return outer ? run(outer) : db.transaction(run);
+}
+
+/** The assigned technician accepts (optionally booking the visit) or rejects the job. */
+export async function respondToAssignment(
+  access: CaseAccess,
+  input: { action: "accept"; scheduledAt?: Date } | { action: "reject"; reason: string },
+) {
+  return db.transaction(async (tx) => {
+    const a = await activeAssignment(tx, access.kase.id);
+    if (!a || a.technicianId !== access.actor.user.id) throw new HttpError(404, "Job not found", "not_found");
+    if (input.action === "accept") {
+      if (a.assignmentStatus === "accepted") throw new HttpError(409, "You already accepted this job.", "already_accepted");
+      await tx.update(caseAssignments).set({ assignmentStatus: "accepted", acceptedAt: new Date() }).where(eq(caseAssignments.id, a.id));
+      // Accepting confirms the technician has received the handoff.
+      await tx
+        .update(caseHandoffs)
+        .set({ acknowledgedAt: new Date() })
+        .where(and(eq(caseHandoffs.caseId, access.kase.id), eq(caseHandoffs.toUserId, access.actor.user.id), isNull(caseHandoffs.acknowledgedAt)));
+      await tx.insert(caseEvents).values({ caseId: access.kase.id, actorId: access.actor.user.id, eventType: "assignment_accepted", metadata: {} });
+      if (input.scheduledAt) await scheduleVisit(access, input.scheduledAt, tx);
+      return { status: "accepted" as const };
+    }
+    await tx.update(caseAssignments).set({ assignmentStatus: "rejected", note: input.reason }).where(eq(caseAssignments.id, a.id));
+    await removeParticipant(tx, access.kase.id, access.actor.user.id);
+    await transitionCase(access, { to: "awaiting_assignment", reason: input.reason }, tx);
+    await enqueue("nexconn.group.sync", { caseId: access.kase.id }, { tx });
+    return { status: "rejected" as const };
+  });
+}
