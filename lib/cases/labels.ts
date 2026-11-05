@@ -111,6 +111,16 @@ export function describeEvent(e: EventLike): string {
       return `recorded warranty as ${m.status?.replace("_", " ")}${m.notes ? ` (${m.notes})` : ""}`;
     case "handoff_created":
       return "prepared the handoff for dispatch";
+    case "technician_assigned":
+      return `assigned ${m.technicianName ?? "a technician"}${m.previousTechnicianId ? " (replacing the previous technician)" : ""}`;
+    case "assignment_accepted":
+      return "accepted the job";
+    case "visit_scheduled":
+      return `${m.rescheduled ? "moved" : "booked"} the visit for ${new Intl.DateTimeFormat("en-IN", { day: "numeric", month: "short", hour: "numeric", minute: "2-digit", timeZone: "Asia/Kolkata" }).format(new Date(m.scheduledAt))}`;
+    case "work_completed":
+      return "finished the repair and filed the report";
+    case "feedback_given":
+      return `rated the service ${m.score} out of 5`;
     case "evidence_added":
       return `added ${m.purpose === "complaint" ? "a photo" : `${m.purpose ?? "a"} evidence`}: ${m.fileName ?? "file"}`;
     default:
