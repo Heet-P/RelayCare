@@ -74,14 +74,14 @@ async function StaffCase({ caseId }: { caseId: string }) {
         <div className="flex flex-wrap items-start justify-between gap-4">
           <div className="space-y-1">
             <p className="font-tag text-sm text-muted-foreground">{c.caseNumber}</p>
-            <h1 className="text-xl font-semibold tracking-tight">{c.title}</h1>
+            <h1 className="text-2xl font-semibold tracking-tight text-balance">{c.title}</h1>
             <div className="flex flex-wrap items-center gap-2">
               <StatusChip status={c.status} />
               <PriorityMark priority={c.priority} />
               <span className="text-sm text-muted-foreground">opened {date(c.createdAt)}</span>
             </div>
           </div>
-          <p className="flex items-center gap-2 rounded-md border bg-card px-3 py-2 text-sm">
+          <p className="glass flex items-center gap-2 rounded-full px-4 py-2 text-sm">
             <span aria-hidden className={`size-2.5 rounded-full ${ownerName ? "bg-baton" : "bg-border"}`} />
             {ownerName ? (
               <span>
@@ -94,7 +94,7 @@ async function StaffCase({ caseId }: { caseId: string }) {
         </div>
         <RelayStrip
           current={station}
-          className="max-w-2xl"
+          className="glass max-w-2xl rounded-xl px-2 py-4"
           labels={{ customer: view.customer.name, agent: view.agent?.name ?? "Support", technician: view.technician?.name ?? "Technician" }}
         />
       </header>

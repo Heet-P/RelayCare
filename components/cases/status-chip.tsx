@@ -3,7 +3,7 @@ import type { CaseStatus } from "@/lib/cases/state-machine";
 import { cn } from "@/lib/utils";
 
 const TONE = {
-  attention: "bg-primary/10 text-primary",
+  attention: "bg-primary/12 text-primary",
   active: "bg-secondary text-foreground",
   waiting: "bg-muted text-muted-foreground",
   done: "bg-success/10 text-success",
@@ -12,7 +12,7 @@ const TONE = {
 
 export function StatusChip({ status, className }: { status: CaseStatus; className?: string }) {
   return (
-    <span className={cn("inline-flex h-6 items-center rounded-sm px-2 text-xs font-medium whitespace-nowrap", TONE[STATUS_TONE[status]], className)}>
+    <span className={cn("inline-flex h-6 items-center gap-1.5 rounded-full px-2.5 text-xs font-semibold whitespace-nowrap", TONE[STATUS_TONE[status]], className)}>
       {STATUS_LABEL[status]}
     </span>
   );
