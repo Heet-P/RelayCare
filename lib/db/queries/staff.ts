@@ -137,3 +137,32 @@ export async function listConversations(authUserId: string) {
       .limit(200),
   );
 }
+
+/** Overview analytics (spec §4A "review performance"), all under RLS. */
+export async function serviceAnalytics(authUserId: string) {
+  return withRls(authUserId, async (tx) => {
+    const byCategory = await tx.execute<{ category: string; n: number }>(sql`
+      select category, count(*)::int as n from service_cases group by category order by n desc`);
+    // Time spent in each status = gap until the next status change of the same case.
+    const stageHours = await tx.execute<{ status: string; hours: number; samples: number }>(sql`
+      with s as (
+        select new_status, created_at,
+               lead(created_at) over (partition by case_id order by created_at) as left_at
+        from case_events where new_status is not null
+      )
+      select new_status::text as status,
+             round((extract(epoch from avg(left_at - created_at)) / 3600)::numeric, 1)::float as hours,
+             count(*)::int as samples
+      from s where left_at is not null
+      group by new_status`);
+    const workload = await tx.execute<{ name: string; open: number; done: number }>(sql`
+      select u.name,
+             count(*) filter (where a.assignment_status in ('assigned', 'accepted'))::int as open,
+             count(*) filter (where a.assignment_status = 'completed')::int as done
+      from case_assignments a join users u on u.id = a.technician_id
+      group by u.name order by open desc, done desc`);
+    const [csat] = await tx.execute<{ avg: number | null; n: number }>(sql`
+      select round(avg(csat_score)::numeric, 1)::float as avg, count(csat_score)::int as n from service_cases`);
+    return { byCategory: [...byCategory], stageHours: [...stageHours], workload: [...workload], csat };
+  });
+}
