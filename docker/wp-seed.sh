@@ -4,7 +4,10 @@
 set -euo pipefail
 cd /var/www/html
 
-until wp db check >/dev/null 2>&1; do echo "waiting for database…"; sleep 2; done
+# Readiness via PHP mysqli: the cli image's MariaDB client rejects MySQL 8.4's self-signed TLS cert.
+until php -r 'exit(@new mysqli(getenv("WORDPRESS_DB_HOST"), getenv("WORDPRESS_DB_USER"), getenv("WORDPRESS_DB_PASSWORD"), getenv("WORDPRESS_DB_NAME")) ? 0 : 1);' 2>/dev/null; do
+  echo "waiting for database…"; sleep 2
+done
 
 if ! wp core is-installed 2>/dev/null; then
   wp core install --url=http://localhost:8080 --title="Demo Electronics" \
