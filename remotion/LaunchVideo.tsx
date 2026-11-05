@@ -235,15 +235,19 @@ function Relay() {
           <div className="absolute top-[52px] right-[12.5%] left-[12.5%] h-1.5 rounded-full bg-border" />
           <div className="absolute top-[52px] left-[12.5%] h-1.5 rounded-full bg-foreground/60" style={{ width: `${(at / 3) * 75}%` }} />
           <div
-            className="absolute top-[34px] z-10 h-[42px] w-28 -translate-x-1/2 rounded-full bg-baton shadow-[0_0_0_8px_var(--background),0_16px_30px_-10px_rgb(244_165_28/0.7)]"
+            className="absolute top-[34px] h-[42px] w-28 -translate-x-1/2 rounded-full bg-baton shadow-[0_0_0_8px_var(--background),0_16px_30px_-10px_rgb(244_165_28/0.7)]"
             style={{ left: `${12.5 + (at / 3) * 75}%` }}
           />
           <ol className="relative grid grid-cols-4">
             {PEOPLE.map((p, i) => {
               const lit = interpolate(at, [i - 0.4, i], [0, 1], { extrapolateLeft: "clamp", extrapolateRight: "clamp" });
               return (
-                <li key={p.name} className="flex flex-col items-center gap-4" style={{ opacity: 0.45 + lit * 0.55 }}>
-                  <span className="grid size-[104px] place-items-center rounded-full bg-primary text-[44px] font-semibold text-primary-foreground ring-8 ring-background">
+                <li key={p.name} className="relative z-10 flex flex-col items-center gap-4" style={{ opacity: 0.45 + lit * 0.55 }}>
+                  {/* the holder wears the baton colour as a ring; the baton itself slides behind */}
+                  <span
+                    className="grid size-[104px] place-items-center rounded-full bg-primary text-[44px] font-semibold text-primary-foreground"
+                    style={{ boxShadow: `0 0 0 8px var(--background), 0 0 0 ${8 + 8 * holds(at, i)}px var(--baton)` }}
+                  >
                     {p.name[0]}
                   </span>
                   <span className="text-[36px] font-semibold tracking-tight">{p.name}</span>
@@ -267,6 +271,9 @@ function Relay() {
     </Stage>
   );
 }
+
+/** 1 while the baton rests on station i, easing to 0 as it leaves or before it arrives. */
+const holds = (at: number, i: number) => Math.max(0, 1 - Math.abs(at - i) * 2.5);
 
 /* 6. Repair report, the customer confirms, the numbers land. */
 function Resolution() {
@@ -333,11 +340,11 @@ function Close() {
       {frame < 120 && (
         <AbsoluteFill className="items-center justify-center" style={{ opacity: 1 - out, filter: `blur(${out * 12}px)` }}>
           <p className={`${h1} text-center`}>
-            <Words text="One purchase." start={2} />
+            <Words text="One purchase." start={14} />
             <br />
-            <Words text="One journey." start={26} />
+            <Words text="One journey." start={34} />
             <br />
-            <Words text="One resolution." start={50} wordClassName={() => "text-primary"} />
+            <Words text="One resolution." start={54} wordClassName={() => "text-primary"} />
           </p>
         </AbsoluteFill>
       )}
