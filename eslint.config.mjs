@@ -12,6 +12,8 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Vendored third-party components (installed from registries; not edited here).
+    "components/ui/skiper-ui/**",
   ]),
 ]);
 
