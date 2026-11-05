@@ -3,7 +3,7 @@ import { and, asc, desc, eq, ilike, inArray, or, sql, type SQL } from "drizzle-o
 import { alias } from "drizzle-orm/pg-core";
 import type { CaseStatus } from "@/lib/cases/state-machine";
 import { withRls } from "@/lib/db/rls";
-import { caseEvents, customers, orderItems, serviceCases, users } from "@/lib/db/schema";
+import { caseEvents, chatThreads, customers, orderItems, serviceCases, users } from "@/lib/db/schema";
 
 const owner = alias(users, "owner");
 const actor = alias(users, "actor");
@@ -112,3 +112,28 @@ export async function listCases(authUserId: string, opts: { group?: StatusGroup 
   });
 }
 export type CaseRow = Awaited<ReturnType<typeof listCases>>[number];
+
+/** Case conversations the viewer may open, most recently active first (spec §4 "Conversations"). */
+export async function listConversations(authUserId: string) {
+  return withRls(authUserId, (tx) =>
+    tx
+      .select({
+        threadId: chatThreads.id,
+        threadType: chatThreads.threadType,
+        lastMessageAt: chatThreads.lastMessageAt,
+        openedAt: chatThreads.createdAt,
+        caseId: serviceCases.id,
+        caseNumber: serviceCases.caseNumber,
+        status: serviceCases.status,
+        productName: orderItems.name,
+        customerName: customers.name,
+      })
+      .from(chatThreads)
+      .innerJoin(serviceCases, eq(serviceCases.id, chatThreads.caseId))
+      .innerJoin(orderItems, eq(orderItems.id, serviceCases.orderItemId))
+      .innerJoin(customers, eq(customers.id, serviceCases.customerId))
+      .where(eq(chatThreads.isActive, true))
+      .orderBy(desc(sql`coalesce(${chatThreads.lastMessageAt}, ${chatThreads.createdAt})`))
+      .limit(200),
+  );
+}
