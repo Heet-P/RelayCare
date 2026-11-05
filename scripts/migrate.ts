@@ -9,6 +9,10 @@ const url = process.env.DIRECT_URL ?? process.env.DATABASE_URL;
 if (!url) throw new Error("Set DIRECT_URL (or DATABASE_URL) in .env.local");
 
 const sql = postgres(url, { max: 1 });
-await migrate(drizzle(sql), { migrationsFolder: "drizzle" });
-console.log("migrations applied");
-await sql.end();
+migrate(drizzle(sql), { migrationsFolder: "drizzle" })
+  .then(() => console.log("migrations applied"))
+  .catch((e) => {
+    console.error(e);
+    process.exitCode = 1;
+  })
+  .finally(() => sql.end());
