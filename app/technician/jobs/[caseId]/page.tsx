@@ -10,6 +10,7 @@ import { ChatPanel } from "@/components/chat/chat-panel";
 import { ScheduleDialog } from "@/components/dispatch/assign-dialog";
 import { LiveRefresh } from "@/components/shared/live-refresh";
 import { JobResponse } from "@/components/technician/job-response";
+import { WorkPanel } from "@/components/technician/work-panel";
 import { Skeleton } from "@/components/ui/skeleton";
 import { resolveCaseAccess } from "@/lib/auth/access";
 import { requireActor } from "@/lib/auth/session";
@@ -105,6 +106,14 @@ async function Job({ caseId }: { caseId: string }) {
           )}
         </div>
       </section>
+
+      {accepted && (
+        <WorkPanel
+          caseId={c.id}
+          status={c.status}
+          photoCount={view.attachments.filter((a) => a.uploadedBy === actor.user.id && (a.purpose === "inspection" || a.purpose === "repair")).length}
+        />
+      )}
 
       <ChatPanel channels={channels} names={names} locale={actor.user.locale} className="h-[28rem]" />
 
