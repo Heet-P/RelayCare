@@ -12,7 +12,8 @@ import { resolveCaseAccess } from "@/lib/auth/access";
 import { requireActor } from "@/lib/auth/session";
 import { categoryLabel } from "@/lib/cases/categories";
 import { chatChannelsFor } from "@/lib/cases/chat-channels";
-import { CUSTOMER_STEPS, customerStatus } from "@/lib/cases/customer-status";
+import { customerStatusIn } from "@/lib/cases/customer-status";
+import { tr } from "@/lib/i18n";
 import { getCaseView } from "@/lib/db/queries/case-view";
 import { date } from "@/lib/format";
 import { cn } from "@/lib/utils";
@@ -38,7 +39,8 @@ async function CustomerCase({ caseId }: { caseId: string }) {
   if (!view) notFound();
 
   const c = view.case;
-  const status = customerStatus(c.status, {
+  const t = tr(actor.user.locale);
+  const status = customerStatusIn(actor.user.locale, c.status, {
     agent: view.agent?.name,
     technician: view.technician?.name,
     visitAt: view.activeAssignment?.scheduledAt ?? null,
@@ -51,7 +53,7 @@ async function CustomerCase({ caseId }: { caseId: string }) {
       <LiveRefresh table="service_cases" />
       <header className="space-y-2">
         <p className="font-tag text-sm text-muted-foreground">
-          {c.caseNumber}, opened {date(c.createdAt)}
+          {c.caseNumber}, {t.opened} {date(c.createdAt)}
         </p>
         <h1 className="text-xl font-semibold tracking-tight">{view.item.name}</h1>
         <p className="text-muted-foreground">{categoryLabel(c.category)}</p>
@@ -59,7 +61,7 @@ async function CustomerCase({ caseId }: { caseId: string }) {
 
       <section className="space-y-4 rounded-lg border bg-card p-4" aria-label="Progress">
         <ol className="grid grid-cols-5 gap-1">
-          {CUSTOMER_STEPS.map((s, i) => (
+          {t.steps.map((s, i) => (
             <li key={s} className="space-y-2" aria-current={i === status.step ? "step" : undefined}>
               <span
                 className={cn(
@@ -77,24 +79,26 @@ async function CustomerCase({ caseId }: { caseId: string }) {
         </div>
         {view.technician && (
           <p className="rounded-md bg-secondary px-3 py-2 text-sm">
-            Technician: <span className="font-medium">{view.technician.name}</span>
-            {view.activeAssignment?.scheduledAt && <>, visit {date(view.activeAssignment.scheduledAt)}</>}
+            {t.technician}: <span className="font-medium">{view.technician.name}</span>
+            {view.activeAssignment?.scheduledAt && <>, {t.visit} {date(view.activeAssignment.scheduledAt)}</>}
           </p>
         )}
       </section>
 
       {c.status === "resolution_pending" && (
         <ResolutionReview
+          t={t}
           caseId={c.id}
           technician={view.people[view.assignments.find((a) => a.assignmentStatus === "completed")?.technicianId ?? ""]?.name ?? null}
           report={(view.assignments.find((a) => a.assignmentStatus === "completed")?.report as RepairReport | null) ?? null}
           deskNotes={c.resolutionNotes}
         />
       )}
-      {(c.status === "resolved" || c.status === "closed") && <RateService caseId={c.id} existing={c.csatScore} />}
+      {(c.status === "resolved" || c.status === "closed") && <RateService t={t} caseId={c.id} existing={c.csatScore} />}
 
       {c.status === "awaiting_customer" && (
         <InfoRequest
+          t={t}
           caseId={c.id}
           agent={view.agent?.name ?? "Support"}
           question={
@@ -106,15 +110,15 @@ async function CustomerCase({ caseId }: { caseId: string }) {
       <ChatPanel channels={channels} names={names} locale={actor.user.locale} className="h-[28rem]" />
 
       <section className="space-y-3">
-        <h2 className="text-lg font-semibold">Your report</h2>
+        <h2 className="text-lg font-semibold">{t.yourReport}</h2>
         <dl className="divide-y rounded-lg border bg-card">
           <div className="space-y-1 px-4 py-3">
-            <dt className="text-sm text-muted-foreground">What happened</dt>
+            <dt className="text-sm text-muted-foreground">{t.whatHappened}</dt>
             <dd className="whitespace-pre-line">{c.description}</dd>
           </div>
           {c.troubleshooting.length > 0 && (
             <div className="space-y-1 px-4 py-3">
-              <dt className="text-sm text-muted-foreground">Already tried</dt>
+              <dt className="text-sm text-muted-foreground">{t.alreadyTried}</dt>
               <dd>
                 <ul className="list-disc pl-5">
                   {c.troubleshooting.map((t, i) => (
@@ -126,18 +130,18 @@ async function CustomerCase({ caseId }: { caseId: string }) {
           )}
           <div className="grid grid-cols-2 gap-4 px-4 py-3">
             <div className="space-y-1">
-              <dt className="text-sm text-muted-foreground">Order</dt>
+              <dt className="text-sm text-muted-foreground">{t.order}</dt>
               <dd className="font-tag">#{view.order.orderNumber}</dd>
             </div>
             <div className="space-y-1">
-              <dt className="text-sm text-muted-foreground">Serial number</dt>
-              <dd className="font-tag">{c.reportedSerial ?? "Not given"}</dd>
+              <dt className="text-sm text-muted-foreground">{t.serial}</dt>
+              <dd className="font-tag">{c.reportedSerial ?? t.notGiven}</dd>
             </div>
           </div>
         </dl>
       </section>
 
-      <EvidenceGrid view={view} canAdd={open} />
+      <EvidenceGrid view={view} canAdd={open} labels={{ title: t.photos, add: t.addPhotos }} />
     </div>
   );
 }

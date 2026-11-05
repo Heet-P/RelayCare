@@ -83,5 +83,5 @@ export function customerStatusIn(locale: string, status: CaseStatus, ctx: Ctx = 
   const visit = ctx.visitAt
     ? new Intl.DateTimeFormat(locale === "gu" ? "gu-IN" : "hi-IN", { weekday: "long", day: "numeric", month: "long", hour: "numeric", minute: "2-digit", timeZone: "Asia/Kolkata" }).format(ctx.visitAt)
     : null;
-  return { step: base.step, ...fn({ agent: ctx.agent ?? "સપોર્ટ ટીમ", tech: ctx.technician ?? (locale === "gu" ? "તમારા ટેકનિશિયન" : "आपके तकनीशियन"), visit }) };
+  return { step: base.step, ...fn({ agent: ctx.agent ?? (locale === "gu" ? "સપોર્ટ ટીમ" : "सपोर्ट टीम"), tech: ctx.technician ?? (locale === "gu" ? "તમારા ટેકનિશિયન" : "आपके तकनीशियन"), visit }) };
 }

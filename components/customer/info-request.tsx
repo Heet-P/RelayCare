@@ -4,14 +4,17 @@ import { useRouter } from "next/navigation";
 import { useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import type { Messages } from "@/lib/i18n";
 
 /** Shown while the case waits on the customer: what was asked, and a way to hand it back. */
-export function InfoRequest({ caseId, question, agent }: { caseId: string; question: string | null; agent: string }) {
+export function InfoRequest({ t, caseId, question, agent }: { t: Messages; caseId: string; question: string | null; agent: string }) {
   const router = useRouter();
   const [pending, start] = useTransition();
   return (
     <section className="space-y-3 rounded-lg border-2 border-baton bg-card p-4" aria-label="Information requested">
-      <p className="font-semibold">{agent} asked:</p>
+      <p className="font-semibold">
+        {agent} {t.asked}
+      </p>
       <p className="whitespace-pre-line">{question ?? "Please reply in the conversation below."}</p>
       <p className="text-sm text-muted-foreground">Answer in the conversation or add photos below, then let {agent} know.</p>
       <Button
@@ -33,7 +36,7 @@ export function InfoRequest({ caseId, question, agent }: { caseId: string; quest
           })
         }
       >
-        {pending ? "Sending…" : "I've added the information"}
+        {pending ? "…" : t.infoDone}
       </Button>
     </section>
   );

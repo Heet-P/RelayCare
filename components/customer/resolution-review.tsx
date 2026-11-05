@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
+import type { Messages } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export type RepairReport = {
@@ -31,7 +32,7 @@ async function post(url: string, method: string, body: object) {
 }
 
 /** Spec Journey E steps 9–10: the customer reviews the result and confirms or rejects it. */
-export function ResolutionReview({ caseId, technician, report, deskNotes }: { caseId: string; technician: string | null; report: RepairReport | null; deskNotes: string | null }) {
+export function ResolutionReview({ t, caseId, technician, report, deskNotes }: { t: Messages; caseId: string; technician: string | null; report: RepairReport | null; deskNotes: string | null }) {
   const router = useRouter();
   const [pending, start] = useTransition();
   const [notFixed, setNotFixed] = useState(false);
@@ -90,7 +91,7 @@ export function ResolutionReview({ caseId, technician, report, deskNotes }: { ca
           }}
         >
           <label htmlFor="still" className="text-sm font-medium">
-            What is still wrong?
+            {t.stillWrong}
           </label>
           <textarea
             id="still"
@@ -111,10 +112,10 @@ export function ResolutionReview({ caseId, technician, report, deskNotes }: { ca
       ) : (
         <div className="flex flex-wrap gap-2">
           <Button className="h-11 flex-1" disabled={pending} onClick={() => act({ to: "resolved" }, "Thanks for confirming!")}>
-            Yes, it&apos;s fixed
+            {t.isFixed}
           </Button>
           <Button variant="outline" className="h-11" disabled={pending} onClick={() => setNotFixed(true)}>
-            No, still a problem
+            {t.notFixed}
           </Button>
         </div>
       )}
@@ -123,7 +124,7 @@ export function ResolutionReview({ caseId, technician, report, deskNotes }: { ca
 }
 
 /** One-tap 1–5 rating once the case is resolved. Optimistic: shows the rating immediately. */
-export function RateService({ caseId, existing }: { caseId: string; existing: number | null }) {
+export function RateService({ t, caseId, existing }: { t: Messages; caseId: string; existing: number | null }) {
   const [score, setScore] = useState(existing ?? 0);
   const [comment, setComment] = useState("");
   const [sent, setSent] = useState(existing != null);
@@ -132,7 +133,7 @@ export function RateService({ caseId, existing }: { caseId: string; existing: nu
   if (sent) return <p className="rounded-lg border bg-card p-4 text-sm">Thanks for rating us {score} out of 5.</p>;
   return (
     <section className="space-y-3 rounded-lg border bg-card p-4" aria-label="Rate the service">
-      <p className="font-semibold">How was the service?</p>
+      <p className="font-semibold">{t.rate}</p>
       <div className="flex gap-1" role="radiogroup" aria-label="Rating">
         {[1, 2, 3, 4, 5].map((n) => (
           <button
@@ -170,7 +171,7 @@ export function RateService({ caseId, existing }: { caseId: string; existing: nu
           })
         }
       >
-        Send rating
+        {t.sendRating}
       </Button>
     </section>
   );

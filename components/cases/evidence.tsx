@@ -5,12 +5,12 @@ import { AddEvidence } from "./add-evidence";
 const PURPOSE: Record<string, string> = { complaint: "From customer", inspection: "Inspection", repair: "Repair", document: "Document" };
 
 /** Case evidence. Files load through /api/attachments/:id (access-checked, short-lived signed URL). */
-export function EvidenceGrid({ view, canAdd }: { view: CaseView; canAdd: boolean }) {
+export function EvidenceGrid({ view, canAdd, labels }: { view: CaseView; canAdd: boolean; labels?: { title: string; add: string } }) {
   return (
     <section className="space-y-3">
       <div className="flex items-center justify-between gap-2">
-        <h2 className="text-lg font-semibold">Photos and files</h2>
-        {canAdd && <AddEvidence caseId={view.case.id} />}
+        <h2 className="text-lg font-semibold">{labels?.title ?? "Photos and files"}</h2>
+        {canAdd && <AddEvidence caseId={view.case.id} label={labels?.add} />}
       </div>
       {view.attachments.length === 0 ? (
         <p className="text-muted-foreground">No photos yet. A clear photo of the problem helps the technician prepare.</p>
