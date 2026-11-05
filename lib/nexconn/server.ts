@@ -113,3 +113,8 @@ export async function sendDirectText(fromUserId: string, toUserId: string, text:
     isEchoToSender: 1,
   });
 }
+
+/** Delete a group channel (test clean-up and demo reset). */
+export async function dismissGroup(channelId: string, ownerUserId: string) {
+  await call("/v4/group-channel/dismiss", { channelId, userId: ownerUserId });
+}
