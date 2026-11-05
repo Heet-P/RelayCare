@@ -442,7 +442,8 @@ export const caseEvents = pgTable(
     oldStatus: caseStatus("old_status"),
     newStatus: caseStatus("new_status"),
     metadata: jsonb("metadata").notNull().default({}),
-    createdAt: createdAt(),
+    // clock_timestamp(), not now(): several events written in one transaction must keep their order.
+    createdAt: timestamp("created_at", { withTimezone: true }).notNull().default(sql`clock_timestamp()`),
   },
   (t) => [index("idx_case_events_timeline").on(t.caseId, t.createdAt.desc())],
 );
