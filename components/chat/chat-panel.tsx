@@ -77,7 +77,11 @@ function ChannelView({ channel, names, locale }: { channel: ChannelRef; names: R
   const bottom = useRef<HTMLDivElement>(null);
   const isGroup = channel.type === "group";
 
-  useEffect(() => bottom.current?.scrollIntoView({ block: "end" }), [messages.length]);
+  // Braces matter: scrollIntoView returns a Promise in current browsers, which must not
+  // be returned from an effect.
+  useEffect(() => {
+    bottom.current?.scrollIntoView({ block: "end" });
+  }, [messages.length]);
 
   async function send() {
     const text = draft.trim();
