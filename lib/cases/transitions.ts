@@ -4,6 +4,7 @@ import type { CaseAccess } from "@/lib/auth/access";
 import { db, type Tx } from "@/lib/db/client";
 import { caseAssignments, caseAttachments, caseEvents, caseHandoffs, caseParticipants, serviceCases } from "@/lib/db/schema";
 import { HttpError } from "@/lib/http";
+import { enqueue } from "@/lib/jobs/queue";
 import { canTransition, ownerKindFor, type CaseStatus, type ResolutionType } from "./state-machine";
 
 export type TransitionInput = {
@@ -60,6 +61,9 @@ export async function transitionCase(access: CaseAccess, input: TransitionInput,
       newStatus: input.to,
       metadata: { action: verdict.action, ...(input.reason ? { reason: input.reason } : {}), ...(input.resolutionType ? { resolutionType: input.resolutionType } : {}) },
     });
+    // Customer-facing notifications, enqueued in the same transaction as the change.
+    if (input.to === "awaiting_customer") await enqueue("case.notify", { caseId: kase.id, kind: "info_requested", detail: input.reason ?? "" }, { tx });
+    if (input.to === "closed") await enqueue("case.notify", { caseId: kase.id, kind: "case_closed" }, { tx });
     return updated;
   };
   return outer ? run(outer) : db.transaction(run);

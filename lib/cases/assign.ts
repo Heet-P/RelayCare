@@ -111,6 +111,7 @@ export async function assignTechnician(access: CaseAccess, input: AssignInput) {
     if (input.scheduledAt) await transitionCase(access, { to: "scheduled" }, tx);
 
     await enqueue("nexconn.group.sync", { caseId: kase.id, assignmentId: assignment.id }, { tx, dedupeKey: `group.sync:${assignment.id}` });
+    await enqueue("case.notify", { caseId: kase.id, kind: "technician_assigned" }, { tx });
     return { assignmentId: assignment.id, technician: tech.name };
   });
   return result;

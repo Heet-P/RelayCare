@@ -15,6 +15,7 @@ import {
 } from "@/lib/db/schema";
 import type { CreateCaseInput, CreateCaseResult } from "@/lib/contracts/cases";
 import { HttpError, notFound } from "@/lib/http";
+import { enqueue } from "@/lib/jobs/queue";
 import { ensureNexconnId } from "@/lib/nexconn/ids";
 import { categoryLabel } from "./categories";
 import { TERMINAL } from "./state-machine";
@@ -128,6 +129,7 @@ export async function createCase(actor: Actor, input: CreateCaseInput): Promise<
       newStatus: "submitted",
       metadata: { category: input.category, agentId },
     });
+    await enqueue("case.notify", { caseId: kase.id, kind: "case_created" }, { tx });
     return { caseId: kase.id, caseNumber };
   });
 }
