@@ -246,6 +246,52 @@
   animation: rise 360ms var(--ease-out) both;
 }
 
+/*
+ * Landing: scroll-driven motion (CSS scroll timelines; no JS listeners). Progressive: without
+ * support, or with reduced motion, everything simply shows its finished state.
+ */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 40%;
+    }
+    @media (min-width: 48rem) {
+      .relay-scroll {
+        view-timeline-name: --relay;
+      }
+      .relay-fill {
+        animation: relay-fill linear both;
+        animation-timeline: --relay;
+        animation-range: contain 0% contain 100%;
+      }
+      .relay-baton {
+        animation: relay-baton linear both;
+        animation-timeline: --relay;
+        animation-range: contain 0% contain 100%;
+      }
+      .relay-station {
+        animation: relay-station linear both;
+        animation-timeline: --relay;
+        animation-range: contain calc(var(--i) * 25%) contain calc(var(--i) * 25% + 12%);
+      }
+    }
+  }
+}
+@keyframes relay-fill {
+  from { transform: scaleX(0.02); }
+  to { transform: scaleX(1); }
+}
+@keyframes relay-baton {
+  from { left: 1%; }
+  to { left: 100%; }
+}
+@keyframes relay-station {
+  from { opacity: 0.35; transform: translateY(10px) scale(0.98); }
+  to { opacity: 1; transform: none; }
+}
+
 /* Sonner toasts on glass (Emil Kowalski's toaster; styled, not replaced). */
 [data-sonner-toaster] [data-sonner-toast] {
   background: var(--glass-strong);
