@@ -1,0 +1,62 @@
+# Local WooCommerce demo store for RelayCare development.
+#   docker compose -f docker/docker-compose.yml up -d
+#   docker compose -f docker/docker-compose.yml run --rm cli bash /seed/wp-seed.sh
+# Store: http://localhost:8080  (admin / relaycare-admin)
+name: relaycare-store
+
+services:
+  db:
+    image: mysql:8.4
+    environment:
+      MYSQL_DATABASE: wordpress
+      MYSQL_USER: wordpress
+      MYSQL_PASSWORD: wordpress
+      MYSQL_ROOT_PASSWORD: root
+    volumes:
+      - db:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-uroot", "-proot"]
+      interval: 5s
+      retries: 20
+
+  wordpress:
+    image: wordpress:6-php8.3-apache
+    depends_on:
+      db:
+        condition: service_healthy
+    ports:
+      - "8080:80"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - wp:/var/www/html
+      - ./mu-plugins:/var/www/html/wp-content/mu-plugins
+      - ../wordpress/relaycare-woocommerce:/var/www/html/wp-content/plugins/relaycare-woocommerce
+
+  cli:
+    image: wordpress:cli-php8.3
+    profiles: ["tools"]
+    depends_on:
+      - wordpress
+    user: "33:33"
+    environment:
+      WORDPRESS_DB_HOST: db
+      WORDPRESS_DB_USER: wordpress
+      WORDPRESS_DB_PASSWORD: wordpress
+      WORDPRESS_DB_NAME: wordpress
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    volumes:
+      - wp:/var/www/html
+      - ./mu-plugins:/var/www/html/wp-content/mu-plugins
+      - ../wordpress/relaycare-woocommerce:/var/www/html/wp-content/plugins/relaycare-woocommerce
+      - ./wp-seed.sh:/seed/wp-seed.sh:ro
+
+volumes:
+  db:
+  wp:
