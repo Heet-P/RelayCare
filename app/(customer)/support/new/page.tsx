@@ -5,6 +5,7 @@ import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { requireActor } from "@/lib/auth/session";
 import { listMyPurchases } from "@/lib/db/queries/customer";
+import { tr } from "@/lib/i18n";
 import { ReportWizard, type WizardItem } from "./report-wizard";
 
 export const metadata: Metadata = { title: "Report a problem" };
@@ -48,7 +49,7 @@ async function Wizard({ item, order }: { item?: string; order?: string }) {
   // From the store's Get Support button we know the order; pick its only product automatically.
   const fromOrder = order ? items.filter((i) => i.orderId === order) : [];
   const preselected = items.find((i) => i.id === item)?.id ?? (fromOrder.length === 1 ? fromOrder[0].id : undefined);
-  return <ReportWizard items={fromOrder.length > 1 ? fromOrder : items} preselected={preselected} />;
+  return <ReportWizard items={fromOrder.length > 1 ? fromOrder : items} preselected={preselected} t={tr(actor.user.locale)} />;
 }
 
 function WizardSkeleton() {

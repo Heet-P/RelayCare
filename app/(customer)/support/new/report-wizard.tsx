@@ -11,6 +11,7 @@ import { Label } from "@/components/ui/label";
 import { ISSUE_CATEGORIES, type IssueCategory } from "@/lib/cases/categories";
 import { EVIDENCE_LIMITS } from "@/lib/contracts/cases";
 import { uploadEvidence } from "@/lib/evidence-upload";
+import type { Messages } from "@/lib/i18n";
 import { cn } from "@/lib/utils";
 
 export type WizardItem = { id: string; orderId: string; orderNumber: string; name: string; serialNumber: string | null };
@@ -19,7 +20,7 @@ const STEPS = ["Product", "What's wrong", "Details", "Photos", "Review"] as cons
 const MAX_FILES = 6;
 
 /** Spec Journey B steps 5–10: choose product → category → describe → evidence → create case. */
-export function ReportWizard({ items, preselected }: { items: WizardItem[]; preselected?: string }) {
+export function ReportWizard({ items, preselected, t }: { items: WizardItem[]; preselected?: string; t: Messages }) {
   const router = useRouter();
   const [step, setStep] = useState(preselected ? 1 : 0);
   const [itemId, setItemId] = useState(preselected ?? (items.length === 1 ? items[0].id : ""));
@@ -99,12 +100,12 @@ export function ReportWizard({ items, preselected }: { items: WizardItem[]; pres
         ))}
       </ol>
       <p className="text-sm text-muted-foreground">
-        Step {step + 1} of {STEPS.length}
+        {t.step} {step + 1} {t.of} {STEPS.length}
       </p>
 
       {step === 0 && (
         <fieldset className="space-y-4">
-          <legend className="text-xl font-semibold tracking-tight">Which product needs help?</legend>
+          <legend className="text-xl font-semibold tracking-tight">{t.whichProduct}</legend>
           <div className="space-y-2">
             {items.map((i) => (
               <label
@@ -126,7 +127,7 @@ export function ReportWizard({ items, preselected }: { items: WizardItem[]; pres
 
       {step === 1 && (
         <fieldset className="space-y-4">
-          <legend className="text-xl font-semibold tracking-tight">What&apos;s wrong with your {item?.name}?</legend>
+          <legend className="text-xl font-semibold tracking-tight">{t.whatsWrong} {item?.name}?</legend>
           <div className="grid grid-cols-2 gap-2">
             {ISSUE_CATEGORIES.map((c) => (
               <label
@@ -143,9 +144,9 @@ export function ReportWizard({ items, preselected }: { items: WizardItem[]; pres
 
       {step === 2 && (
         <div className="space-y-6">
-          <h2 className="text-xl font-semibold tracking-tight">Tell us what happened</h2>
+          <h2 className="text-xl font-semibold tracking-tight">{t.tellUs}</h2>
           <div className="space-y-2">
-            <Label htmlFor="description">What&apos;s the problem?</Label>
+            <Label htmlFor="description">{t.problem}</Label>
             <textarea
               id="description"
               rows={5}
@@ -154,10 +155,10 @@ export function ReportWizard({ items, preselected }: { items: WizardItem[]; pres
               placeholder="For example: water leaks from the bottom during the wash cycle."
               className="w-full rounded-md border border-input bg-card px-3 py-2 text-base outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
             />
-            <p className="text-sm text-muted-foreground">Write in English, हिन्दी or ગુજરાતી. The team sees a translation.</p>
+            <p className="text-sm text-muted-foreground">{t.anyLanguage}</p>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="tried">What have you already tried?</Label>
+            <Label htmlFor="tried">{t.triedLabel}</Label>
             {tried.length > 0 && (
               <ul className="flex flex-wrap gap-2">
                 {tried.map((t, i) => (
@@ -180,13 +181,13 @@ export function ReportWizard({ items, preselected }: { items: WizardItem[]; pres
                 className="h-11"
               />
               <Button type="button" variant="outline" className="h-11" onClick={addTried} disabled={!triedDraft.trim()}>
-                <Plus className="size-4" /> Add
+                <Plus className="size-4" /> {t.add}
               </Button>
             </div>
-            <p className="text-sm text-muted-foreground">This saves the technician from asking you again.</p>
+            <p className="text-sm text-muted-foreground">{t.triedHint}</p>
           </div>
           <div className="space-y-2">
-            <Label htmlFor="serial">Serial number</Label>
+            <Label htmlFor="serial">{t.serial}</Label>
             <Input id="serial" value={serial} onChange={(e) => setSerial(e.target.value)} className="font-tag h-11" placeholder="On the label behind the door or on the back" />
           </div>
         </div>
@@ -194,11 +195,13 @@ export function ReportWizard({ items, preselected }: { items: WizardItem[]; pres
 
       {step === 3 && (
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold tracking-tight">Add photos or a short video</h2>
-          <p className="text-muted-foreground">Optional, but it helps us arrive with the right parts. Up to {MAX_FILES} files.</p>
+          <h2 className="text-xl font-semibold tracking-tight">{t.addMedia}</h2>
+          <p className="text-muted-foreground">
+            {t.addMediaHint} ({MAX_FILES} max)
+          </p>
           <label className="flex min-h-24 cursor-pointer flex-col items-center justify-center gap-2 rounded-lg border-2 border-dashed bg-card p-4 text-center hover:border-primary">
             <Camera className="size-6 text-muted-foreground" aria-hidden />
-            <span className="font-medium">Take or choose photos</span>
+            <span className="font-medium">{t.chooseMedia}</span>
             <span className="text-sm text-muted-foreground">Photos up to 10 MB, videos up to 50 MB</span>
             <input type="file" accept="image/*,video/mp4,video/quicktime,application/pdf" multiple className="sr-only" onChange={(e) => (addFiles(e.target.files), (e.target.value = ""))} />
           </label>
@@ -224,7 +227,7 @@ export function ReportWizard({ items, preselected }: { items: WizardItem[]; pres
 
       {step === 4 && (
         <div className="space-y-4">
-          <h2 className="text-xl font-semibold tracking-tight">Check and send</h2>
+          <h2 className="text-xl font-semibold tracking-tight">{t.checkAndSend}</h2>
           <dl className="divide-y rounded-lg border bg-card">
             <Row label="Product" value={`${item?.name} (Order #${item?.orderNumber})`} />
             <Row label="Problem" value={ISSUE_CATEGORIES.find((c) => c.key === category)?.label ?? ""} />
@@ -250,16 +253,16 @@ export function ReportWizard({ items, preselected }: { items: WizardItem[]; pres
         <div className="mx-auto flex max-w-2xl gap-2 px-4 py-3 sm:px-0">
           {step > 0 && (
             <Button variant="outline" className="h-11" onClick={() => setStep(step - 1)} disabled={!!busy}>
-              Back
+              {t.back}
             </Button>
           )}
           {step < STEPS.length - 1 ? (
             <Button className="h-11 flex-1 sm:flex-none" onClick={() => setStep(step + 1)} disabled={!canContinue}>
-              Continue
+              {t.continue}
             </Button>
           ) : (
             <Button className="h-11 flex-1 sm:flex-none" onClick={submit} disabled={!!busy}>
-              {busy ?? "Send to support"}
+              {busy ?? t.send}
             </Button>
           )}
         </div>
