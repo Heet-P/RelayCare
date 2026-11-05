@@ -2,6 +2,7 @@ import { Suspense } from "react";
 import { CustomerGuard } from "@/components/customer/customer-guard";
 import { LocalizedTabs } from "@/components/customer/localized-tabs";
 import { CustomerTabs } from "@/components/customer/tabs";
+import { MyLanguage } from "@/components/shared/my-language";
 import { UserMenu, UserMenuSkeleton } from "@/components/shared/user-menu";
 import { ThemeToggleButton } from "@/components/ui/skiper-ui/skiper26";
 
@@ -20,6 +21,9 @@ export default function CustomerLayout({ children }: LayoutProps<"/">) {
               <LocalizedTabs />
             </Suspense>
           </div>
+          <Suspense fallback={null}>
+            <MyLanguage />
+          </Suspense>
           <ThemeToggleButton className="size-11 bg-foreground" start="top-right" />
           <Suspense fallback={<UserMenuSkeleton />}>
             <UserMenu />

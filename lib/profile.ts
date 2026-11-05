@@ -36,3 +36,11 @@ export async function changePassword(_: ProfileState, form: FormData): Promise<P
   const { error } = await supabase.auth.updateUser({ password });
   return error ? { error: error.message } : { ok: true };
 }
+
+/** Language switch for any signed-in user (customer portal and technician headers). */
+export async function setLocale(locale: string): Promise<ProfileState> {
+  const actor = await requireActor();
+  if (!["en", "hi", "gu"].includes(locale)) return { error: "Unsupported language." };
+  await db.update(users).set({ locale }).where(eq(users.id, actor.user.id));
+  return { ok: true };
+}

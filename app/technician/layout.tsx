@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Suspense } from "react";
 import { TechnicianGuard } from "@/components/technician/technician-guard";
+import { MyLanguage } from "@/components/shared/my-language";
 import { UserMenu, UserMenuSkeleton } from "@/components/shared/user-menu";
 import { ThemeToggleButton } from "@/components/ui/skiper-ui/skiper26";
 
@@ -14,6 +15,9 @@ export default function TechnicianLayout({ children }: LayoutProps<"/technician"
             <span className="block font-semibold tracking-tight">Your jobs</span>
             <span className="block text-xs text-muted-foreground">Demo Electronics Service Team</span>
           </Link>
+          <Suspense fallback={null}>
+            <MyLanguage />
+          </Suspense>
           <ThemeToggleButton className="size-11 bg-foreground" start="top-right" />
           <Suspense fallback={<UserMenuSkeleton />}>
             <UserMenu />
