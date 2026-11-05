@@ -3,7 +3,7 @@ import { Logo } from "@/components/shared/logo";
 import { TechnicianGuard } from "@/components/technician/technician-guard";
 import { MyLanguage } from "@/components/shared/my-language";
 import { UserMenu, UserMenuSkeleton } from "@/components/shared/user-menu";
-import { ThemeToggleButton } from "@/components/ui/skiper-ui/skiper26";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
 
 /** Technician workspace: phone-first, one job at a time. */
 export default function TechnicianLayout({ children }: LayoutProps<"/technician">) {
@@ -15,7 +15,7 @@ export default function TechnicianLayout({ children }: LayoutProps<"/technician"
           <Suspense fallback={null}>
             <MyLanguage />
           </Suspense>
-          <ThemeToggleButton className="size-11 bg-foreground" start="top-right" />
+          <ThemeToggle />
           <Suspense fallback={<UserMenuSkeleton />}>
             <UserMenu />
           </Suspense>

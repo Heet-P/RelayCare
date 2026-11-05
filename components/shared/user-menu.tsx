@@ -10,7 +10,7 @@ export async function UserMenu() {
   if (!actor) return null;
   const role = actor.memberships[0]?.role;
   return (
-    <div className="flex items-center gap-3">
+    <div className="flex min-w-0 items-center gap-3">
       <span
         aria-hidden
         className="grid size-9 place-items-center rounded-full bg-secondary text-sm font-semibold"

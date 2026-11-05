@@ -42,7 +42,7 @@ function NavLinks({ path, onNavigate }: { path: string; onNavigate?: () => void 
             aria-current={active ? "page" : undefined}
             className={cn(
               "pressable flex h-11 items-center gap-3 rounded-md px-3 text-sm font-medium text-muted-foreground hover:bg-[color-mix(in_oklab,var(--foreground)_6%,transparent)] hover:text-foreground",
-              active && "bg-[color-mix(in_oklab,var(--primary)_14%,transparent)] text-foreground hover:bg-[color-mix(in_oklab,var(--primary)_18%,transparent)]",
+              active && "bg-card text-foreground shadow-[0_1px_2px_rgb(28_25_23/0.08),0_0_0_1px_var(--border)] hover:bg-card",
             )}
           >
             <Icon className={cn("size-[18px]", active ? "text-primary" : "")} aria-hidden strokeWidth={active ? 2.25 : 1.75} />

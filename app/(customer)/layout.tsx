@@ -5,7 +5,7 @@ import { LocalizedTabs } from "@/components/customer/localized-tabs";
 import { CustomerTabs } from "@/components/customer/tabs";
 import { MyLanguage } from "@/components/shared/my-language";
 import { UserMenu, UserMenuSkeleton } from "@/components/shared/user-menu";
-import { ThemeToggleButton } from "@/components/ui/skiper-ui/skiper26";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
 
 /** Customer portal: phone-first single column, bottom tabs on small screens. */
 export default function CustomerLayout({ children }: LayoutProps<"/">) {
@@ -22,7 +22,7 @@ export default function CustomerLayout({ children }: LayoutProps<"/">) {
           <Suspense fallback={null}>
             <MyLanguage />
           </Suspense>
-          <ThemeToggleButton className="size-11 bg-foreground" start="top-right" />
+          <ThemeToggle />
           <Suspense fallback={<UserMenuSkeleton />}>
             <UserMenu />
           </Suspense>

@@ -1,6 +1,6 @@
 import { HeroScene } from "@/components/illustrations/hero-scene";
 import { Logo } from "@/components/shared/logo";
-import { ThemeToggleButton } from "@/components/ui/skiper-ui/skiper26";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
 
 /**
  * Sign-in: the form floats on glass; the story (illustration + one line) sits beside it.
@@ -11,7 +11,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
     <main className="relative grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
       <header className="absolute inset-x-0 top-0 z-10 flex items-center justify-between p-4 sm:p-6">
         <Logo />
-        <ThemeToggleButton className="size-11 bg-foreground" variant="circle" start="top-right" />
+        <ThemeToggle />
       </header>
 
       <section className="flex items-center justify-center px-4 pt-24 pb-10 sm:px-10">

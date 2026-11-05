@@ -7,7 +7,7 @@ import { RelayScroll } from "@/components/landing/relay-scroll";
 import { WorkspaceLink } from "@/components/landing/workspace-link";
 import { Logo } from "@/components/shared/logo";
 import { RelayStrip } from "@/components/shared/relay-strip";
-import { ThemeToggleButton } from "@/components/ui/skiper-ui/skiper26";
+import { ThemeToggle } from "@/components/shared/theme-toggle";
 
 export const metadata: Metadata = {
   title: "RelayCare — after-sales service that never loses the story",
@@ -29,7 +29,7 @@ export default function Landing() {
           </a>
         </div>
         <div className="ml-auto flex items-center gap-1">
-          <ThemeToggleButton className="size-10 bg-foreground" start="top-right" />
+          <ThemeToggle />
           <Suspense fallback={<Pill href="/login">Sign in</Pill>}>
             <WorkspaceLink />
           </Suspense>
