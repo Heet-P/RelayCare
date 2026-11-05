@@ -6,7 +6,11 @@ import { LiveRefresh } from "@/components/shared/live-refresh";
 import { Skeleton } from "@/components/ui/skeleton";
 import { requireOrgRole } from "@/lib/auth/access";
 import { age, describeEvent } from "@/lib/cases/labels";
-import { needsAttention, overviewStats, recentActivity } from "@/lib/db/queries/staff";
+import { BarList } from "@/components/dashboard/bar-list";
+import { categoryLabel } from "@/lib/cases/categories";
+import { STATUS_LABEL } from "@/lib/cases/labels";
+import type { CaseStatus } from "@/lib/cases/state-machine";
+import { needsAttention, overviewStats, recentActivity, serviceAnalytics } from "@/lib/db/queries/staff";
 
 export const metadata: Metadata = { title: "Overview" };
 
@@ -32,6 +36,12 @@ export default function OverviewPage() {
       <Suspense fallback={<Skeleton className="h-24 w-full rounded-lg" />}>
         <Stats />
       </Suspense>
+      <section className="space-y-4">
+        <h2 className="text-lg font-semibold">How service is going</h2>
+        <Suspense fallback={<Skeleton className="h-64 w-full rounded-lg" />}>
+          <Analytics />
+        </Suspense>
+      </section>
       <section className="space-y-4">
         <h2 className="text-lg font-semibold">Recent activity</h2>
         <Suspense fallback={<Skeleton className="h-64 w-full rounded-lg" />}>
@@ -94,5 +104,32 @@ async function Activity() {
         </li>
       ))}
     </ol>
+  );
+}
+
+const STAGES: CaseStatus[] = ["submitted", "under_triage", "warranty_review", "awaiting_assignment", "assigned", "scheduled", "in_progress", "resolution_pending"];
+
+async function Analytics() {
+  const { actor } = await requireOrgRole([...STAFF]);
+  const a = await serviceAnalytics(actor.authUserId);
+  return (
+    <div className="grid gap-4 lg:grid-cols-2">
+      <BarList title="Cases by issue" unit="cases" empty="No cases yet." rows={a.byCategory.map((r) => ({ label: categoryLabel(r.category), value: r.n }))} />
+      <BarList
+        title="Average time at each stage"
+        unit="hours"
+        empty="Stage times appear once cases move along."
+        rows={STAGES.flatMap((st) => {
+          const r = a.stageHours.find((x) => x.status === st);
+          return r ? [{ label: STATUS_LABEL[st], value: r.hours, note: `${r.samples} case${r.samples === 1 ? "" : "s"}` }] : [];
+        })}
+      />
+      <BarList title="Open jobs per technician" unit="open jobs" empty="No technician jobs yet." rows={a.workload.map((w) => ({ label: w.name, value: w.open, note: `${w.done} completed` }))} />
+      <section className="space-y-1 rounded-lg border bg-card p-4">
+        <h3 className="font-semibold">Customer rating</h3>
+        <p className="font-tag text-2xl font-semibold">{a.csat?.avg != null ? `${a.csat.avg} / 5` : "No ratings yet"}</p>
+        <p className="text-sm text-muted-foreground">{a.csat?.n ? `From ${a.csat.n} resolved case${a.csat.n === 1 ? "" : "s"}` : "Customers rate the service after confirming a fix."}</p>
+      </section>
+    </div>
   );
 }
