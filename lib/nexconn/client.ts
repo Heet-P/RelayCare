@@ -218,3 +218,11 @@ export async function translateHistory(messages: ChatMessage[], target: string) 
   } as Chat.TranslateMessagesParams);
   if (!res.isOk) console.warn("[chat] translateMessages failed", res.code, res.msg);
 }
+
+/** Change the translation target for the current connection (profile language switch). */
+export async function setChatLanguage(locale: string) {
+  currentLocale = locale;
+  if (state !== "connected") return; // applied on the next connect()
+  const { NCEngine } = await sdk();
+  await NCEngine.translateModule.setTranslationLanguage(locale);
+}
