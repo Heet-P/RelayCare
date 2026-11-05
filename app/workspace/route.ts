@@ -1,7 +1,7 @@
 import { redirect } from "next/navigation";
 import { getActor } from "@/lib/auth/session";
 
-/** "/" sends each person to their own workspace. */
+/** "/workspace" sends each person to their own area (staff, technician, customer). */
 export async function GET() {
   const actor = await getActor();
   if (!actor) redirect("/login");

@@ -12,9 +12,9 @@ export default function LoginPage({ searchParams }: PageProps<"/login">) {
         <h1 className="text-xl font-semibold tracking-tight">Sign in to your service desk</h1>
         <p className="text-muted-foreground">For support agents, dispatchers, technicians and store owners.</p>
       </div>
-      <Suspense fallback={<StaffSignInForm next="/" />}>
+      <Suspense fallback={<StaffSignInForm next="/workspace" />}>
         {searchParams.then((sp) => (
-          <StaffSignInForm next={typeof sp.next === "string" ? sp.next : "/"} />
+          <StaffSignInForm next={typeof sp.next === "string" ? sp.next : "/workspace"} />
         ))}
       </Suspense>
       <p className="text-sm text-muted-foreground">

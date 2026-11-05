@@ -15,10 +15,10 @@ export default function VerifyPage({ searchParams }: PageProps<"/verify">) {
           Use the email address you shopped with. We&apos;ll send a 6-digit code to confirm it&apos;s you.
         </p>
       </div>
-      <Suspense fallback={<CodeSignInForm next="/" />}>
+      <Suspense fallback={<CodeSignInForm next="/workspace" />}>
         {searchParams.then((sp) => (
           <CodeSignInForm
-            next={typeof sp.next === "string" ? sp.next : "/"}
+            next={typeof sp.next === "string" ? sp.next : "/workspace"}
             email={typeof sp.email === "string" ? sp.email : undefined}
           />
         ))}

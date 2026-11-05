@@ -18,6 +18,6 @@ export async function GET(req: Request) {
     password: process.env.SEED_PASSWORD ?? "relaycare-demo-2026",
   });
   if (error) return NextResponse.json({ error: error.message }, { status: 400 });
-  const next = url.searchParams.get("next") ?? "/";
+  const next = url.searchParams.get("next") ?? "/workspace";
   return NextResponse.redirect(new URL(next.startsWith("/") && !next.startsWith("//") ? next : "/", url));
 }

@@ -10,7 +10,7 @@ const Email = z.email("Enter a valid email address.").transform((e) => e.trim().
 /** Only same-site relative paths may be used as post-login destinations (no open redirects). */
 const safeNext = (v: FormDataEntryValue | null) => {
   const s = typeof v === "string" ? v : "";
-  return s.startsWith("/") && !s.startsWith("//") ? s : "/";
+  return s.startsWith("/") && !s.startsWith("//") && s !== "/" ? s : "/workspace";
 };
 
 /** Staff: email + password. */

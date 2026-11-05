@@ -5,6 +5,6 @@ import { getActor } from "@/lib/auth/session";
 export async function TechnicianGuard() {
   const actor = await getActor();
   if (!actor) redirect("/login?next=/technician/jobs");
-  if (!actor.memberships.some((m) => m.role === "technician")) redirect("/");
+  if (!actor.memberships.some((m) => m.role === "technician")) redirect("/workspace");
   return null;
 }
