@@ -1,0 +1,113 @@
+{
+  "id": 10842,
+  "parent_id": 0,
+  "status": "completed",
+  "currency": "INR",
+  "version": "11.2.2",
+  "prices_include_tax": false,
+  "date_created": "2026-10-20T11:30:00",
+  "date_modified": "2026-11-05T15:37:14",
+  "discount_total": "0.00",
+  "discount_tax": "0.00",
+  "shipping_total": "0.00",
+  "shipping_tax": "0.00",
+  "cart_tax": "0.00",
+  "total": "18999.00",
+  "total_tax": "0.00",
+  "customer_id": 2,
+  "order_key": "wc_order_CMiKTLztVbtmw",
+  "billing": {
+    "first_name": "Demo",
+    "last_name": "Customer",
+    "company": "",
+    "address_1": "12 Riverfront Road",
+    "address_2": "",
+    "city": "Ahmedabad",
+    "state": "GJ",
+    "postcode": "380009",
+    "country": "IN",
+    "email": "customer@relaycare.test",
+    "phone": "+91 98765 43210"
+  },
+  "shipping": {
+    "first_name": "Demo",
+    "last_name": "Customer",
+    "company": "",
+    "address_1": "12 Riverfront Road",
+    "address_2": "",
+    "city": "Ahmedabad",
+    "state": "GJ",
+    "postcode": "380009",
+    "country": "IN",
+    "phone": "+91 98765 43210"
+  },
+  "payment_method": "",
+  "payment_method_title": "Cash on delivery",
+  "transaction_id": "",
+  "customer_ip_address": "127.0.0.1",
+  "customer_user_agent": "WP CLI 2.12.0",
+  "created_via": "",
+  "customer_note": "",
+  "date_completed": "2026-10-22T16:00:00",
+  "date_paid": "2026-10-20T11:30:00",
+  "cart_hash": "",
+  "number": "10842",
+  "meta_data": [
+    {
+      "id": 54,
+      "key": "_shipping_email",
+      "value": "customer@relaycare.test"
+    },
+    {
+      "id": 62,
+      "key": "_relaycare_demo",
+      "value": "WC-10842"
+    }
+  ],
+  "line_items": [
+    {
+      "id": 1,
+      "name": "AquaWash 7kg",
+      "product_id": 10,
+      "variation_id": 0,
+      "quantity": 1,
+      "tax_class": "",
+      "subtotal": "18999.00",
+      "subtotal_tax": "0.00",
+      "total": "18999.00",
+      "total_tax": "0.00",
+      "taxes": [],
+      "meta_data": [
+        {
+          "id": 10,
+          "key": "serial_number",
+          "value": "AW7-DEMO-0042",
+          "display_key": "serial_number",
+          "display_value": "AW7-DEMO-0042"
+        }
+      ],
+      "sku": "AW7-7KG",
+      "global_unique_id": "",
+      "price": 18999,
+      "image": {
+        "id": "",
+        "src": ""
+      },
+      "parent_name": null
+    }
+  ],
+  "tax_lines": [],
+  "shipping_lines": [],
+  "fee_lines": [],
+  "coupon_lines": [],
+  "refunds": [],
+  "payment_url": "http://localhost:8080/checkout/order-pay/10842/?pay_for_order=true&key=wc_order_CMiKTLztVbtmw",
+  "is_editable": false,
+  "needs_payment": false,
+  "needs_processing": true,
+  "date_created_gmt": "2026-10-20T11:30:00",
+  "date_modified_gmt": "2026-11-05T15:37:14",
+  "date_completed_gmt": "2026-10-22T16:00:00",
+  "date_paid_gmt": "2026-10-20T11:30:00",
+  "currency_symbol": "₹"
+}
