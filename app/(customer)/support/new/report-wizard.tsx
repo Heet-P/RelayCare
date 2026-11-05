@@ -88,7 +88,7 @@ export function ReportWizard({ items, preselected, t }: { items: WizardItem[]; p
   }
 
   return (
-    <div className="space-y-6 pb-24">
+    <div className="space-y-6 pb-40 sm:pb-0">
       <ol className="flex gap-1" aria-label="Progress">
         {STEPS.map((s, i) => (
           <li key={s} className="flex-1" aria-current={i === step ? "step" : undefined}>
@@ -249,8 +249,8 @@ export function ReportWizard({ items, preselected, t }: { items: WizardItem[]; p
         </div>
       )}
 
-      <div className="fixed inset-x-0 bottom-14 z-10 border-t bg-background/95 backdrop-blur sm:static sm:border-0 sm:bg-transparent">
-        <div className="mx-auto flex max-w-2xl gap-2 px-4 py-3 sm:px-0">
+      <div className="glass fixed inset-x-4 bottom-[calc(max(1rem,env(safe-area-inset-bottom))+4.25rem)] z-10 mx-auto max-w-sm rounded-2xl sm:static sm:max-w-none sm:rounded-none sm:border-0 sm:bg-transparent sm:shadow-none sm:backdrop-blur-none">
+        <div className="mx-auto flex max-w-2xl gap-2 p-2 sm:px-0 sm:py-3">
           {step > 0 && (
             <Button variant="outline" className="h-11" onClick={() => setStep(step - 1)} disabled={!!busy}>
               {t.back}
