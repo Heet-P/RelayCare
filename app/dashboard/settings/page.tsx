@@ -1,6 +1,6 @@
 import { redirect } from "next/navigation";
 
-// ponytail: Integrations is the only settings section until Phase 4 adds members, warranty rules and profile.
+// Settings opens on the section every role can use.
 export default function SettingsPage() {
-  redirect("/dashboard/settings/integrations");
+  redirect("/dashboard/settings/profile");
 }

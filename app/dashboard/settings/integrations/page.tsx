@@ -14,7 +14,7 @@ export default function IntegrationsPage() {
   return (
     <div className="max-w-3xl space-y-8">
       <div className="space-y-1">
-        <h1 className="text-xl font-semibold tracking-tight">Store integration</h1>
+        <h2 className="text-lg font-semibold">Store integration</h2>
         <p className="text-muted-foreground">
           Connect your WooCommerce store so orders sync and customers can ask for help from their account.
         </p>
