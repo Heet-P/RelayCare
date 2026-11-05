@@ -6,6 +6,7 @@ import {
   caseAssignments,
   caseAttachments,
   caseEvents,
+  caseParticipants,
   caseHandoffs,
   chatThreads,
   customers,
@@ -43,12 +44,23 @@ export async function getCaseView(authUserId: string, caseId: string) {
       .where(eq(serviceCases.id, caseId));
     if (!kase) return null;
 
-    const [attachments, events, threads, assignments, handoffs] = await Promise.all([
+    const [attachments, events, threads, assignments, handoffs, participants] = await Promise.all([
       tx.select().from(caseAttachments).where(eq(caseAttachments.caseId, caseId)).orderBy(asc(caseAttachments.createdAt)),
       tx.select().from(caseEvents).where(eq(caseEvents.caseId, caseId)).orderBy(asc(caseEvents.createdAt)),
       tx.select().from(chatThreads).where(eq(chatThreads.caseId, caseId)).orderBy(asc(chatThreads.createdAt)),
       tx.select().from(caseAssignments).where(eq(caseAssignments.caseId, caseId)).orderBy(desc(caseAssignments.createdAt)),
       tx.select().from(caseHandoffs).where(eq(caseHandoffs.caseId, caseId)).orderBy(desc(caseHandoffs.createdAt)),
+      tx
+        .select({
+          userId: caseParticipants.userId,
+          role: caseParticipants.participantRole,
+          removedAt: caseParticipants.removedAt,
+          name: users.name,
+          nexconnUserId: users.nexconnUserId,
+        })
+        .from(caseParticipants)
+        .innerJoin(users, eq(users.id, caseParticipants.userId))
+        .where(eq(caseParticipants.caseId, caseId)),
     ]);
 
     // Display names for everyone referenced on the page (actors, uploaders, technicians).
@@ -71,6 +83,7 @@ export async function getCaseView(authUserId: string, caseId: string) {
       threads,
       assignments,
       handoffs,
+      participants,
       activeAssignment: active,
       technician: active ? people.find((p) => p.id === active.technicianId) ?? null : null,
       people: Object.fromEntries(people.map((p) => [p.id, p])),
