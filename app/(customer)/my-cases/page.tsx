@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
+import { EmptyState } from "@/components/shared/empty-state";
 import { LiveRefresh } from "@/components/shared/live-refresh";
 import { Skeleton } from "@/components/ui/skeleton";
 import { requireActor } from "@/lib/auth/session";
@@ -37,13 +38,7 @@ async function Cases() {
     return (
       <div className="space-y-6">
         {heading}
-        <div className="panel rounded-xl p-6">
-          <p className="font-medium">{t.noCases}</p>
-          <p className="mt-1 text-muted-foreground">{t.noCasesHint}</p>
-          <Link href="/my-orders" className="mt-2 inline-flex h-11 items-center font-medium text-primary underline-offset-4 hover:underline">
-            {t.goToPurchases}
-          </Link>
-        </div>
+        <EmptyState art="cases" title={t.noCases} body={t.noCasesHint} action={{ href: "/my-orders", label: t.goToPurchases }} />
       </div>
     );
   }

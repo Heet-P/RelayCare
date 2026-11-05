@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { PriorityMark } from "@/components/cases/status-chip";
+import { EmptyState } from "@/components/shared/empty-state";
 import { LiveRefresh } from "@/components/shared/live-refresh";
 import { Skeleton } from "@/components/ui/skeleton";
 import { requireActor } from "@/lib/auth/session";
@@ -45,10 +46,7 @@ async function Jobs() {
     <div className="space-y-8">
       <LiveRefresh table="service_cases" />
       {jobs.length === 0 && (
-        <div className="panel rounded-xl p-6">
-          <p className="font-medium">{t.noJobs}</p>
-          <p className="mt-1 text-muted-foreground">When dispatch assigns you a repair, it appears here with the full case history.</p>
-        </div>
+        <EmptyState art="jobs" title={t.noJobs} body="When dispatch assigns you a repair, it appears here with the full case history." />
       )}
       {groups
         .filter(([, list]) => list.length)

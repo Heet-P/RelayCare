@@ -1,11 +1,12 @@
 import Link from "next/link";
 import type { CaseRow } from "@/lib/db/queries/staff";
 import { age } from "@/lib/cases/labels";
+import { EmptyState } from "@/components/shared/empty-state";
 import { PriorityMark, StatusChip } from "./status-chip";
 
 /** Staff case list. The yellow dot marks who holds the case right now (the baton). */
 export function CaseTable({ rows, empty }: { rows: CaseRow[]; empty: string }) {
-  if (!rows.length) return <p className="panel rounded-xl p-6 text-muted-foreground">{empty}</p>;
+  if (!rows.length) return <EmptyState art="done" title="All caught up" body={empty} />;
   return (
     <div className="overflow-x-auto panel rounded-xl">
       <table className="w-full min-w-[720px] text-sm">
