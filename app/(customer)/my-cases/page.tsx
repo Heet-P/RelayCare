@@ -4,7 +4,8 @@ import { Suspense } from "react";
 import { LiveRefresh } from "@/components/shared/live-refresh";
 import { Skeleton } from "@/components/ui/skeleton";
 import { requireActor } from "@/lib/auth/session";
-import { customerStatus } from "@/lib/cases/customer-status";
+import { customerStatusIn } from "@/lib/cases/customer-status";
+import { tr } from "@/lib/i18n";
 import { listMyCases } from "@/lib/db/queries/customer";
 import { date } from "@/lib/format";
 
@@ -13,7 +14,6 @@ export const metadata: Metadata = { title: "Your cases" };
 export default function MyCasesPage() {
   return (
     <div className="space-y-6">
-      <h1 className="text-xl font-semibold tracking-tight">Your cases</h1>
       <Suspense
         fallback={
           <div className="space-y-2">
@@ -31,22 +31,29 @@ export default function MyCasesPage() {
 async function Cases() {
   const actor = await requireActor();
   const cases = await listMyCases(actor.authUserId);
+  const t = tr(actor.user.locale);
+  const heading = <h1 className="text-xl font-semibold tracking-tight">{t.yourCases}</h1>;
   if (!cases.length) {
     return (
-      <div className="rounded-lg border bg-card p-6">
-        <p className="font-medium">No cases yet</p>
-        <p className="mt-1 text-muted-foreground">If a product stops working, report it from your purchases.</p>
-        <Link href="/my-orders" className="mt-2 inline-flex h-11 items-center font-medium text-primary underline-offset-4 hover:underline">
-          Go to your purchases
-        </Link>
+      <div className="space-y-6">
+        {heading}
+        <div className="rounded-lg border bg-card p-6">
+          <p className="font-medium">{t.noCases}</p>
+          <p className="mt-1 text-muted-foreground">{t.noCasesHint}</p>
+          <Link href="/my-orders" className="mt-2 inline-flex h-11 items-center font-medium text-primary underline-offset-4 hover:underline">
+            {t.goToPurchases}
+          </Link>
+        </div>
       </div>
     );
   }
   return (
+    <div className="space-y-6">
+    {heading}
     <ul className="divide-y rounded-lg border bg-card">
       <LiveRefresh table="service_cases" />
       {cases.map((c) => {
-        const s = customerStatus(c.status);
+        const s = customerStatusIn(actor.user.locale, c.status);
         const open = !["closed", "cancelled", "rejected", "resolved"].includes(c.status);
         return (
           <li key={c.id}>
@@ -65,5 +72,6 @@ async function Cases() {
         );
       })}
     </ul>
+    </div>
   );
 }

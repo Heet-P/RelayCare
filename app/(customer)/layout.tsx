@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { CustomerGuard } from "@/components/customer/customer-guard";
+import { LocalizedTabs } from "@/components/customer/localized-tabs";
 import { CustomerTabs } from "@/components/customer/tabs";
 import { UserMenu, UserMenuSkeleton } from "@/components/shared/user-menu";
 import { ThemeToggleButton } from "@/components/ui/skiper-ui/skiper26";
@@ -15,7 +16,9 @@ export default function CustomerLayout({ children }: LayoutProps<"/">) {
             <p className="text-xs text-muted-foreground">Support by RelayCare</p>
           </div>
           <div className="hidden sm:block">
-            <CustomerTabs />
+            <Suspense fallback={<CustomerTabs />}>
+              <LocalizedTabs />
+            </Suspense>
           </div>
           <ThemeToggleButton className="size-11 bg-foreground" start="top-right" />
           <Suspense fallback={<UserMenuSkeleton />}>
@@ -30,7 +33,9 @@ export default function CustomerLayout({ children }: LayoutProps<"/">) {
         {children}
       </main>
       <div className="sm:hidden">
-        <CustomerTabs />
+        <Suspense fallback={<CustomerTabs />}>
+          <LocalizedTabs />
+        </Suspense>
       </div>
     </div>
   );

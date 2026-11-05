@@ -19,7 +19,7 @@ function warrantyLine(status: string | null, expires: string | null) {
   return expires ? `Warranty until ${date(expires)} (to be confirmed)` : "Warranty to be confirmed";
 }
 
-export function PurchaseCard({ purchase }: { purchase: Purchase }) {
+export function PurchaseCard({ purchase, getHelp = "Get help with this" }: { purchase: Purchase; getHelp?: string }) {
   return (
     <section className="rounded-lg border bg-card">
       <header className="flex items-baseline justify-between gap-4 border-b px-4 py-3">
@@ -53,7 +53,7 @@ export function PurchaseCard({ purchase }: { purchase: Purchase }) {
                 href={`/support/new?item=${item.id}`}
                 className="inline-flex h-11 items-center rounded-md bg-primary px-4 text-sm font-medium text-primary-foreground hover:bg-primary/90"
               >
-                Get help with this
+                {getHelp}
               </Link>
             )}
           </li>

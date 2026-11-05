@@ -7,31 +7,34 @@ import { Suspense } from "react";
 import { cn } from "@/lib/utils";
 
 const TABS = [
-  { href: "/my-orders", label: "Purchases", icon: ShoppingBag },
-  { href: "/my-cases", label: "My cases", icon: ClipboardList },
+  { href: "/my-orders", key: "purchases", icon: ShoppingBag },
+  { href: "/my-cases", key: "myCases", icon: ClipboardList },
 ] as const;
 
+type Labels = { purchases: string; myCases: string };
+const EN: Labels = { purchases: "Purchases", myCases: "My cases" };
+
 /** Bottom tab bar on phones, inline links on wider screens. */
-export function CustomerTabs() {
+export function CustomerTabs({ labels = EN }: { labels?: Labels }) {
   // The active tab depends on the URL, which is request-time data: stream it in.
   return (
-    <Suspense fallback={<Tabs path="" />}>
-      <ActiveTabs />
+    <Suspense fallback={<Tabs path="" labels={labels} />}>
+      <ActiveTabs labels={labels} />
     </Suspense>
   );
 }
 
-function ActiveTabs() {
-  return <Tabs path={usePathname()} />;
+function ActiveTabs({ labels }: { labels: Labels }) {
+  return <Tabs path={usePathname()} labels={labels} />;
 }
 
-function Tabs({ path }: { path: string }) {
+function Tabs({ path, labels }: { path: string; labels: Labels }) {
   return (
     <nav
       aria-label="Main"
       className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-2 border-t bg-card pb-[env(safe-area-inset-bottom)] sm:static sm:flex sm:gap-1 sm:border-0 sm:bg-transparent sm:pb-0"
     >
-      {TABS.map(({ href, label, icon: Icon }) => {
+      {TABS.map(({ href, key, icon: Icon }) => {
         const active = path.startsWith(href);
         return (
           <Link
@@ -44,7 +47,7 @@ function Tabs({ path }: { path: string }) {
             )}
           >
             <Icon className="size-5 sm:size-4" aria-hidden />
-            {label}
+            {labels[key]}
           </Link>
         );
       })}
