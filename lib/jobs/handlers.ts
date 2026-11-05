@@ -1,4 +1,5 @@
 import "server-only";
+import { processNexconnEvent } from "@/lib/nexconn/events";
 import { syncCaseGroup } from "@/lib/nexconn/group-sync";
 import { notifyCase } from "@/lib/notify";
 import { importOrders, processInbox } from "@/lib/woocommerce/jobs";
@@ -9,4 +10,5 @@ export const handlers: Record<string, (payload: Record<string, unknown>) => Prom
   "wc.import": importOrders,
   "nexconn.group.sync": syncCaseGroup,
   "case.notify": notifyCase,
+  "nexconn.event": processNexconnEvent,
 };
