@@ -166,7 +166,7 @@
   }
   /* Continuous ("squircle") corners where the browser supports them. */
   @supports (corner-shape: squircle) {
-    [class*="rounded-"] {
+    [class*="rounded-"]:not([class*="rounded-full"]) {
       corner-shape: squircle;
     }
   }

@@ -1,7 +1,9 @@
 import { loadFont as loadHind } from "@remotion/google-fonts/HindVadodara";
 import { loadFont as loadInstrument } from "@remotion/google-fonts/InstrumentSans";
 import { loadFont as loadMukta } from "@remotion/google-fonts/Mukta";
+import type { TransitionPresentation, TransitionPresentationComponentProps } from "@remotion/transitions";
 import { AbsoluteFill, Easing, interpolate, spring, useCurrentFrame, useVideoConfig } from "remotion";
+import { graphemes } from "./timeline";
 
 /*
  * Shared motion and type for the launch video. Every animation is frame-driven (no CSS
@@ -33,7 +35,7 @@ export function useEnter(delay = 0, config: { damping?: number; stiffness?: numb
   return spring({ frame: frame - delay, fps, config });
 }
 
-/** The peacock mesh behind everything; `dark` switches every light-dark() token in the scene. */
+/** The warm wash behind everything; `dark` switches every light-dark() token in the scene. */
 export function Stage({ dark = false, children }: { dark?: boolean; children: React.ReactNode }) {
   return (
     <AbsoluteFill className="mesh font-sans text-foreground" style={{ ...fontVars, colorScheme: dark ? "dark" : "light" }}>
@@ -91,7 +93,7 @@ export function Words({
 /** Typed text, sliced by grapheme so Gujarati conjuncts never break mid-character. */
 export function Typed({ text, start, perChar = 1.6 }: { text: string; start: number; perChar?: number }) {
   const frame = useCurrentFrame();
-  const parts = [...new Intl.Segmenter().segment(text)].map((s) => s.segment);
+  const parts = graphemes(text);
   const shown = Math.max(0, Math.min(parts.length, Math.floor((frame - start) / perChar)));
   return (
     <>
@@ -101,17 +103,46 @@ export function Typed({ text, start, perChar = 1.6 }: { text: string; start: num
   );
 }
 
-/** A phone: glass bezel, rounded like the hardware, content on the app background. */
+/**
+ * A phone you can actually see on any background: solid graphite titanium frame with a lit
+ * edge, black bezel, Dynamic Island, and the app's own background on the screen.
+ * Radii nest: frame 68, bezel 10 → screen 58.
+ */
 export function Phone({ children, className, style }: { children: React.ReactNode; className?: string; style?: React.CSSProperties }) {
   return (
     <div
-      className={`glass-strong rounded-[64px] p-3 shadow-[0_40px_80px_-30px_rgb(6_26_28/0.45)] ${className ?? ""}`}
-      style={{ width: 420, height: 860, ...style }}
+      className={`rounded-[68px] bg-[linear-gradient(145deg,#4a443d,#1c1917_40%,#2b2622)] p-[3px] shadow-[0_50px_100px_-30px_rgb(28_25_23/0.55),0_20px_40px_-20px_rgb(28_25_23/0.4)] ${className ?? ""}`}
+      style={{ width: 430, height: 880, ...style }}
     >
-      <div className="relative flex h-full flex-col overflow-hidden rounded-[52px] bg-background">
-        <div className="mx-auto mt-3 h-8 w-32 rounded-full bg-foreground" />
-        {children}
+      <div className="h-full rounded-[65px] bg-[#0b0a09] p-[7px]">
+        <div className="relative flex h-full flex-col overflow-hidden rounded-[58px] bg-background">
+          <div className="absolute top-3 left-1/2 z-10 h-9 w-32 -translate-x-1/2 rounded-full bg-[#0b0a09]" />
+          <div className="flex h-14 items-end justify-between px-9 pb-1 text-sm font-semibold">
+            <span>9:41</span>
+            <span className="flex items-center gap-1.5">
+              <span className="h-2.5 w-4 rounded-[3px] border border-current p-px">
+                <span className="block h-full w-3/4 rounded-[1px] bg-current" />
+              </span>
+            </span>
+          </div>
+          {children}
+        </div>
       </div>
     </div>
   );
 }
+
+/**
+ * Zoom-through morph between scenes (the Fomo cut): the old scene pushes toward the camera and
+ * dissolves into blur while the new one settles in from slightly behind, so the two read as one
+ * continuous move rather than a crossfade.
+ */
+function ZoomBlur({ children, presentationDirection, presentationProgress }: TransitionPresentationComponentProps<Record<string, never>>) {
+  const p = easeOut(presentationProgress);
+  const entering = presentationDirection === "entering";
+  const scale = entering ? 0.92 + 0.08 * p : 1 + 0.14 * p;
+  const blur = entering ? (1 - p) * 18 : p * 18;
+  const opacity = entering ? p : 1 - p;
+  return <AbsoluteFill style={{ transform: `scale(${scale})`, filter: `blur(${blur}px)`, opacity }}>{children}</AbsoluteFill>;
+}
+export const zoomBlur = (): TransitionPresentation<Record<string, never>> => ({ component: ZoomBlur, props: {} });
