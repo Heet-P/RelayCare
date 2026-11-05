@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { CaseTable, CaseTableSkeleton } from "@/components/cases/case-table";
+import { AnimatedNumber } from "@/components/shared/animated-number";
 import { LiveRefresh } from "@/components/shared/live-refresh";
 import { Skeleton } from "@/components/ui/skeleton";
 import { requireOrgRole } from "@/lib/auth/access";
@@ -72,16 +73,24 @@ async function Stats() {
     { label: "Waiting on customers", value: s.awaitingCustomer },
     { label: "With technicians", value: s.inProgress },
     { label: "Awaiting confirmation", value: s.pendingResolution },
-    { label: "Average time to resolve", value: s.avgResolutionHours == null ? "—" : s.avgResolutionHours < 48 ? `${s.avgResolutionHours} h` : `${Math.round(s.avgResolutionHours / 24)} d` },
   ];
+  const avg = s.avgResolutionHours;
   return (
-    <dl className="grid grid-cols-2 divide-x divide-y panel rounded-xl sm:grid-cols-3 lg:grid-cols-6 lg:divide-y-0">
+    <dl className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-6">
       {items.map((i) => (
-        <div key={i.label} className="space-y-1 p-4">
+        <div key={i.label} className="glass space-y-1 rounded-lg p-4">
           <dt className="text-sm text-muted-foreground">{i.label}</dt>
-          <dd className="font-tag text-xl font-semibold">{i.value}</dd>
+          <dd className="text-2xl font-semibold tracking-tight">
+            <AnimatedNumber value={i.value} />
+          </dd>
         </div>
       ))}
+      <div className="glass space-y-1 rounded-lg p-4">
+        <dt className="text-sm text-muted-foreground">Average time to resolve</dt>
+        <dd className="text-2xl font-semibold tracking-tight">
+          {avg == null ? "—" : avg < 48 ? <AnimatedNumber value={avg} suffix=" h" /> : <AnimatedNumber value={Math.round(avg / 24)} suffix=" d" />}
+        </dd>
+      </div>
     </dl>
   );
 }
