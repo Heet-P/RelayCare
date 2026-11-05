@@ -40,6 +40,7 @@ const listeners = {
 let sdkPromise: Promise<typeof Chat> | null = null;
 let connectPromise: Promise<string> | null = null;
 let currentUserId: string | null = null;
+let currentLocale = "en";
 let state: ConnectionState = "idle";
 
 export const sdk = () => (sdkPromise ??= import("@nexconn/chat"));
@@ -123,8 +124,12 @@ export function connect(getToken: TokenSource = backendToken): Promise<string> {
       NCEngine.addMessageHandler(
         "relaycare",
         new MessageHandler({
-          onMessageReceived: ({ messages }) =>
-            listeners.messages.forEach((l) => l(messages.map((m) => toChatMessage(m, currentUserId)))),
+          onMessageReceived: ({ messages }) => {
+            const batch = messages.map((m) => toChatMessage(m, currentUserId));
+            listeners.messages.forEach((l) => l(batch));
+            // Explicit request so live messages translate even when auto-translate is not applied.
+            void translateHistory(batch, currentLocale);
+          },
         }),
       );
       NCEngine.addTranslateHandler(
@@ -144,6 +149,7 @@ export function connect(getToken: TokenSource = backendToken): Promise<string> {
     const result = await NCEngine.connect({ token });
     if (!result.isOk) throw new Error(`Nexconn connection failed (${result.code}: ${result.msg})`);
     currentUserId = result.data!.userId;
+    currentLocale = locale;
 
     // Per-user translation settings live in Nexconn; keep them in sync with the profile locale.
     // Translation failing must not block chat, but it must be visible (needs Console enablement).
