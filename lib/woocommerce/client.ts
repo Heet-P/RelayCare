@@ -23,7 +23,14 @@ export class WooError extends Error {
 /** RFC 3986 encoding, same as PHP rawurlencode. */
 const enc = (s: string) => encodeURIComponent(s).replace(/[!'()*]/g, (c) => "%" + c.charCodeAt(0).toString(16).toUpperCase());
 
-export function oauthQuery(method: string, url: string, query: Record<string, string>, key: string, secret: string, now = Date.now()) {
+export function oauthQuery(
+  method: string,
+  url: string,
+  query: Record<string, string>,
+  key: string,
+  secret: string,
+  now = Date.now(),
+): Record<string, string> {
   const params: Record<string, string> = {
     ...query,
     oauth_consumer_key: key,
