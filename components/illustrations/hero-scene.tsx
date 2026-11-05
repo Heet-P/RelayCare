@@ -5,10 +5,11 @@ import { cn } from "@/lib/utils";
  * chat), the support headset and the technician, joined by a dotted relay path with the
  * marigold baton travelling along it. Colours come from --ill-* tokens (light and dark).
  * `animate` sends the baton along the path once (skipped for reduced motion).
+ * `baton` (0 to 1) places it by hand instead; the launch video drives it per frame.
  */
 const RELAY = "M150 70 C 250 0, 350 30, 400 96 S 520 190, 560 150";
 
-export function HeroScene({ className, animate = false }: { className?: string; animate?: boolean }) {
+export function HeroScene({ className, animate = false, baton = 1 }: { className?: string; animate?: boolean; baton?: number }) {
   const ink = "var(--ill-ink)";
   return (
     <svg viewBox="0 0 640 420" className={cn("h-auto w-full", className)} role="img" aria-label="A customer reports a leaking washing machine; support and a technician pick it up along one connected path">
@@ -25,7 +26,7 @@ export function HeroScene({ className, animate = false }: { className?: string; 
       {/* relay path + baton */}
       <path d={RELAY} fill="none" stroke={ink} strokeOpacity="0.35" strokeWidth="2.5" strokeDasharray="2 9" strokeLinecap="round" />
       {/* Baton rides the relay path with CSS offset-path; rests at the technician. */}
-      <g className={animate ? "hero-baton" : undefined} style={{ offsetPath: `path("${RELAY}")`, offsetDistance: "100%", offsetRotate: "auto" }}>
+      <g className={animate ? "hero-baton" : undefined} style={{ offsetPath: `path("${RELAY}")`, offsetDistance: `${baton * 100}%`, offsetRotate: "auto" }}>
         <rect x="-16" y="-7" width="32" height="14" rx="7" fill="var(--ill-marigold)" stroke={ink} strokeWidth="2.5" />
       </g>
       {animate && (
