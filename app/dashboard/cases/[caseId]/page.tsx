@@ -94,7 +94,7 @@ async function StaffCase({ caseId }: { caseId: string }) {
         </div>
         <RelayStrip
           current={station}
-          className="glass max-w-2xl rounded-xl px-2 py-4"
+          className="glass max-w-2xl rounded-xl px-2 py-4 isolate"
           labels={{ customer: view.customer.name, agent: view.agent?.name ?? "Support", technician: view.technician?.name ?? "Technician" }}
         />
       </header>
