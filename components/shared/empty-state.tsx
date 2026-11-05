@@ -1,9 +1,10 @@
+import { CheckCheck, Inbox, MessagesSquare, ShoppingBag, Wrench } from "lucide-react";
 import Link from "next/link";
-import { AllCaughtUp, EmptyCases, EmptyJobs, EmptyOrders, SpotTranslate } from "@/components/illustrations/spots";
+import { IconTile } from "@/components/shared/icon-tile";
 
-const ART = { cases: EmptyCases, jobs: EmptyJobs, orders: EmptyOrders, done: AllCaughtUp, chat: SpotTranslate } as const;
+const ART = { cases: Inbox, jobs: Wrench, orders: ShoppingBag, done: CheckCheck, chat: MessagesSquare } as const;
 
-/** An empty screen is an invitation to act: illustration, what's missing, and the next step. */
+/** An empty screen is an invitation to act: what's missing, and the next step. */
 export function EmptyState({
   art,
   title,
@@ -15,10 +16,9 @@ export function EmptyState({
   body?: string;
   action?: { href: string; label: string };
 }) {
-  const Art = ART[art];
   return (
-    <div className="panel rise flex flex-col items-center gap-3 rounded-xl px-6 py-10 text-center">
-      <Art className="w-36" />
+    <div className="panel rise flex flex-col items-center gap-3 rounded-xl px-6 py-12 text-center">
+      <IconTile icon={ART[art]} className="mb-2" />
       <p className="text-lg font-semibold tracking-tight">{title}</p>
       {body && <p className="max-w-sm text-muted-foreground text-balance">{body}</p>}
       {action && (

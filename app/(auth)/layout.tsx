@@ -1,10 +1,9 @@
-import { HeroScene } from "@/components/illustrations/hero-scene";
+import { ProductPreview } from "@/components/landing/product-preview";
 import { Logo } from "@/components/shared/logo";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 
 /**
- * Sign-in: the form floats on glass; the story (illustration + one line) sits beside it.
- * The baton travels the relay once on load.
+ * Sign-in: the form floats on glass; beside it, the product itself and one line of story.
  */
 export default function AuthLayout({ children }: LayoutProps<"/">) {
   return (
@@ -19,7 +18,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
       </section>
 
       <aside className="relative hidden flex-col justify-center gap-10 overflow-hidden px-12 lg:flex">
-        <HeroScene animate className="max-w-2xl" />
+        <ProductPreview className="mx-0 rise [animation-delay:120ms]" />
         <div className="max-w-lg space-y-3">
           <p className="text-3xl font-semibold tracking-tight text-balance">
             The technician already knows what happened.

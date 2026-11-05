@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
-import { HeroScene } from "@/components/illustrations/hero-scene";
-import { SpotHandoff, SpotTranslate, SpotWarranty, EmptyJobs, EmptyOrders } from "@/components/illustrations/spots";
+import { type LucideIcon, ClipboardList, Languages, ShieldCheck, ShoppingBag, Smartphone } from "lucide-react";
+import { ProductPreview } from "@/components/landing/product-preview";
 import { RelayScroll } from "@/components/landing/relay-scroll";
 import { WorkspaceLink } from "@/components/landing/workspace-link";
 import { Logo } from "@/components/shared/logo";
-import { RelayStrip } from "@/components/shared/relay-strip";
+import { IconTile } from "@/components/shared/icon-tile";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 
 export const metadata: Metadata = {
@@ -39,7 +39,7 @@ export default function Landing() {
       {/* Hero */}
       <header className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pt-32 pb-20 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:pt-40">
         <div className="rise space-y-6">
-          <p className="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklab,var(--primary)_12%,transparent)] px-3 py-1 text-sm font-medium text-primary">
+          <p className="inline-flex items-center gap-2 rounded-full border bg-card px-3 py-1 text-sm font-medium">
             <span aria-hidden className="size-2 rounded-full bg-amber" /> For WooCommerce electronics stores
           </p>
           <h1 className="text-4xl font-semibold tracking-[-0.035em] text-balance sm:text-[4.25rem] sm:leading-[1.02]">
@@ -58,18 +58,7 @@ export default function Landing() {
             </Link>
           </div>
         </div>
-        <div className="relative">
-          <HeroScene animate />
-          {/* Glass over illustration: the live case, as the team sees it */}
-          <div className="glass-strong rise absolute -bottom-6 left-2 w-[min(22rem,90%)] space-y-3 rounded-xl p-4 [animation-delay:500ms] sm:left-8">
-            <div className="flex items-baseline justify-between">
-              <span className="font-tag text-sm text-muted-foreground">RC-2026-0042</span>
-              <span className="rounded-full bg-primary/12 px-2.5 py-0.5 text-xs font-semibold text-primary">Visit booked</span>
-            </div>
-            <p className="font-semibold">AquaWash 7kg, water leak</p>
-            <RelayStrip current="technician" labels={{ customer: "Customer", agent: "Maya", dispatcher: "Arjun", technician: "Ravi" }} />
-          </div>
-        </div>
+        <ProductPreview className="rise [animation-delay:120ms]" />
       </header>
 
       <RelayScroll />
@@ -81,21 +70,21 @@ export default function Landing() {
           <p className="text-lg text-muted-foreground">Every handoff carries the order, the product, the warranty and what was already tried.</p>
         </div>
         <div className="grid gap-4 md:grid-cols-3">
-          <Feature art={<SpotHandoff className="w-32" />} title="Context travels with the case">
+          <Feature icon={ClipboardList} title="Context travels with the case">
             The technician gets a structured handoff before the visit: complaint, photos, serial number, warranty and the exact action required.
           </Feature>
-          <Feature art={<SpotTranslate className="w-32" />} title="Gujarati, Hindi and English">
+          <Feature icon={Languages} title="Gujarati, Hindi and English">
             Customers write in their language. Support reads English. Technicians reply in Hindi. Every message is translated for whoever reads it.
           </Feature>
-          <Feature art={<EmptyOrders className="w-32" />} title="Starts from the real order">
+          <Feature icon={ShoppingBag} title="Starts from the real order">
             A Get Support button inside your WooCommerce store. Orders sync by signed webhooks, so a case always points at the actual purchase.
           </Feature>
         </div>
         <div className="grid gap-4 md:grid-cols-2">
-          <Feature art={<SpotWarranty className="w-32" />} title="A person decides the warranty">
+          <Feature icon={ShieldCheck} title="A person decides the warranty">
             Store rules suggest the cover dates; your team confirms each claim. Every decision is recorded with who made it and why.
           </Feature>
-          <Feature art={<EmptyJobs className="w-32" />} title="A phone app for technicians">
+          <Feature icon={Smartphone} title="A phone app for technicians">
             Jobs, the handoff, tap-to-call, photos and a completion report. The customer confirms the fix; nobody closes a case by saying “done” in chat.
           </Feature>
         </div>
@@ -127,10 +116,10 @@ export default function Landing() {
   );
 }
 
-function Feature({ art, title, children }: { art: React.ReactNode; title: string; children: React.ReactNode }) {
+function Feature({ icon, title, children }: { icon: LucideIcon; title: string; children: React.ReactNode }) {
   return (
     <article className="reveal panel space-y-3 rounded-xl p-6">
-      <div className="grid h-28 place-items-start">{art}</div>
+      <IconTile icon={icon} size="sm" className="mb-2" />
       <h3 className="text-lg font-semibold tracking-tight">{title}</h3>
       <p className="text-muted-foreground">{children}</p>
     </article>

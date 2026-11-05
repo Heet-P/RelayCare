@@ -256,11 +256,6 @@
         animation-timeline: --relay;
         animation-range: contain 0% contain 100%;
       }
-      .relay-baton {
-        animation: relay-baton linear both;
-        animation-timeline: --relay;
-        animation-range: contain 0% contain 100%;
-      }
       .relay-station {
         animation: relay-station linear both;
         animation-timeline: --relay;
@@ -272,10 +267,6 @@
 @keyframes relay-fill {
   from { transform: scaleX(0.02); }
   to { transform: scaleX(1); }
-}
-@keyframes relay-baton {
-  from { left: 1%; }
-  to { left: 100%; }
 }
 @keyframes relay-station {
   from { opacity: 0.35; transform: translateY(10px) scale(0.98); }
