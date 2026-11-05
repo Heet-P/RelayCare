@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { redirect } from "next/navigation";
 import { Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { requireActor } from "@/lib/auth/session";
@@ -21,6 +22,12 @@ export default function NewCasePage({ searchParams }: PageProps<"/support/new">)
 async function Wizard({ item, order }: { item?: string; order?: string }) {
   const actor = await requireActor();
   const purchases = await listMyPurchases(actor.authUserId);
+  // "Get Support" on an order whose product already has an open case: go straight to that case.
+  const fromStore = purchases.find((p) => p.id === order);
+  if (fromStore && fromStore.items.every((i) => i.openCase)) {
+    const open = fromStore.items[0]?.openCase;
+    if (open) redirect(`/my-cases/${open.id}`);
+  }
   // Only products without an open case can be reported (one open case per product).
   const items: WizardItem[] = purchases.flatMap((p) =>
     p.items
