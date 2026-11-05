@@ -1,30 +1,33 @@
-import { RelayStrip } from "@/components/shared/relay-strip";
+import { HeroScene } from "@/components/illustrations/hero-scene";
+import { Logo } from "@/components/shared/logo";
 import { ThemeToggleButton } from "@/components/ui/skiper-ui/skiper26";
 
-/** Sign-in screens: the form on one side, the relay (the product in one picture) on the other. */
+/**
+ * Sign-in: the form floats on glass; the story (illustration + one line) sits beside it.
+ * The baton travels the relay once on load.
+ */
 export default function AuthLayout({ children }: LayoutProps<"/">) {
   return (
-    <main className="grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1.1fr)]">
-      <section className="flex flex-col px-4 py-8 sm:px-12">
-        <header className="flex items-center justify-between">
-          <span className="text-lg font-semibold tracking-tight">RelayCare</span>
-          <ThemeToggleButton className="size-11 bg-foreground" variant="circle" start="top-right" />
-        </header>
-        <div className="flex flex-1 items-center">
-          <div className="w-full max-w-sm">{children}</div>
-        </div>
+    <main className="relative grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1.15fr)]">
+      <header className="absolute inset-x-0 top-0 z-10 flex items-center justify-between p-4 sm:p-6">
+        <Logo />
+        <ThemeToggleButton className="size-11 bg-foreground" variant="circle" start="top-right" />
+      </header>
+
+      <section className="flex items-center justify-center px-4 pt-24 pb-10 sm:px-10">
+        <div className="glass-strong rise w-full max-w-md rounded-2xl p-6 sm:p-8">{children}</div>
       </section>
-      <aside className="hidden flex-col justify-center gap-12 border-l bg-card px-16 lg:flex">
-        <p className="max-w-md text-2xl font-semibold tracking-tight text-balance">
-          The technician already knows what happened. The customer never explains it twice.
-        </p>
-        <RelayStrip current="technician" travel className="max-w-lg" />
-        <dl className="grid max-w-lg grid-cols-[auto_1fr] gap-x-6 gap-y-2 text-sm">
-          <dt className="font-tag text-muted-foreground">RC-2026-0042</dt>
-          <dd>AquaWash 7kg, water leakage during wash cycle</dd>
-          <dt className="font-tag text-muted-foreground">Handoff</dt>
-          <dd>Inlet pipe checked by customer, photos received, warranty verified</dd>
-        </dl>
+
+      <aside className="relative hidden flex-col justify-center gap-10 overflow-hidden px-12 lg:flex">
+        <HeroScene animate className="max-w-2xl" />
+        <div className="max-w-lg space-y-3">
+          <p className="text-3xl font-semibold tracking-tight text-balance">
+            The technician already knows what happened.
+          </p>
+          <p className="text-lg text-muted-foreground text-balance">
+            One purchase. One connected service journey. One resolution.
+          </p>
+        </div>
       </aside>
     </main>
   );
