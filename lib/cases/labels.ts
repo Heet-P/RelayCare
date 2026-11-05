@@ -63,6 +63,32 @@ export const ACTION_LABEL: Record<string, string> = {
   cancel: "Cancel case",
 };
 
+/** Past tense for the timeline ("Maya started the review"). */
+const ACTION_DONE: Record<string, string> = {
+  start_triage: "started the review",
+  request_info: "asked the customer for more information",
+  info_provided: "replied with the requested information",
+  review_warranty: "started the warranty check",
+  send_to_dispatch: "sent the case to dispatch",
+  propose_desk_resolution: "proposed a resolution without a visit",
+  reject: "rejected the case",
+  assign_technician: "assigned a technician",
+  schedule: "booked the visit",
+  unassign: "removed the technician",
+  start_work: "started work",
+  complete_work: "completed the repair",
+  confirm_resolution: "confirmed the problem is fixed",
+  reject_resolution: "said the problem is not fixed",
+  close: "closed the case",
+  retriage: "sent the case back to triage",
+  redispatch: "sent the case back to dispatch",
+  escalate: "escalated the case",
+  deescalate_triage: "returned the case to triage",
+  deescalate_dispatch: "returned the case to dispatch",
+  deescalate_restore: "de-escalated the case",
+  cancel: "cancelled the case",
+};
+
 /** "3h", "2d" — compact age for queues. */
 export function age(from: Date | string, now = Date.now()) {
   const mins = Math.max(0, Math.round((now - new Date(from).getTime()) / 60000));
@@ -80,7 +106,7 @@ export function describeEvent(e: EventLike): string {
     case "case_created":
       return "reported the problem";
     case "status_changed":
-      return `${(ACTION_LABEL[m.action] ?? "moved the case").toLowerCase()}${m.reason ? `: “${m.reason}”` : ""}`;
+      return `${ACTION_DONE[m.action] ?? "updated the case"}${m.reason ? `: “${m.reason}”` : ""}`;
     case "warranty_verified":
       return `recorded warranty as ${m.status?.replace("_", " ")}${m.notes ? ` (${m.notes})` : ""}`;
     case "handoff_created":
