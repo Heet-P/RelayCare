@@ -10,6 +10,7 @@ import { PriorityMark, StatusChip } from "@/components/cases/status-chip";
 import { Timeline } from "@/components/cases/timeline";
 import { WarrantyPanel } from "@/components/cases/warranty-panel";
 import { ChatPanel } from "@/components/chat/chat-panel";
+import { AssignDialog, ScheduleDialog } from "@/components/dispatch/assign-dialog";
 import { LiveRefresh } from "@/components/shared/live-refresh";
 import { RelayStrip, type Station } from "@/components/shared/relay-strip";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -19,6 +20,7 @@ import { categoryLabel } from "@/lib/cases/categories";
 import { chatChannelsFor } from "@/lib/cases/chat-channels";
 import { availableActions, ownerKindFor } from "@/lib/cases/state-machine";
 import { getCaseView, type CaseView } from "@/lib/db/queries/case-view";
+import { listTechnicians } from "@/lib/db/queries/dispatch";
 import { date, daysUntil, money } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Case" };
@@ -58,6 +60,9 @@ async function StaffCase({ caseId }: { caseId: string }) {
   const latestHandoff = view.handoffs[0];
   const staffEditor = role === "owner" || role === "support_agent";
   const open = !["closed", "cancelled", "rejected"].includes(c.status);
+  const dispatcher = role === "owner" || role === "dispatcher";
+  const assigned = view.activeAssignment && view.technician ? { id: view.technician.id, name: view.technician.name } : null;
+  const technicians = dispatcher && (c.status === "awaiting_assignment" || assigned) ? await listTechnicians(c.organizationId) : [];
 
   return (
     <div className="space-y-6">
@@ -98,6 +103,19 @@ async function StaffCase({ caseId }: { caseId: string }) {
         <aside className="space-y-6">
           <section className="space-y-3 rounded-lg border bg-card p-4">
             <CaseActions caseId={c.id} status={c.status} actions={actions} />
+            {dispatcher && (c.status === "awaiting_assignment" || assigned) && (
+              <div className="flex flex-wrap gap-2">
+                <AssignDialog
+                  caseId={c.id}
+                  caseNumber={c.caseNumber}
+                  city={c.serviceAddress?.city ?? null}
+                  current={assigned}
+                  technicians={technicians}
+                  trigger={assigned ? "Change technician" : "Assign technician"}
+                />
+                {assigned && <ScheduleDialog caseId={c.id} scheduledAt={view.activeAssignment?.scheduledAt ?? null} />}
+              </div>
+            )}
             {staffEditor && c.status === "warranty_review" && (
               <HandoffBuilder
                 caseId={c.id}
