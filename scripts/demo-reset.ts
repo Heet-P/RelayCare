@@ -28,7 +28,7 @@ async function main() {
     const cases = tx`select id from service_cases where organization_id = ${org.id}`;
     await tx`alter table case_events disable trigger case_events_no_update`;
     for (const table of ["case_events", "case_attachments", "chat_threads", "case_handoffs", "case_assignments", "case_participants"]) {
-      await tx`delete from ${tx(table)} where case_id in ${cases}`;
+      await tx`delete from ${tx(table)} where case_id in (${cases})`;
     }
     const gone = await tx`delete from service_cases where organization_id = ${org.id} returning id`;
     await tx`alter table case_events enable trigger case_events_no_update`;
