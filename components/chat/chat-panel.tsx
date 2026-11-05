@@ -53,7 +53,7 @@ export function ChatPanel({
             aria-selected={c.key === channel.key}
             className={cn(
               "pressable h-9 rounded-full px-3.5 text-sm font-medium text-muted-foreground hover:text-foreground",
-              c.key === channel.key && "bg-card text-foreground shadow-[0_1px_2px_rgb(6_26_28/0.08),0_2px_8px_-2px_rgb(6_26_28/0.12)]",
+              c.key === channel.key && "bg-card text-foreground shadow-[0_1px_2px_rgb(28_25_23/0.08),0_2px_8px_-2px_rgb(28_25_23/0.12)]",
             )}
           >
             {c.label}
@@ -179,7 +179,7 @@ function Bubble({ message: m, translation, sender, showSender }: { message: Chat
   const [original, setOriginal] = useState(false);
   const evidenceId = typeof m.extra?.attachmentId === "string" ? m.extra.attachmentId : null;
   return (
-    <div className={cn("flex flex-col gap-1", m.mine ? "items-end" : "items-start")}>
+    <div className={cn("chat-enter flex flex-col gap-1", m.mine ? "items-end" : "items-start")}>
       {showSender && <span className="px-1 text-xs text-muted-foreground">{sender}</span>}
       <div
         className={cn(

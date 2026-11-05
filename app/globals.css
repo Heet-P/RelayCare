@@ -207,11 +207,13 @@
 
 /* Press feedback for anything tappable (buttons, rows, tiles). */
 @utility pressable {
+  /* press snaps (ease-out); colour changes on hover ease gently (ease) */
   transition:
     transform var(--dur-press) var(--ease-out),
-    background-color var(--dur-ui) var(--ease-out),
-    box-shadow var(--dur-ui) var(--ease-out),
-    opacity var(--dur-ui) var(--ease-out);
+    background-color 200ms ease,
+    color 200ms ease,
+    box-shadow 200ms ease,
+    opacity 200ms ease;
   &:active:not(:disabled) {
     transform: scale(0.97);
   }
@@ -233,7 +235,16 @@
   }
 }
 @utility rise {
-  animation: rise 360ms var(--ease-out) both;
+  animation: rise 280ms var(--ease-out) both;
+}
+
+/* A new chat message eases in from just below; history loads in place without a stagger. */
+.chat-enter {
+  transition: opacity 220ms var(--ease-out), transform 220ms var(--ease-out);
+  @starting-style {
+    opacity: 0;
+    transform: translateY(8px);
+  }
 }
 
 /*
@@ -300,16 +311,32 @@ html.lenis body {
   overscroll-behavior: contain;
 }
 
+/*
+ * Reduced motion = fewer, gentler animations, not none: fades and colour changes stay (they
+ * explain state), anything that moves or scales is removed.
+ */
 @media (prefers-reduced-motion: reduce) {
-  *,
-  ::before,
-  ::after {
-    animation-duration: 1ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 1ms !important;
+  .pressable:active:not(:disabled) {
+    transform: none;
+  }
+  .rise {
+    animation-name: fade;
+  }
+  .chat-enter {
+    @starting-style {
+      transform: none;
+    }
+  }
+  [data-slot="dialog-content"] {
+    scale: 1 !important;
   }
   ::view-transition-old(root),
   ::view-transition-new(root) {
     animation: none !important;
+  }
+}
+@keyframes fade {
+  from {
+    opacity: 0;
   }
 }
