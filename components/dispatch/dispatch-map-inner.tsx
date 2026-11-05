@@ -28,8 +28,8 @@ export default function DispatchMapInner({ pins }: { pins: MapPin[] }) {
       const dot = document.createElement("a");
       dot.href = `/dashboard/cases/${p.id}`;
       dot.setAttribute("aria-label", `${p.caseNumber}: ${p.label}`);
-      // Signal yellow = waiting for a technician (the baton is with dispatch); petrol = booked.
-      dot.style.cssText = `display:block;width:18px;height:18px;border-radius:9999px;border:3px solid white;box-shadow:0 1px 4px rgba(0,0,0,.35);background:${p.needsTechnician ? "#f5b800" : "#145b6f"}`;
+      // Amber = waiting for a technician; ink = booked.
+      dot.style.cssText = `display:block;width:18px;height:18px;border-radius:9999px;border:3px solid white;box-shadow:0 1px 4px rgba(0,0,0,.35);background:${p.needsTechnician ? "#e8a317" : "#1c1917"}`;
       new mapboxgl.Marker({ element: dot })
         .setLngLat([p.lng, p.lat])
         .setPopup(new mapboxgl.Popup({ offset: 14, closeButton: false }).setText(`${p.caseNumber}, ${p.label}`))

@@ -6,65 +6,56 @@
 @custom-variant dark (&:is(.dark *));
 
 /*
- * RelayCare — "Peacock & Marigold"
+ * RelayCare — "Graphite & Amber"
  *
- * Peacock (deep blue-green) carries the brand and every action. Marigold is the BATON: it only
- * ever marks who holds a case right now. Terracotta, leaf and peacock-neck blue live in the
- * illustrations. Content sits on solid panels; navigation and controls float on glass over a
- * soft peacock mesh (the Apple "materials" approach: glass for chrome, never for dense data).
+ * Warm stone neutrals carry almost everything; the primary action is ink (graphite), the way
+ * Apple and Emil Kowalski keep colour out of the way. Amber is the one accent: it marks what is
+ * live or waiting on someone (unread, needs action, current step). Content sits on solid
+ * panels; navigation floats on glass over a barely-there warm wash.
  *
- * WCAG AA verified in both schemes: ink/mist 14.7, muted/mist 5.7, white/peacock 6.3,
- * ink/marigold 8.0; dark fg/night 15.1, muted/panel 7.2, night/peacock 8.4.
+ * WCAG AA, both schemes: ink/stone 15.9, muted/stone 5.6, stone/ink button 15.9,
+ * amber-ink/white 5.1; dark fg/night 16.4, muted/panel 6.9, amber-ink/panel 9.2.
  */
 :root {
   color-scheme: light;
 
-  --background: light-dark(#eef4f2, #061a1c);
-  --foreground: light-dark(#0b2326, #e3eeec);
-  --card: light-dark(#ffffff, #0d2629);
+  --background: light-dark(#f6f4f0, #141210);
+  --foreground: light-dark(#1c1917, #f5f3ef);
+  --card: light-dark(#ffffff, #1c1a17);
   --card-foreground: var(--foreground);
-  --popover: light-dark(#ffffff, #0f2b2e);
+  --popover: light-dark(#ffffff, #221f1b);
   --popover-foreground: var(--foreground);
-  --primary: light-dark(#0a6b68, #4cc4b8);
-  --primary-foreground: light-dark(#ffffff, #061a1c);
-  --secondary: light-dark(#e2ecea, #15343a);
+  --primary: light-dark(#1c1917, #f5f3ef);
+  --primary-foreground: light-dark(#faf9f7, #141210);
+  --secondary: light-dark(#ece9e3, #26231f);
   --secondary-foreground: var(--foreground);
-  --muted: light-dark(#e7efed, #12302f);
-  --muted-foreground: light-dark(#4b6466, #9bb4b1);
-  --accent: light-dark(#dbe9e6, #173a3d);
+  --muted: light-dark(#efece6, #23201c);
+  --muted-foreground: light-dark(#665f57, #a8a097);
+  --accent: light-dark(#ebe7df, #2a2622);
   --accent-foreground: var(--foreground);
   --destructive: light-dark(#b42318, #ff8a7a);
-  --border: light-dark(#d4e0dd, #1d3f42);
-  --input: light-dark(#c6d6d2, #26494c);
-  --ring: light-dark(#0a6b68, #4cc4b8);
+  --border: light-dark(#e2ddd4, #2e2a25);
+  --input: light-dark(#d6d0c5, #3a352f);
+  --ring: light-dark(#1c1917, #f5f3ef);
 
-  --baton: #f4a51c;
-  --baton-foreground: #0b2326;
+  /* The accent: fills (dots, rings, stars) use --amber; amber text uses --amber-ink. */
+  --amber: #e8a317;
+  --amber-ink: light-dark(#8a5300, #f0b43c);
   --success: light-dark(#18794e, #4fd18b);
   --warning: light-dark(#a15c07, #fdb022);
 
-  /* Illustration palette (never used for UI meaning). */
-  --ill-peacock: light-dark(#0a6b68, #3fb3a7);
-  --ill-neck: light-dark(#1f4e9b, #6f9cf0);
-  --ill-leaf: light-dark(#2f8f5b, #5cc28a);
-  --ill-terracotta: light-dark(#d9653b, #ef8a62);
-  --ill-marigold: #f4a51c;
-  --ill-ink: light-dark(#0b2326, #e3eeec);
-  --ill-paper: light-dark(#ffffff, #12302f);
-  --ill-shade: light-dark(#d9e6e3, #1a3b3e);
-
   /* Data colour (validated with the dataviz checker in both modes). */
-  --chart-1: light-dark(#1d8aa6, #2f9bb8);
+  --chart-1: light-dark(#b87a0e, #c4840f);
   --chart-2: var(--success);
   --chart-3: var(--warning);
   --chart-4: light-dark(#6941c6, #b692f6);
   --chart-5: var(--muted-foreground);
 
   /* Glass material. */
-  --glass: light-dark(rgb(255 255 255 / 0.62), rgb(13 38 41 / 0.58));
-  --glass-strong: light-dark(rgb(255 255 255 / 0.82), rgb(13 38 41 / 0.82));
-  --glass-edge: light-dark(rgb(255 255 255 / 0.85), rgb(255 255 255 / 0.09));
-  --glass-shadow: light-dark(0 1px 0 0 rgb(255 255 255 / 0.7) inset, 0 1px 0 0 rgb(255 255 255 / 0.06) inset), 0 10px 30px -12px rgb(6 26 28 / 0.28);
+  --glass: light-dark(rgb(255 255 255 / 0.66), rgb(28 26 23 / 0.62));
+  --glass-strong: light-dark(rgb(255 255 255 / 0.84), rgb(28 26 23 / 0.86));
+  --glass-edge: light-dark(rgb(255 255 255 / 0.9), rgb(255 255 255 / 0.07));
+  --glass-shadow: light-dark(0 1px 0 0 rgb(255 255 255 / 0.7) inset, 0 1px 0 0 rgb(255 255 255 / 0.05) inset), 0 10px 30px -14px rgb(28 25 23 / 0.22);
 
   --sidebar: var(--glass);
   --sidebar-foreground: var(--foreground);
@@ -133,8 +124,8 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
-  --color-baton: var(--baton);
-  --color-baton-foreground: var(--baton-foreground);
+  --color-amber: var(--amber);
+  --color-amber-ink: var(--amber-ink);
   --color-success: var(--success);
   --color-warning: var(--warning);
   --color-chart-1: var(--chart-1);
@@ -180,7 +171,7 @@
     }
   }
   ::selection {
-    background: color-mix(in oklab, var(--baton) 45%, transparent);
+    background: color-mix(in oklab, var(--amber) 40%, transparent);
   }
 }
 
@@ -211,7 +202,7 @@
 @utility panel {
   background: var(--card);
   border: 1px solid var(--border);
-  box-shadow: 0 1px 2px rgb(6 26 28 / 0.04), 0 12px 32px -20px rgb(6 26 28 / 0.18);
+  box-shadow: 0 1px 2px rgb(28 25 23 / 0.04), 0 12px 32px -20px rgb(28 25 23 / 0.16);
 }
 
 /* Press feedback for anything tappable (buttons, rows, tiles). */
@@ -226,12 +217,11 @@
   }
 }
 
-/* Peacock mesh backdrop behind the glass (fixed, decorative). */
+/* Warm wash behind the glass (fixed, decorative): a hint of amber light, nothing more. */
 @utility mesh {
   background:
-    radial-gradient(60rem 40rem at 8% -10%, color-mix(in oklab, var(--ill-peacock) 22%, transparent), transparent 60%),
-    radial-gradient(40rem 32rem at 100% 0%, color-mix(in oklab, var(--ill-neck) 14%, transparent), transparent 60%),
-    radial-gradient(36rem 28rem at 85% 100%, color-mix(in oklab, var(--ill-marigold) 12%, transparent), transparent 60%),
+    radial-gradient(56rem 36rem at 100% -10%, color-mix(in oklab, var(--amber) 10%, transparent), transparent 60%),
+    radial-gradient(48rem 32rem at 0% 110%, color-mix(in oklab, var(--foreground) 5%, transparent), transparent 60%),
     var(--background);
 }
 

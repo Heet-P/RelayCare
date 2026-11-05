@@ -7,7 +7,7 @@ import { UserMenu, UserMenuSkeleton } from "@/components/shared/user-menu";
 import { ThemeToggleButton } from "@/components/ui/skiper-ui/skiper26";
 
 /**
- * Staff workspace. Chrome floats on glass over the peacock mesh (sidebar, top bar); content
+ * Staff workspace. Chrome floats on glass over the warm wash (sidebar, top bar); content
  * stays on solid panels. Navigation is static (prerendered); session-dependent parts stream in.
  */
 export default function DashboardLayout({ children }: LayoutProps<"/dashboard">) {

@@ -57,7 +57,7 @@ export function JobResponse({ caseId, proposedAt, t }: { caseId: string; propose
   }
 
   return (
-    <section className="space-y-3 panel rounded-xl ring-2 ring-baton p-4" aria-label="New job">
+    <section className="space-y-3 panel rounded-xl ring-2 ring-amber p-4" aria-label="New job">
       <p className="font-semibold">Dispatch has offered you this job</p>
       <div className="space-y-2">
         <Label htmlFor="visit">Visit time (optional)</Label>

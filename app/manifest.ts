@@ -8,8 +8,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "One purchase. One connected service journey. One resolution.",
     start_url: "/",
     display: "standalone",
-    background_color: "#f2f5f7",
-    theme_color: "#145b6f",
+    background_color: "#f6f4f0",
+    theme_color: "#1c1917",
     icons: [{ src: "/icon.svg", sizes: "any", type: "image/svg+xml", purpose: "any" }],
     shortcuts: [{ name: "Your jobs", url: "/technician/jobs" }],
   };

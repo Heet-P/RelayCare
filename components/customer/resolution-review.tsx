@@ -50,7 +50,7 @@ export function ResolutionReview({ t, caseId, technician, report, deskNotes }: {
     });
 
   return (
-    <section className="space-y-4 panel rounded-xl ring-2 ring-baton p-4" aria-label="Confirm the repair">
+    <section className="space-y-4 panel rounded-xl ring-2 ring-amber p-4" aria-label="Confirm the repair">
       <h2 className="text-lg font-semibold">{technician ? `${technician}'s report` : "Proposed resolution"}</h2>
       {report ? (
         <dl className="space-y-2 text-sm">
@@ -145,7 +145,7 @@ export function RateService({ t, caseId, existing }: { t: Messages; caseId: stri
             onClick={() => setScore(n)}
             className="grid size-11 place-items-center rounded-md hover:bg-accent"
           >
-            <Star className={cn("size-6", n <= score ? "fill-baton text-baton" : "text-muted-foreground")} />
+            <Star className={cn("size-6", n <= score ? "fill-amber text-amber" : "text-muted-foreground")} />
           </button>
         ))}
       </div>

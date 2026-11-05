@@ -66,7 +66,7 @@ async function CustomerCase({ caseId }: { caseId: string }) {
               <span
                 className={cn(
                   "block h-1.5 rounded-full",
-                  i < status.step ? "bg-foreground/50" : i === status.step ? "bg-baton" : "bg-border",
+                  i < status.step ? "bg-foreground/50" : i === status.step ? "bg-amber" : "bg-border",
                 )}
               />
               <span className={cn("block text-xs text-muted-foreground", i === status.step && "font-semibold text-foreground")}>{s}</span>

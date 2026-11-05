@@ -82,7 +82,7 @@ async function StaffCase({ caseId }: { caseId: string }) {
             </div>
           </div>
           <p className="glass flex items-center gap-2 rounded-full px-4 py-2 text-sm">
-            <span aria-hidden className={`size-2.5 rounded-full ${ownerName ? "bg-baton" : "bg-border"}`} />
+            <span aria-hidden className={`size-2.5 rounded-full ${ownerName ? "bg-amber" : "bg-border"}`} />
             {ownerName ? (
               <span>
                 With <span className="font-semibold">{ownerName}</span>

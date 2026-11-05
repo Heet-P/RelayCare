@@ -53,7 +53,7 @@ async function Cases() {
         return (
           <li key={c.id}>
             <Link href={`/my-cases/${c.id}`} className="flex items-center gap-4 px-4 py-4 hover:bg-accent/50">
-              <span aria-hidden className={`size-2.5 shrink-0 rounded-full ${open ? "bg-baton" : "bg-border"}`} />
+              <span aria-hidden className={`size-2.5 shrink-0 rounded-full ${open ? "bg-amber" : "bg-border"}`} />
               <span className="min-w-0 flex-1">
                 <span className="block truncate font-medium">{c.productName}</span>
                 <span className="block text-sm text-muted-foreground">{s.headline}</span>

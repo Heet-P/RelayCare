@@ -45,7 +45,7 @@ export function PurchaseCard({ purchase, getHelp = "Get help with this" }: { pur
                 href={`/my-cases/${item.openCase.id}`}
                 className="inline-flex h-11 items-center gap-2 rounded-md border px-4 text-sm font-medium hover:bg-accent"
               >
-                <span aria-hidden className="size-2 rounded-full bg-baton" />
+                <span aria-hidden className="size-2 rounded-full bg-amber" />
                 <span className="font-tag">{item.openCase.caseNumber}</span>
               </Link>
             ) : (

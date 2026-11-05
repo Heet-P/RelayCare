@@ -67,7 +67,7 @@ async function Jobs() {
                       {j.address?.city ? `, ${j.address.city}` : ""}
                     </p>
                     <p className="mt-2 flex items-center gap-2 text-sm">
-                      <span aria-hidden className={`size-2 rounded-full ${j.assignmentStatus === "assigned" ? "bg-baton" : "bg-foreground/40"}`} />
+                      <span aria-hidden className={`size-2 rounded-full ${j.assignmentStatus === "assigned" ? "bg-amber" : "bg-foreground/40"}`} />
                       {j.scheduledAt ? `Visit ${when(j.scheduledAt)}` : "Visit not booked yet"}
                     </p>
                   </Link>

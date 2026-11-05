@@ -40,7 +40,7 @@ export default function Landing() {
       <header className="relative mx-auto grid max-w-6xl items-center gap-10 px-4 pt-32 pb-20 sm:px-6 lg:grid-cols-[1.05fr_1fr] lg:pt-40">
         <div className="rise space-y-6">
           <p className="inline-flex items-center gap-2 rounded-full bg-[color-mix(in_oklab,var(--primary)_12%,transparent)] px-3 py-1 text-sm font-medium text-primary">
-            <span aria-hidden className="size-2 rounded-full bg-baton" /> For WooCommerce electronics stores
+            <span aria-hidden className="size-2 rounded-full bg-amber" /> For WooCommerce electronics stores
           </p>
           <h1 className="text-4xl font-semibold tracking-[-0.035em] text-balance sm:text-[4.25rem] sm:leading-[1.02]">
             After-sales service that never loses the story.

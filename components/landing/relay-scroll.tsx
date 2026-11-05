@@ -22,7 +22,7 @@ export function RelayScroll() {
         </div>
         <div className="relative mt-12 hidden h-2 rounded-full bg-[color-mix(in_oklab,var(--foreground)_10%,transparent)] md:block">
           <div className="relay-fill absolute inset-y-0 left-0 w-full origin-left rounded-full bg-primary" />
-          <div className="relay-baton absolute top-1/2 left-full h-5 w-11 -translate-x-1/2 -translate-y-1/2 rounded-full bg-baton shadow-[0_0_0_5px_var(--background),0_6px_16px_-4px_rgb(244_165_28/0.6)]" />
+          <div className="relay-baton absolute top-1/2 left-full h-5 w-11 -translate-x-1/2 -translate-y-1/2 rounded-full bg-amber shadow-[0_0_0_5px_var(--background),0_6px_16px_-4px_rgb(244_165_28/0.6)]" />
         </div>
         <ol className="mt-8 grid gap-4 md:grid-cols-4">
           {STATIONS.map(({ who, title, body, Art }, i) => (

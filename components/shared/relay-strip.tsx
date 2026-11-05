@@ -43,7 +43,7 @@ export function RelayStrip({
         {travel && (
           <span
             aria-hidden
-            className="relay-baton-travel absolute top-1.5 z-20 h-3 w-8 -translate-x-1/2 rounded-full bg-baton shadow-[0_0_0_4px_var(--card)]"
+            className="relay-baton-travel absolute top-1.5 z-20 h-3 w-8 -translate-x-1/2 rounded-full bg-amber shadow-[0_0_0_4px_var(--card)]"
             style={{ left: `${12.5 + (index / 3) * 75}%` }}
           />
         )}
@@ -56,10 +56,10 @@ export function RelayStrip({
                 className={cn(
                   "relative z-10 grid size-6 place-items-center rounded-full border-2 bg-background",
                   passed ? "border-foreground/50" : "border-border",
-                  holds && "border-baton bg-baton",
+                  holds && "border-baton bg-amber",
                 )}
               >
-                {holds && !travel && <span className="size-2 rounded-full bg-baton-foreground" />}
+                {holds && !travel && <span className="size-2 rounded-full bg-amber-foreground" />}
                 {passed && <span className="size-2 rounded-full bg-foreground/50" />}
               </span>
               <span className={cn("text-xs text-muted-foreground", holds && "font-semibold text-foreground")}>

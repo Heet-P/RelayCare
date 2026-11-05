@@ -16,7 +16,7 @@ export function Timeline({ view }: { view: CaseView }) {
           <li key={e.id} className="relative">
             <span
               aria-hidden
-              className={cn("absolute top-1.5 -left-6 size-4 rounded-full border-2 border-background", last ? "bg-baton" : e.newStatus ? "bg-foreground/50" : "bg-border")}
+              className={cn("absolute top-1.5 -left-6 size-4 rounded-full border-2 border-background", last ? "bg-amber" : e.newStatus ? "bg-foreground/50" : "bg-border")}
             />
             <p className="text-sm">
               <span className="font-medium">{e.actorId ? (view.people[e.actorId]?.name ?? "Someone") : "RelayCare"}</span> {describeEvent(e)}

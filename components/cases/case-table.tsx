@@ -4,7 +4,7 @@ import { age } from "@/lib/cases/labels";
 import { EmptyState } from "@/components/shared/empty-state";
 import { PriorityMark, StatusChip } from "./status-chip";
 
-/** Staff case list. The yellow dot marks who holds the case right now (the baton). */
+/** Staff case list. The amber dot marks who holds the case right now. */
 export function CaseTable({ rows, empty }: { rows: CaseRow[]; empty: string }) {
   if (!rows.length) return <EmptyState art="done" title="All caught up" body={empty} />;
   return (
@@ -40,7 +40,7 @@ export function CaseTable({ rows, empty }: { rows: CaseRow[]; empty: string }) {
               <td className="px-4 py-3">
                 {c.ownerName ? (
                   <span className="flex items-center gap-2">
-                    <span aria-hidden className="size-2 rounded-full bg-baton" />
+                    <span aria-hidden className="size-2 rounded-full bg-amber" />
                     {c.ownerName}
                   </span>
                 ) : (

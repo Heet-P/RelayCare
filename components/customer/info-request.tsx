@@ -11,7 +11,7 @@ export function InfoRequest({ t, caseId, question, agent }: { t: Messages; caseI
   const router = useRouter();
   const [pending, start] = useTransition();
   return (
-    <section className="space-y-3 panel rounded-xl ring-2 ring-baton p-4" aria-label="Information requested">
+    <section className="space-y-3 panel rounded-xl ring-2 ring-amber p-4" aria-label="Information requested">
       <p className="font-semibold">
         {agent} {t.asked}
       </p>

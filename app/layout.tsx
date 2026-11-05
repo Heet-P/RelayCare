@@ -16,8 +16,8 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = {
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#eef4f2" },
-    { media: "(prefers-color-scheme: dark)", color: "#061a1c" },
+    { media: "(prefers-color-scheme: light)", color: "#f6f4f0" },
+    { media: "(prefers-color-scheme: dark)", color: "#141210" },
   ],
 };
 
@@ -25,7 +25,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="en" suppressHydrationWarning className={`${instrument.variable} ${mukta.variable} ${hindVadodara.variable}`}>
       <body className="min-h-dvh">
-        {/* Peacock mesh behind every screen; glass surfaces pick it up. */}
+        {/* Warm wash behind every screen; glass surfaces pick it up. */}
         <div aria-hidden className="mesh pointer-events-none fixed inset-0 -z-10" />
         <Providers>{children}</Providers>
       </body>
