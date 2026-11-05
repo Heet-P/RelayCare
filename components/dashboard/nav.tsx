@@ -41,11 +41,11 @@ function NavLinks({ path, onNavigate }: { path: string; onNavigate?: () => void 
             onClick={onNavigate}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex h-11 items-center gap-3 rounded-md px-3 text-sm text-muted-foreground transition-colors hover:bg-sidebar-accent hover:text-foreground",
-              active && "bg-card font-medium text-foreground shadow-[inset_3px_0_0_var(--primary)]",
+              "pressable flex h-11 items-center gap-3 rounded-md px-3 text-sm font-medium text-muted-foreground hover:bg-[color-mix(in_oklab,var(--foreground)_6%,transparent)] hover:text-foreground",
+              active && "bg-[color-mix(in_oklab,var(--primary)_14%,transparent)] text-foreground hover:bg-[color-mix(in_oklab,var(--primary)_18%,transparent)]",
             )}
           >
-            <Icon className="size-4" aria-hidden />
+            <Icon className={cn("size-[18px]", active ? "text-primary" : "")} aria-hidden strokeWidth={active ? 2.25 : 1.75} />
             {label}
           </Link>
         );
@@ -55,7 +55,7 @@ function NavLinks({ path, onNavigate }: { path: string; onNavigate?: () => void 
 }
 
 export const StoreMark = () => (
-  <span className="flex items-center gap-2 text-sm text-muted-foreground">
-    <Building2 className="size-4" aria-hidden /> Demo Electronics
+  <span className="flex items-center gap-2 pl-[42px] text-xs text-muted-foreground">
+    <Building2 className="size-3.5" aria-hidden /> Demo Electronics
   </span>
 );
