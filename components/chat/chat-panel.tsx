@@ -40,22 +40,26 @@ export function ChatPanel({
   }
 
   return (
-    <section className={cn("flex min-h-0 flex-col panel rounded-xl", className)} aria-label="Conversation">
-      <header className="flex items-center gap-1 border-b px-2">
+    <section className={cn("panel flex min-h-0 flex-col overflow-hidden rounded-xl", className)} aria-label="Conversation">
+      <header className="flex items-center gap-2 border-b px-3 py-2.5">
+        <div className="flex rounded-full bg-muted p-1" role="tablist" aria-label="Conversations">
         {channels.map((c) => (
           <button
             key={c.key}
             type="button"
             onClick={() => setActive(c.key)}
             aria-pressed={c.key === channel.key}
+            role="tab"
+            aria-selected={c.key === channel.key}
             className={cn(
-              "h-12 rounded-t-md px-3 text-sm text-muted-foreground",
-              c.key === channel.key && "font-semibold text-foreground shadow-[inset_0_-2px_0_var(--primary)]",
+              "pressable h-9 rounded-full px-3.5 text-sm font-medium text-muted-foreground hover:text-foreground",
+              c.key === channel.key && "bg-card text-foreground shadow-[0_1px_2px_rgb(6_26_28/0.08),0_2px_8px_-2px_rgb(6_26_28/0.12)]",
             )}
           >
             {c.label}
           </button>
         ))}
+        </div>
         {state !== "connected" && (
           <span className="ml-auto flex items-center gap-1 px-2 text-xs text-muted-foreground" role="status">
             {state === "error" ? <WifiOff className="size-3.5" /> : null}
@@ -99,7 +103,7 @@ function ChannelView({ channel, names, locale }: { channel: ChannelRef; names: R
 
   return (
     <>
-      <div className="min-h-64 flex-1 space-y-3 overflow-y-auto p-4" aria-live="polite">
+      <div data-lenis-prevent className="min-h-64 flex-1 space-y-3 overflow-y-auto overscroll-contain p-4" aria-live="polite">
         {hasMore && (
           <button type="button" onClick={() => loadOlder()} className="mx-auto block h-11 text-sm text-primary underline-offset-4 hover:underline">
             Show earlier messages
@@ -123,13 +127,13 @@ function ChannelView({ channel, names, locale }: { channel: ChannelRef; names: R
         <div ref={bottom} />
       </div>
       <form
-        className="flex items-end gap-2 border-t p-2"
+        className="flex items-end gap-2 border-t p-2.5"
         onSubmit={(e) => {
           e.preventDefault();
           void send();
         }}
       >
-        <label className="grid size-11 shrink-0 cursor-pointer place-items-center rounded-md text-muted-foreground hover:bg-accent" aria-label="Send a photo or file">
+        <label className="pressable grid size-11 shrink-0 cursor-pointer place-items-center rounded-full text-muted-foreground hover:bg-accent" aria-label="Send a photo or file">
           <ImagePlus className="size-5" />
           <input
             type="file"
@@ -154,12 +158,12 @@ function ChannelView({ channel, names, locale }: { channel: ChannelRef; names: R
           rows={1}
           placeholder="Write a message"
           aria-label="Message"
-          className="max-h-32 min-h-11 flex-1 resize-none rounded-md border border-input bg-background px-3 py-2.5 text-base outline-none focus-visible:ring-3 focus-visible:ring-ring/50"
+          className="max-h-32 min-h-11 flex-1 resize-none rounded-[22px] border border-input bg-background px-4 py-2.5 text-base transition-[box-shadow,border-color] duration-200 outline-none focus-visible:border-primary focus-visible:ring-4 focus-visible:ring-primary/15"
         />
         <button
           type="submit"
           disabled={sending || !draft.trim()}
-          className="grid size-11 shrink-0 place-items-center rounded-md bg-primary text-primary-foreground disabled:opacity-50"
+          className="pressable grid size-11 shrink-0 place-items-center rounded-full bg-primary text-primary-foreground disabled:opacity-40"
           aria-label="Send"
         >
           <SendHorizontal className="size-5" />
@@ -179,8 +183,8 @@ function Bubble({ message: m, translation, sender, showSender }: { message: Chat
       {showSender && <span className="px-1 text-xs text-muted-foreground">{sender}</span>}
       <div
         className={cn(
-          "max-w-[85%] rounded-lg px-3 py-2 break-words whitespace-pre-wrap",
-          m.mine ? "bg-primary text-primary-foreground" : "bg-secondary",
+          "max-w-[85%] rounded-[20px] px-3.5 py-2.5 break-words whitespace-pre-wrap",
+          m.mine ? "rounded-br-md bg-primary text-primary-foreground" : "rounded-bl-md bg-secondary",
         )}
       >
         {m.kind === "text" && <p>{translation && !original ? translation : m.text}</p>}
