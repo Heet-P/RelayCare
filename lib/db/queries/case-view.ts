@@ -15,6 +15,7 @@ import {
   serviceCases,
   users,
   warranties,
+  warrantyPolicies,
 } from "@/lib/db/schema";
 
 const agent = alias(users, "agent");
@@ -31,7 +32,15 @@ export async function getCaseView(authUserId: string, caseId: string) {
         case: serviceCases,
         order: { id: orders.id, orderNumber: orders.orderNumber, orderedAt: orders.orderedAt, completedAt: orders.completedAt, total: orders.total, currency: orders.currency },
         item: { id: orderItems.id, name: orderItems.name, sku: orderItems.sku, serialNumber: orderItems.serialNumber },
-        warranty: { status: warranties.verificationStatus, startsAt: warranties.startsAt, expiresAt: warranties.expiresAt, notes: warranties.notes },
+        warranty: {
+          status: warranties.verificationStatus,
+          startsAt: warranties.startsAt,
+          expiresAt: warranties.expiresAt,
+          notes: warranties.notes,
+          verifiedById: warranties.verifiedBy,
+          policyName: warrantyPolicies.name,
+          coverageNotes: warrantyPolicies.coverageNotes,
+        },
         customer: { id: customers.id, name: customers.name, email: customers.email, phone: customers.phone },
         agent: { id: agent.id, name: agent.name, nexconnUserId: agent.nexconnUserId },
       })
@@ -40,6 +49,7 @@ export async function getCaseView(authUserId: string, caseId: string) {
       .innerJoin(orderItems, eq(orderItems.id, serviceCases.orderItemId))
       .innerJoin(customers, eq(customers.id, serviceCases.customerId))
       .leftJoin(warranties, eq(warranties.orderItemId, orderItems.id))
+      .leftJoin(warrantyPolicies, eq(warrantyPolicies.id, warranties.policyId))
       .leftJoin(agent, eq(agent.id, serviceCases.assignedAgentId))
       .where(eq(serviceCases.id, caseId));
     if (!kase) return null;
@@ -69,6 +79,7 @@ export async function getCaseView(authUserId: string, caseId: string) {
         ...events.map((e) => e.actorId),
         ...attachments.map((a) => a.uploadedBy),
         ...assignments.flatMap((a) => [a.technicianId, a.assignedBy]),
+        kase.warranty?.verifiedById,
       ].filter(Boolean) as string[]),
     ];
     const people = ids.length
