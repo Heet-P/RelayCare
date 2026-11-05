@@ -6,6 +6,8 @@ import { cn } from "@/lib/utils";
  * marigold baton travelling along it. Colours come from --ill-* tokens (light and dark).
  * `animate` sends the baton along the path once (skipped for reduced motion).
  */
+const RELAY = "M150 70 C 250 0, 350 30, 400 96 S 520 190, 560 150";
+
 export function HeroScene({ className, animate = false }: { className?: string; animate?: boolean }) {
   const ink = "var(--ill-ink)";
   return (
@@ -15,26 +17,25 @@ export function HeroScene({ className, animate = false }: { className?: string; 
           <stop offset="0" stopColor="var(--ill-neck)" stopOpacity="0.55" />
           <stop offset="1" stopColor="var(--ill-peacock)" stopOpacity="0.85" />
         </linearGradient>
-        <path id="hs-relay" d="M150 150 C 230 40, 360 40, 420 120 S 540 200, 560 140" />
       </defs>
 
       {/* ground */}
       <ellipse cx="320" cy="378" rx="290" ry="26" fill="var(--ill-shade)" />
 
       {/* relay path + baton */}
-      <use href="#hs-relay" fill="none" stroke={ink} strokeOpacity="0.35" strokeWidth="2.5" strokeDasharray="2 9" strokeLinecap="round" />
-      <g>
+      <path d={RELAY} fill="none" stroke={ink} strokeOpacity="0.35" strokeWidth="2.5" strokeDasharray="2 9" strokeLinecap="round" />
+      {/* Baton rides the relay path with CSS offset-path; rests at the technician. */}
+      <g className={animate ? "hero-baton" : undefined} style={{ offsetPath: `path("${RELAY}")`, offsetDistance: "100%", offsetRotate: "auto" }}>
         <rect x="-16" y="-7" width="32" height="14" rx="7" fill="var(--ill-marigold)" stroke={ink} strokeWidth="2.5" />
-        {animate ? (
-          <animateMotion dur="3.2s" begin="0.4s" fill="freeze" calcMode="spline" keyTimes="0;1" keySplines="0.6 0 0.2 1" rotate="auto">
-            <mpath href="#hs-relay" />
-          </animateMotion>
-        ) : (
-          <animateMotion dur="0.001s" fill="freeze" keyPoints="1;1" keyTimes="0;1" rotate="auto">
-            <mpath href="#hs-relay" />
-          </animateMotion>
-        )}
       </g>
+      {animate && (
+        <style>{`
+          @keyframes hero-baton { 0%, 12% { offset-distance: 0%; } 100% { offset-distance: 100%; } }
+          @media (prefers-reduced-motion: no-preference) {
+            .hero-baton { animation: hero-baton 3.4s cubic-bezier(0.6, 0, 0.2, 1) 0.3s both; }
+          }
+        `}</style>
+      )}
 
       {/* washing machine */}
       <g transform="translate(70 170)">
@@ -51,7 +52,7 @@ export function HeroScene({ className, animate = false }: { className?: string; 
       </g>
 
       {/* customer phone with Gujarati chat */}
-      <g transform="translate(110 70) rotate(-8)">
+      <g transform="translate(40 24) rotate(-8)">
         <rect x="0" y="0" width="84" height="132" rx="18" fill="var(--ill-paper)" stroke={ink} strokeWidth="2.5" />
         <rect x="30" y="8" width="24" height="5" rx="2.5" fill={ink} opacity="0.5" />
         <rect x="10" y="26" width="56" height="26" rx="10" fill="var(--ill-shade)" stroke={ink} strokeWidth="2" />
@@ -81,6 +82,9 @@ export function HeroScene({ className, animate = false }: { className?: string; 
         {/* toolbox */}
         <rect x="-26" y="160" width="74" height="44" rx="10" fill="var(--ill-terracotta)" stroke={ink} strokeWidth="2.5" />
         <path d="M-4 160 v -10 h 30 v 10" fill="none" stroke={ink} strokeWidth="2.5" strokeLinejoin="round" />
+        {/* arm carrying the toolbox */}
+        <path d="M36 112 q -26 18 -25 42" fill="none" stroke={ink} strokeWidth="2.5" strokeLinecap="round" />
+        <circle cx="11" cy="152" r="7" fill="var(--ill-terracotta)" fillOpacity="0.5" stroke={ink} strokeWidth="2.5" />
         <rect x="-26" y="174" width="74" height="6" fill={ink} opacity="0.18" />
       </g>
 

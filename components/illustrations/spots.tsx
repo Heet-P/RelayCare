@@ -16,14 +16,18 @@ function Frame({ label, className, children }: { label?: string; className?: str
   );
 }
 
-/** Two hands passing the marigold baton: the structured handoff. */
+/** Two people passing the marigold baton: the structured handoff. */
 export function SpotHandoff(p: { className?: string; label?: string }) {
   return (
     <Frame {...p}>
-      <path d="M18 74 q 18 -14 40 -10 l 12 4" fill="var(--ill-terracotta)" fillOpacity="0.35" {...S} />
-      <path d="M142 58 q -18 -10 -40 -2 l -12 6" fill="var(--ill-terracotta)" fillOpacity="0.55" {...S} />
-      <rect x="58" y="54" width="44" height="16" rx="8" fill="var(--ill-marigold)" {...S} transform="rotate(-12 80 62)" />
-      <path d="M30 90 h 34 M96 90 h 34" {...S} strokeDasharray="2 7" opacity="0.4" />
+      {/* left sleeve + hand */}
+      <path d="M8 86 l 30 -26 l 14 14 l -26 28 z" fill="var(--ill-peacock)" {...S} />
+      <rect x="40" y="52" width="24" height="20" rx="10" fill="var(--ill-terracotta)" fillOpacity="0.45" {...S} transform="rotate(-38 52 62)" />
+      {/* right sleeve + hand */}
+      <path d="M152 74 l -30 -22 l -12 14 l 28 24 z" fill="var(--ill-neck)" {...S} />
+      <rect x="96" y="44" width="24" height="20" rx="10" fill="var(--ill-terracotta)" fillOpacity="0.7" {...S} transform="rotate(36 108 54)" />
+      {/* baton */}
+      <rect x="58" y="46" width="46" height="15" rx="7.5" fill="var(--ill-marigold)" {...S} transform="rotate(-8 81 53)" />
     </Frame>
   );
 }
