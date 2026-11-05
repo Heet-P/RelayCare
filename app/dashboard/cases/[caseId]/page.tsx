@@ -19,7 +19,7 @@ import { categoryLabel } from "@/lib/cases/categories";
 import { chatChannelsFor } from "@/lib/cases/chat-channels";
 import { availableActions, ownerKindFor } from "@/lib/cases/state-machine";
 import { getCaseView, type CaseView } from "@/lib/db/queries/case-view";
-import { date, money } from "@/lib/format";
+import { date, daysUntil, money } from "@/lib/format";
 
 export const metadata: Metadata = { title: "Case" };
 
@@ -121,7 +121,7 @@ async function StaffCase({ caseId }: { caseId: string }) {
                 coverageNotes: view.warranty?.coverageNotes ?? null,
                 startsAt: view.warranty?.startsAt ?? null,
                 expiresAt: view.warranty?.expiresAt ?? null,
-                daysLeft: view.warranty?.expiresAt ? Math.floor((new Date(view.warranty.expiresAt).getTime() - Date.now()) / 86_400_000) : null,
+                daysLeft: daysUntil(view.warranty?.expiresAt ?? null),
               }}
             />
           </section>
