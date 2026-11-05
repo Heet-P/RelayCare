@@ -32,7 +32,7 @@ function Tabs({ path, labels }: { path: string; labels: Labels }) {
   return (
     <nav
       aria-label="Main"
-      className="fixed inset-x-0 bottom-0 z-20 grid grid-cols-2 border-t bg-card pb-[env(safe-area-inset-bottom)] sm:static sm:flex sm:gap-1 sm:border-0 sm:bg-transparent sm:pb-0"
+      className="glass fixed inset-x-4 bottom-[max(1rem,env(safe-area-inset-bottom))] z-20 mx-auto grid max-w-sm grid-cols-2 gap-1 rounded-full p-1.5 sm:static sm:flex sm:max-w-none sm:rounded-full sm:border-0 sm:bg-transparent sm:p-0 sm:shadow-none sm:backdrop-blur-none"
     >
       {TABS.map(({ href, key, icon: Icon }) => {
         const active = path.startsWith(href);
@@ -42,8 +42,8 @@ function Tabs({ path, labels }: { path: string; labels: Labels }) {
             href={href}
             aria-current={active ? "page" : undefined}
             className={cn(
-              "flex h-14 flex-col items-center justify-center gap-1 text-xs text-muted-foreground sm:h-11 sm:flex-row sm:gap-2 sm:rounded-md sm:px-3 sm:text-sm sm:hover:bg-accent",
-              active && "font-semibold text-foreground sm:bg-card",
+              "pressable flex h-12 items-center justify-center gap-2 rounded-full px-4 text-sm font-medium text-muted-foreground hover:text-foreground sm:h-11",
+              active && "bg-[color-mix(in_oklab,var(--primary)_16%,transparent)] font-semibold text-foreground",
             )}
           >
             <Icon className="size-5 sm:size-4" aria-hidden />

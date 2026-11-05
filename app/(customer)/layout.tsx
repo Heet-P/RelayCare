@@ -1,5 +1,6 @@
 import { Suspense } from "react";
 import { CustomerGuard } from "@/components/customer/customer-guard";
+import { Logo } from "@/components/shared/logo";
 import { LocalizedTabs } from "@/components/customer/localized-tabs";
 import { CustomerTabs } from "@/components/customer/tabs";
 import { MyLanguage } from "@/components/shared/my-language";
@@ -9,13 +10,10 @@ import { ThemeToggleButton } from "@/components/ui/skiper-ui/skiper26";
 /** Customer portal: phone-first single column, bottom tabs on small screens. */
 export default function CustomerLayout({ children }: LayoutProps<"/">) {
   return (
-    <div className="min-h-dvh pb-20 sm:pb-0">
-      <header className="sticky top-0 z-20 border-b bg-background/90 backdrop-blur">
-        <div className="mx-auto flex h-16 max-w-2xl items-center gap-2 px-4">
-          <div className="mr-auto leading-tight">
-            <p className="font-semibold tracking-tight">Demo Electronics</p>
-            <p className="text-xs text-muted-foreground">Support by RelayCare</p>
-          </div>
+    <div className="min-h-dvh pb-28 sm:pb-0">
+      <header className="glass sticky top-3 z-20 mx-3 mt-3 rounded-2xl">
+        <div className="mx-auto flex h-16 max-w-2xl items-center gap-2 px-3">
+          <Logo href="/my-orders" className="mr-auto" sub="Demo Electronics" />
           <div className="hidden sm:block">
             <Suspense fallback={<CustomerTabs />}>
               <LocalizedTabs />
