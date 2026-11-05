@@ -16,7 +16,7 @@ import { HttpError } from "@/lib/http";
 import { enqueue } from "@/lib/jobs/queue";
 import { transitionCase } from "./transitions";
 
-export type AssignInput = { technicianId: string; servicePartnerId?: string; scheduledAt?: Date; note?: string };
+export type AssignInput = { technicianId: string; servicePartnerId?: string; scheduledAt?: Date; note?: string; reassign?: boolean };
 
 /** Add or re-activate a participant (removed participants lose access until re-added). */
 export async function addParticipant(tx: Tx, caseId: string, userId: string, role: "technician" | "dispatcher" | "support_agent" | "owner") {
@@ -58,12 +58,18 @@ export async function assignTechnician(access: CaseAccess, input: AssignInput) {
   if (!tech) throw new HttpError(400, "Choose an active technician from your team.", "bad_technician");
 
   const result = await db.transaction(async (tx) => {
+    // Serialise concurrent assign requests for this case on the case row.
+    await tx.select({ id: serviceCases.id }).from(serviceCases).where(eq(serviceCases.id, kase.id)).for("update");
     const [previous] = await tx
       .select()
       .from(caseAssignments)
       .where(and(eq(caseAssignments.caseId, kase.id), inArray(caseAssignments.assignmentStatus, ["assigned", "accepted"])))
       .for("update");
     if (previous?.technicianId === tech.id) throw new HttpError(409, `${tech.name} is already assigned to this case.`, "already_assigned");
+    if (previous && !input.reassign) {
+      // A double click or a stale screen must not silently swap technicians.
+      throw new HttpError(409, "A technician is already assigned. Use Change technician to replace them.", "already_assigned");
+    }
 
     // Reassignment: the case goes back to the queue first, so the audit trail shows both steps.
     if (previous) {

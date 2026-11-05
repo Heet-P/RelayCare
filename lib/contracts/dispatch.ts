@@ -9,6 +9,8 @@ export const AssignRequest = z.object({
   servicePartnerId: z.uuid().optional(),
   scheduledAt: futureDate.optional(),
   note: z.string().trim().max(500).optional(),
+  /** Must be true to replace a technician who is already assigned ("Change technician"). */
+  reassign: z.boolean().default(false),
 });
 
 /** POST /api/cases/:id/schedule — book or move the visit. */
