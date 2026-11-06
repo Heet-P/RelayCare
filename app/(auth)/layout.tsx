@@ -1,9 +1,9 @@
-import { ProductPreview } from "@/components/landing/product-preview";
+import { Illustration } from "@/components/shared/illustration";
 import { Logo } from "@/components/shared/logo";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 
 /**
- * Sign-in: the form floats on glass; beside it, the product itself and one line of story.
+ * Sign-in: the form floats on glass; beside it, an illustration and one line of story.
  */
 export default function AuthLayout({ children }: LayoutProps<"/">) {
   return (
@@ -18,7 +18,7 @@ export default function AuthLayout({ children }: LayoutProps<"/">) {
       </section>
 
       <aside className="relative hidden flex-col justify-center gap-10 overflow-hidden px-12 lg:flex">
-        <ProductPreview className="mx-0 rise [animation-delay:120ms]" />
+        <Illustration name="technician" priority className="rise max-w-2xl rounded-2xl [animation-delay:120ms]" sizes="(min-width: 1024px) 640px, 0px" />
         <div className="max-w-lg space-y-3">
           <p className="text-3xl font-semibold tracking-tight text-balance">
             The technician already knows what happened.

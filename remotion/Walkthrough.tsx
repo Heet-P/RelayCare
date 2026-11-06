@@ -215,13 +215,16 @@ function Caption({ beat, t }: { beat: Beat; t: number }) {
   const sentences = SAY[beat.id].split(/(?<=[.!?])\s+/);
   const total = beat.voice ?? estimate(beat.id);
   const chars = sentences.reduce((n, s) => n + s.length, 0);
-  let acc = 0;
   const into = t - beat.t;
-  const current =
-    sentences.find((s) => {
-      acc += (s.length / chars) * total;
-      return into < acc;
-    }) ?? null;
+  // each sentence gets a share of the spoken time proportional to its length
+  let current: string | null = null;
+  for (let i = 0, end = 0; i < sentences.length; i++) {
+    end += (sentences[i].length / chars) * total;
+    if (into < end) {
+      current = sentences[i];
+      break;
+    }
+  }
   if (!current || into < 0) return null;
   return (
     <div className="absolute inset-x-0 bottom-7 flex justify-center px-40">

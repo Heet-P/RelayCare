@@ -1,11 +1,10 @@
-import { Headset, MessageSquareText, Route, Wrench } from "lucide-react";
-import { IconTile } from "@/components/shared/icon-tile";
+import { Illustration, type IllustrationName } from "@/components/shared/illustration";
 
-const STATIONS = [
-  { who: "The customer", title: "Reports the fault", body: "From the order in their account, in Gujarati, with a photo of the leak.", icon: MessageSquareText },
-  { who: "Maya in support", title: "Verifies and hands off", body: "Checks the warranty and writes a structured handoff for dispatch.", icon: Headset },
-  { who: "Arjun in dispatch", title: "Assigns the right person", body: "Picks a technician who covers Ahmedabad and opens the group chat.", icon: Route },
-  { who: "Ravi, technician", title: "Arrives knowing the story", body: "Fixes it, uploads proof, and the customer confirms. Case closed.", icon: Wrench },
+const STATIONS: { who: string; title: string; body: string; art: IllustrationName }[] = [
+  { who: "The customer", title: "Reports the fault", body: "From the order in their account, in Gujarati, with a photo of the leak.", art: "hero" },
+  { who: "Maya in support", title: "Verifies and hands off", body: "Checks the warranty and writes a structured handoff for dispatch.", art: "support" },
+  { who: "Arjun in dispatch", title: "Assigns the right person", body: "Picks a technician who covers Ahmedabad and opens the group chat.", art: "dispatch" },
+  { who: "Ravi, technician", title: "Arrives knowing the story", body: "Fixes it, uploads proof, and the customer confirms. Case closed.", art: "technician" },
 ];
 
 /**
@@ -25,9 +24,9 @@ export function RelayScroll() {
           <div className="relay-fill absolute inset-y-0 left-0 w-full origin-left rounded-full bg-primary" />
         </div>
         <ol className="mt-8 grid gap-4 md:grid-cols-4">
-          {STATIONS.map(({ who, title, body, icon }, i) => (
+          {STATIONS.map(({ who, title, body, art }, i) => (
             <li key={who} className="relay-station panel space-y-1.5 rounded-xl p-5" style={{ ["--i" as string]: i }}>
-              <IconTile icon={icon} size="sm" className="mb-3" />
+              <Illustration name={art} decorative className="mb-3 rounded-[4px]" sizes="(min-width: 768px) 280px, 100vw" />
               <p className="text-xs font-semibold text-muted-foreground">{who}</p>
               <p className="text-lg font-semibold tracking-tight">{title}</p>
               <p className="text-sm text-muted-foreground">{body}</p>

@@ -2,11 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { Suspense } from "react";
 import { type LucideIcon, ClipboardList, Languages, ShieldCheck, ShoppingBag, Smartphone } from "lucide-react";
-import { ProductPreview } from "@/components/landing/product-preview";
 import { RelayScroll } from "@/components/landing/relay-scroll";
 import { WorkspaceLink } from "@/components/landing/workspace-link";
 import { Logo } from "@/components/shared/logo";
 import { IconTile } from "@/components/shared/icon-tile";
+import { Illustration } from "@/components/shared/illustration";
+import { RelayStrip } from "@/components/shared/relay-strip";
 import { ThemeToggle } from "@/components/shared/theme-toggle";
 
 export const metadata: Metadata = {
@@ -58,7 +59,26 @@ export default function Landing() {
             </Link>
           </div>
         </div>
-        <ProductPreview className="rise [animation-delay:120ms]" />
+        {/* Illustration with the product floating on glass over it: the story and the UI together */}
+        <div className="rise relative pb-10 [animation-delay:120ms] sm:pb-12">
+          <Illustration name="hero" priority className="rounded-2xl" sizes="(min-width: 1024px) 560px, 100vw" />
+          <div className="glass-strong absolute top-4 right-4 hidden w-64 space-y-1.5 rounded-xl p-3 text-sm sm:block">
+            <div className="rounded-[14px] rounded-br-md bg-primary px-3 py-2 text-primary-foreground" lang="gu">
+              મારું વોશિંગ મશીન નીચેથી પાણી લીક કરે છે.
+            </div>
+            <p className="px-1 text-xs text-muted-foreground">Maya reads: “My washing machine is leaking from the bottom.”</p>
+          </div>
+          <div className="glass-strong absolute bottom-0 left-4 w-[min(23rem,calc(100%-2rem))] space-y-3 rounded-xl p-4">
+            <div className="flex items-baseline justify-between gap-2">
+              <span className="font-tag text-sm text-muted-foreground">RC-2026-0042</span>
+              <span className="inline-flex items-center gap-1.5 rounded-full bg-secondary px-2.5 py-0.5 text-xs font-semibold">
+                <span className="size-1.5 rounded-full bg-amber" /> Visit booked
+              </span>
+            </div>
+            <p className="font-semibold">AquaWash 7kg, water leak</p>
+            <RelayStrip current="technician" labels={{ customer: "Priya", agent: "Maya", dispatcher: "Arjun", technician: "Ravi" }} />
+          </div>
+        </div>
       </header>
 
       <RelayScroll />
@@ -92,18 +112,21 @@ export default function Landing() {
 
       {/* CTA */}
       <section className="mx-auto max-w-6xl px-4 pb-24 sm:px-6">
-        <div className="reveal glass-strong relative overflow-hidden rounded-2xl px-6 py-14 text-center sm:px-12">
+        <div className="reveal glass-strong grid items-center gap-8 overflow-hidden rounded-2xl p-4 sm:p-6 lg:grid-cols-[1fr_1.1fr] lg:gap-12">
+          <Illustration name="resolved" className="rounded-[16px] sm:rounded-[8px]" sizes="(min-width: 1024px) 520px, 100vw" />
+          <div className="px-2 pb-6 text-center lg:px-0 lg:pb-0 lg:text-left">
           <h2 className="mx-auto max-w-2xl text-3xl font-semibold tracking-tight text-balance sm:text-[2.75rem] sm:leading-tight">
             One purchase. One service journey. One resolution.
           </h2>
-          <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground">Connect your store in minutes. Your customers never explain the same problem twice.</p>
-          <div className="mt-8 flex flex-wrap justify-center gap-3">
+          <p className="mx-auto mt-4 max-w-xl text-lg text-muted-foreground lg:mx-0">Connect your store in minutes. Your customers never explain the same problem twice.</p>
+          <div className="mt-8 flex flex-wrap justify-center gap-3 lg:justify-start">
             <Link href="/login" className="pressable inline-flex h-12 items-center rounded-full bg-primary px-6 font-semibold text-primary-foreground">
               Open the service desk
             </Link>
             <Link href="/verify" className="pressable inline-flex h-12 items-center rounded-full bg-card px-6 font-semibold">
               I bought something
             </Link>
+          </div>
           </div>
         </div>
       </section>
