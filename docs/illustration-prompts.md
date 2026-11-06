@@ -21,5 +21,5 @@ generous empty space, calm and human.
 | `resolved.webp` | 4:3 | The customer and technician at the doorway, she smiles at her phone, he closes his toolbox. |
 | `caught-up.webp` | 1:1 | A person leans back at a tidy desk with a cup of tea, plant beside them. |
 
-When the files are in, tell Claude and they'll be wired into the landing page, sign-in, empty
-states and the launch video.
+The set is in `public/illustrations/` and used by `components/shared/illustration.tsx` (landing hero,
+relay section, CTA, sign-in and empty states). Use the same style block for any new scene.

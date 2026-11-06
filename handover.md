@@ -61,4 +61,3 @@ WC-10842, so every rehearsal starts from the same state.
 | Resend domain + `EMAIL_FROM` | resend.com, `.env` | `EMAIL_FROM` is still an example.com address, so mail is refused |
 | Supabase SMTP + OTP template | Supabase Auth settings | Customer code emails |
 | Nexconn webhook URL | Nexconn Console | Point at `<deployed URL>/api/webhooks/nexconn` |
-| Illustrations | see `docs/illustration-prompts.md` | Image generation is disabled on the Figma and Canva accounts |
