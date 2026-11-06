@@ -19,7 +19,8 @@
     "video:render": "remotion render LaunchVideo out/relaycare-launch-1080p.mp4 && remotion render LaunchVideo out/relaycare-launch-4k.mp4 --scale=2",
     "video:score": "tsx remotion/score.ts",
     "demo:voice": "tsx scripts/demo/voice.ts",
-    "demo:record": "tsx scripts/demo/record.ts"
+    "demo:record": "tsx scripts/demo/record.ts",
+    "video:walkthrough": "remotion render Walkthrough out/relaycare-walkthrough.mp4"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
