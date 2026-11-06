@@ -192,7 +192,8 @@ class Take {
       scene: this.scene,
       device: this.device,
       duration: this.stopAt - t0,
-      beats: this.marks.map((m) => ({ ...m, t: Number((m.t - t0).toFixed(3)) })),
+      // each beat carries its spoken length (null until voice.ts has run) for captions and audio
+      beats: this.marks.map((m) => ({ ...m, t: Number((m.t - t0).toFixed(3)), voice: voiced[m.id] ?? null })),
     };
   }
 }
