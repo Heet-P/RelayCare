@@ -113,8 +113,9 @@ class Take {
 
   /** Glide the pointer to the element (ease-out, ~0.5s) and click it. */
   async click(target: Locator) {
-    await target.scrollIntoViewIfNeeded();
-    await sleep(150);
+    // Centre it first: on phones the floating tab bar covers the bottom of the screen.
+    await target.evaluate((el) => el.scrollIntoView({ block: "center", behavior: "smooth" }));
+    await sleep(700);
     const b = await target.boundingBox();
     if (!b) throw new Error(`Not visible: ${target}`);
     const to = { x: b.x + b.width / 2, y: b.y + b.height / 2 };
@@ -338,7 +339,7 @@ async function main() {
           await s.scroll(300, 1500);
         });
         await s.beat("arjun-2", async () => {
-          await s.click(p.getByRole("button", { name: "Assign technician" }).first());
+          await s.click(p.getByRole("button", { name: "Assign", exact: true }).first());
           const dialog = p.getByRole("dialog");
           await s.click(dialog.locator("label:has(input[name=technician])").filter({ hasText: "Ravi" }));
           await s.click(dialog.getByRole("button", { name: "Tomorrow 10:00" }));
