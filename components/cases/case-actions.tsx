@@ -52,7 +52,7 @@ export function CaseActions({ caseId, status, actions }: { caseId: string; statu
         toast.error(body.error ?? "That change didn't go through.");
         return; // optimistic state reverts when the transition ends
       }
-      toast.success(`${ACTION_LABEL[a.action] ?? "Updated"}: ${STATUS_LABEL[a.to].toLowerCase()}`);
+      toast.success(`Case is now ${STATUS_LABEL[a.to].toLowerCase()}`);
       router.refresh();
     });
   }

@@ -6,6 +6,7 @@ import { useState, useTransition } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import type { Messages } from "@/lib/i18n";
+import { RESOLUTION_LABEL } from "@/lib/cases/labels";
 import { cn } from "@/lib/utils";
 
 export type RepairReport = {
@@ -16,14 +17,7 @@ export type RepairReport = {
   notes?: string;
 };
 
-const OUTCOME: Record<string, string> = {
-  repair: "Repaired",
-  replacement: "Needs replacing",
-  return: "Return to store",
-  refund: "Refund",
-  no_fault_found: "No fault found",
-  not_covered: "Not covered by warranty",
-};
+const OUTCOME = RESOLUTION_LABEL;
 
 async function post(url: string, method: string, body: object) {
   const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(body) });

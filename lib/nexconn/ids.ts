@@ -12,8 +12,13 @@ export function newNexconnUserId() {
   return "rcu_" + Array.from(bytes, (b) => ALNUM[b % ALNUM.length]).join("");
 }
 
-/** Group channel ids allow letters and digits only: "RC-2026-0042" → "rc20260042". */
-export const groupChannelId = (caseNumber: string) => caseNumber.toLowerCase().replace(/[^a-z0-9]/g, "");
+/**
+ * Group channel ids allow letters and digits only: ("RC-2026-0042", case uuid) → "rc20260042a1b2c3".
+ * The case-id suffix keeps it unique when a number is reused (demo resets), since Nexconn keeps a
+ * dismissed group's history and would show it in the new group.
+ */
+export const groupChannelId = (caseNumber: string, caseId: string) =>
+  caseNumber.toLowerCase().replace(/[^a-z0-9]/g, "") + caseId.replace(/[^a-z0-9]/gi, "").slice(0, 6).toLowerCase();
 
 /** Return the user's Nexconn id, assigning one on first use (race-safe). */
 export async function ensureNexconnId(userId: string): Promise<string> {

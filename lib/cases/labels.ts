@@ -38,6 +38,16 @@ export const STATUS_TONE: Record<CaseStatus, "attention" | "active" | "waiting" 
   reopened: "alert",
 };
 
+/** Outcome of a repair or desk decision, in words (staff and customer views share it). */
+export const RESOLUTION_LABEL: Record<string, string> = {
+  repair: "Repaired",
+  replacement: "Needs replacing",
+  return: "Return to store",
+  refund: "Refund",
+  no_fault_found: "No fault found",
+  not_covered: "Not covered by warranty",
+};
+
 export const PRIORITY_LABEL = { low: "Low", normal: "Normal", high: "High", urgent: "Urgent" } as const;
 
 export const ACTION_LABEL: Record<string, string> = {

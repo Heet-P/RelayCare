@@ -29,7 +29,7 @@ export async function syncCaseGroup({ caseId, assignmentId }: Record<string, unk
 
   const owner = active.find((p) => p.role === "dispatcher") ?? active.find((p) => p.role === "owner") ?? active.find((p) => p.role === "support_agent");
   if (!owner) throw new Error(`Case ${kase.caseNumber} has no staff participant to own the group`);
-  const channelId = groupChannelId(kase.caseNumber);
+  const channelId = groupChannelId(kase.caseNumber, kase.id);
   const members = active.filter((p) => p !== owner).map((p) => ids.get(p.userId)!);
 
   const [thread] = await db

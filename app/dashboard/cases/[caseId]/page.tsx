@@ -1,3 +1,4 @@
+import { RESOLUTION_LABEL } from "@/lib/cases/labels";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -170,7 +171,7 @@ async function StaffCase({ caseId }: { caseId: string }) {
                 <h2 className="font-semibold">Repair report by {view.people[done!.technicianId]?.name ?? "the technician"}</h2>
                 <dl className="grid gap-x-6 gap-y-2 text-sm sm:grid-cols-[140px_1fr]">
                   <dt className="text-muted-foreground">Outcome</dt>
-                  <dd>{r.resolutionType.replace(/_/g, " ")}</dd>
+                  <dd>{RESOLUTION_LABEL[r.resolutionType] ?? r.resolutionType}</dd>
                   <dt className="text-muted-foreground">Found</dt>
                   <dd>{r.findings}</dd>
                   <dt className="text-muted-foreground">Work done</dt>
