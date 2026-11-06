@@ -17,7 +17,9 @@
     "test:integration": "vitest run --config vitest.integration.config.mts",
     "video": "remotion studio",
     "video:render": "remotion render LaunchVideo out/relaycare-launch-1080p.mp4 && remotion render LaunchVideo out/relaycare-launch-4k.mp4 --scale=2",
-    "video:score": "tsx remotion/score.ts"
+    "video:score": "tsx remotion/score.ts",
+    "demo:voice": "tsx scripts/demo/voice.ts",
+    "demo:record": "tsx scripts/demo/record.ts"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
