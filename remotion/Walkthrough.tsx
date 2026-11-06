@@ -31,9 +31,31 @@ const CHAPTER: Record<Scene, string> = {
 const starts = TAKES.reduce<number[]>((acc, t, i) => [...acc, i === 0 ? 0 : acc[i - 1] + Math.round(TAKES[i - 1].duration * FPS)], []);
 export const WALKTHROUGH_DURATION = starts[starts.length - 1] + Math.round(TAKES[TAKES.length - 1].duration * FPS);
 
+/** Absolute frame ranges where the narrator is speaking, for ducking the music bed. */
+const SPEECH = TAKES.flatMap((take, i) =>
+  take.beats.filter((b) => b.voice).map((b) => [starts[i] + b.t * FPS, starts[i] + (b.t + b.voice! + 0.3) * FPS] as const),
+);
+const speaking = (f: number) => SPEECH.some(([a, b]) => f >= a - 6 && f <= b);
+/** 0..1 how much the voice is present around frame f, averaged over ±10 frames so the bed ramps. */
+const duck = (f: number) => {
+  let n = 0;
+  for (let i = -10; i <= 10; i++) n += speaking(f + i) ? 1 : 0;
+  return n / 21;
+};
+
 export function Walkthrough() {
   return (
     <AbsoluteFill className="bg-background">
+      {/* The launch score as a quiet bed (looped before its fade-out tail), dipping under the voice. */}
+      <Audio
+        src={staticFile("score.mp3")}
+        loop
+        trimAfter={52 * FPS}
+        volume={(f) =>
+          (0.14 - 0.09 * duck(f)) *
+          interpolate(f, [0, 30, WALKTHROUGH_DURATION - 60, WALKTHROUGH_DURATION], [0, 1, 1, 0], { extrapolateLeft: "clamp", extrapolateRight: "clamp" })
+        }
+      />
       {TAKES.map((take, i) => (
         <Sequence key={take.scene} from={starts[i]} durationInFrames={Math.round(take.duration * FPS)}>
           <TakeView take={take} />
