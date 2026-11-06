@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
  */
 export function ProductPreview({ className }: { className?: string }) {
   return (
-    <div className={cn("relative mx-auto w-full max-w-[600px] pb-16 sm:pb-10", className)} aria-hidden>
+    <div className={cn("relative mx-auto w-full max-w-[600px] pb-28 sm:pb-32", className)} aria-hidden>
       {/* The case, as support sees it */}
       <div className="panel space-y-5 rounded-2xl p-6 sm:mr-24">
         <div className="flex items-start justify-between gap-3">
@@ -34,7 +34,7 @@ export function ProductPreview({ className }: { className?: string }) {
       </div>
 
       {/* Her phone, in front */}
-      <div className="glass-strong absolute right-0 -bottom-2 w-[260px] rounded-[32px] p-2 sm:-bottom-6">
+      <div className="glass-strong absolute right-0 bottom-0 w-[260px] rounded-[32px] p-2">
         <div className="space-y-2 rounded-[24px] bg-background p-3 text-sm">
           <p className="px-1 text-xs text-muted-foreground">Support, Demo Electronics</p>
           <div className="ml-6 rounded-[18px] rounded-br-md bg-primary px-3 py-2 text-primary-foreground">
