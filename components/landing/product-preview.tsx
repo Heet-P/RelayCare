@@ -8,7 +8,7 @@ import { cn } from "@/lib/utils";
  */
 export function ProductPreview({ className }: { className?: string }) {
   return (
-    <div className={cn("relative mx-auto w-full max-w-[600px] pb-28 sm:pb-32", className)} aria-hidden>
+    <div className={cn("relative mx-auto w-full max-w-[600px]", className)} aria-hidden>
       {/* The case, as support sees it */}
       <div className="panel space-y-5 rounded-2xl p-6 sm:mr-24">
         <div className="flex items-start justify-between gap-3">
@@ -33,8 +33,8 @@ export function ProductPreview({ className }: { className?: string }) {
         <RelayStrip current="technician" labels={{ customer: "Priya", agent: "Maya", dispatcher: "Arjun", technician: "Ravi" }} />
       </div>
 
-      {/* Her phone, in front */}
-      <div className="glass-strong absolute right-0 bottom-0 w-[260px] rounded-[32px] p-2">
+      {/* Her phone, tucked under the card's corner (never over its content) */}
+      <div className="glass-strong relative -mt-4 ml-auto w-[260px] rounded-[32px] p-2">
         <div className="space-y-2 rounded-[24px] bg-background p-3 text-sm">
           <p className="px-1 text-xs text-muted-foreground">Support, Demo Electronics</p>
           <div className="ml-6 rounded-[18px] rounded-br-md bg-primary px-3 py-2 text-primary-foreground">
