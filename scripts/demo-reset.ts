@@ -36,6 +36,9 @@ async function main() {
     left join organization_memberships m on m.user_id = u.id and m.organization_id = ${org.id}
     left join customers c on c.user_id = u.id and c.organization_id = ${org.id}
     where u.nexconn_user_id is not null and (m.user_id is not null or c.id is not null)`;
+  // Warranty decisions sit on the order item, so they would survive into the next rehearsal.
+  await sql`update warranties set verification_status = 'unverified', verified_by = null, verified_at = null, notes = null
+    where order_item_id in (select oi.id from order_items oi join orders o on o.id = oi.order_id where o.organization_id = ${org.id})`;
   const ids = people.map((p) => p.nexconn_user_id as string);
   for (const a of ids) for (const b of ids) if (a !== b) await clearDirectHistory(a, b).catch(() => undefined);
 

@@ -75,7 +75,11 @@ export function ChatPanel({
 const sameText = (a?: string, b?: string) => !!a && !!b && a.trim().toLowerCase() === b.trim().toLowerCase();
 
 function ChannelView({ channel, names, locale }: { channel: ChannelRef; names: Record<string, string>; locale: string }) {
-  const { messages, translations, loading, hasMore, loadOlder, sendText, sendFile } = useChannel(channel, locale);
+  const channelState = useChannel(channel, locale);
+  const { translations, loading, hasMore, loadOlder, sendText, sendFile } = channelState;
+  // Only this case's part of a direct chat (see ChannelRef.since).
+  const since = channel.type === "direct" ? channel.since : undefined;
+  const messages = since ? channelState.messages.filter((m) => m.sentTime >= since) : channelState.messages;
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
   const bottom = useRef<HTMLDivElement>(null);
@@ -104,7 +108,7 @@ function ChannelView({ channel, names, locale }: { channel: ChannelRef; names: R
   return (
     <>
       <div data-lenis-prevent className="min-h-64 flex-1 space-y-3 overflow-y-auto overscroll-contain p-4" aria-live="polite">
-        {hasMore && (
+        {hasMore && !(since && channelState.messages.some((m) => m.sentTime < since)) && (
           <button type="button" onClick={() => loadOlder()} className="mx-auto block h-11 text-sm text-primary underline-offset-4 hover:underline">
             Show earlier messages
           </button>

@@ -27,7 +27,11 @@ export type ChatMessage = {
   extra?: Record<string, unknown>;
 };
 
-export type ChannelRef = { type: "direct"; targetId: string } | { type: "group"; groupId: string };
+/**
+ * A direct chat belongs to a pair of people and outlives any one case, so a case view passes
+ * `since` (the case's creation time, ms) to show only that case's conversation.
+ */
+export type ChannelRef = { type: "direct"; targetId: string; since?: number } | { type: "group"; groupId: string };
 export const channelKey = (c: ChannelRef) => (c.type === "direct" ? `d:${c.targetId}` : `g:${c.groupId}`);
 
 type Listener<T> = (value: T) => void;

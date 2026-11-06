@@ -10,7 +10,7 @@ import { config } from "dotenv";
 import { BEATS } from "./script";
 
 config({ path: ".env.local", quiet: true });
-const KEY = process.env.SARVAM_API_KEY;
+const KEY = process.env.SARVAM_API_KEY ?? "";
 if (!KEY) throw new Error("Set SARVAM_API_KEY in .env.local");
 const SPEAKER = process.env.DEMO_VOICE ?? "shubh";
 const DIR = "remotion/public/walkthrough/voice";
@@ -28,27 +28,34 @@ function wavSeconds(buf: Buffer) {
   return buf.readUInt32LE(data + 4) / (rate * blockAlign);
 }
 
-for (const beat of BEATS) {
-  if (only && beat.id !== only) continue;
-  const res = await fetch("https://api.sarvam.ai/text-to-speech", {
-    method: "POST",
-    headers: { "api-subscription-key": KEY, "Content-Type": "application/json" },
-    body: JSON.stringify({
-      text: beat.say,
-      target_language_code: "en-IN",
-      language_code: "en-IN",
-      speaker: SPEAKER,
-      model: "bulbul:v3",
-      pace: 1.0,
-      speech_sample_rate: 44100,
-    }),
-  });
-  if (!res.ok) throw new Error(`${beat.id}: Sarvam ${res.status} ${await res.text()}`);
-  const { audios } = (await res.json()) as { audios: string[] };
-  const wav = Buffer.from(audios[0], "base64");
-  writeFileSync(`${DIR}/${beat.id}.wav`, wav);
-  durations[beat.id] = Number(wavSeconds(wav).toFixed(3));
-  console.log(`${beat.id}  ${durations[beat.id].toFixed(1)}s`);
+async function main() {
+  for (const beat of BEATS) {
+    if (only && beat.id !== only) continue;
+    const res = await fetch("https://api.sarvam.ai/text-to-speech", {
+      method: "POST",
+      headers: { "api-subscription-key": KEY, "Content-Type": "application/json" },
+      body: JSON.stringify({
+        text: beat.say,
+        target_language_code: "en-IN",
+        language_code: "en-IN",
+        speaker: SPEAKER,
+        model: "bulbul:v3",
+        pace: 1.0,
+        speech_sample_rate: 44100,
+      }),
+    });
+    if (!res.ok) throw new Error(`${beat.id}: Sarvam ${res.status} ${await res.text()}`);
+    const { audios } = (await res.json()) as { audios: string[] };
+    const wav = Buffer.from(audios[0], "base64");
+    writeFileSync(`${DIR}/${beat.id}.wav`, wav);
+    durations[beat.id] = Number(wavSeconds(wav).toFixed(3));
+    console.log(`${beat.id}  ${durations[beat.id].toFixed(1)}s`);
+  }
+  writeFileSync(durationsFile, JSON.stringify(durations, null, 2));
+  console.log(`total ${Object.values(durations).reduce((a, b) => a + b, 0).toFixed(0)}s of narration`);
 }
-writeFileSync(durationsFile, JSON.stringify(durations, null, 2));
-console.log(`total ${Object.values(durations).reduce((a, b) => a + b, 0).toFixed(0)}s of narration`);
+
+main().catch((e) => {
+  console.error(e);
+  process.exit(1);
+});
