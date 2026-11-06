@@ -22,6 +22,13 @@
       "when": 1793905649546,
       "tag": "0002_event_clock",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "7",
+      "when": 1793932149173,
+      "tag": "0003_technician_customers",
+      "breakpoints": true
     }
   ]
 }

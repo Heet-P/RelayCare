@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 import { afterAll, beforeAll, describe, expect, it, vi } from "vitest";
 import { sessionCookie } from "../helpers/session";
-import { BASE_URL, call, deleteCases, sql } from "../helpers/api";
+import { as, BASE_URL, call, deleteCases, sql } from "../helpers/api";
 
 vi.mock("server-only", () => ({}));
 const { dismissGroup, listGroupMembers } = await import("@/lib/nexconn/server");
@@ -96,6 +96,11 @@ describe("assigning", () => {
     expect(h.s.actionRequired).toBe("Check the drive belt and motor.");
     expect((await call("ravi", `/api/cases/${caseId}/attachments`, { intent: "upload", fileName: "a.jpg", mimeType: "image/jpeg", sizeBytes: 5 })).status).toBe(200);
     expect((await assign("arjun", { technicianId: await raviId() })).status).toBe(409);
+  });
+
+  it("the job shows up in Ravi's job list (RLS lets him read the case's customer)", async () => {
+    const page = await fetch(`${BASE_URL}/technician/jobs`, { headers: { cookie: await as("ravi") } });
+    expect(await page.text()).toContain(caseNumber);
   });
 
   it("creates the real Nexconn group with customer, agent, dispatcher and technician", async () => {
