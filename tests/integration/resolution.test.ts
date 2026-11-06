@@ -5,6 +5,7 @@ import { BASE_URL, call, deleteCases, sql } from "../helpers/api";
 
 vi.mock("server-only", () => ({}));
 const { dismissGroup } = await import("@/lib/nexconn/server");
+const { groupChannelId } = await import("@/lib/nexconn/ids");
 
 /**
  * The full spec journey on the real API (Journeys B–E), ending with the critical tests
@@ -37,7 +38,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   try {
-    await dismissGroup(caseNumber.toLowerCase().replace(/[^a-z0-9]/g, ""));
+    await dismissGroup(groupChannelId(caseNumber, caseId));
   } catch {
     // group may not have been created
   }
@@ -99,7 +100,7 @@ describe("a chat message is not a business operation", () => {
   };
 
   it("a signed 'done' message from the technician is recorded but changes nothing", async () => {
-    const group = caseNumber.toLowerCase().replace(/[^a-z0-9]/g, "");
+    const group = groupChannelId(caseNumber, caseId);
     const ravi = (await sql`select nexconn_user_id from users where email = 'ravi@relaycare.test'`)[0].nexconn_user_id;
     const id = `test-${Date.now()}`;
     const body = JSON.stringify({ type: "message:send", id, time: Date.now(), data: [{ fromUserId: ravi, toChannelIds: [group], content: JSON.stringify({ content: "done" }) }] });

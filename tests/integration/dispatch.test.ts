@@ -5,6 +5,7 @@ import { as, BASE_URL, call, deleteCases, sql } from "../helpers/api";
 
 vi.mock("server-only", () => ({}));
 const { dismissGroup, listGroupMembers } = await import("@/lib/nexconn/server");
+const { groupChannelId } = await import("@/lib/nexconn/ids");
 
 /**
  * Spec Journey D + critical tests "Backend can create a Nexconn group", "A fourth user can join",
@@ -56,7 +57,7 @@ beforeAll(async () => {
 
 afterAll(async () => {
   try {
-    await dismissGroup(caseNumber.toLowerCase().replace(/[^a-z0-9]/g, ""));
+    await dismissGroup(groupChannelId(caseNumber, caseId));
   } catch {
     // group may not exist if a test failed early
   }
@@ -110,7 +111,7 @@ describe("assigning", () => {
   it("creates the real Nexconn group with customer, agent, dispatcher and technician", async () => {
     await waitForJobs();
     const [t] = await sql`select nexconn_group_id from chat_threads where case_id = ${caseId} and thread_type = 'group'`;
-    expect(t.nexconn_group_id).toBe(caseNumber.toLowerCase().replace(/[^a-z0-9]/g, ""));
+    expect(t.nexconn_group_id).toBe(groupChannelId(caseNumber, caseId));
     const members = await listGroupMembers(t.nexconn_group_id);
     for (const email of ["customer@relaycare.test", "maya@relaycare.test", "arjun@relaycare.test", "ravi@relaycare.test"]) {
       expect(members).toContain(await nexconnId(email));
@@ -126,7 +127,7 @@ describe("reassigning", () => {
     expect(history.map((h) => `${h.name}:${h.assignment_status}`)).toEqual(["Ravi:cancelled", "Tech Two:assigned"]);
     expect((await call("ravi", `/api/cases/${caseId}/attachments`, { intent: "upload", fileName: "a.jpg", mimeType: "image/jpeg", sizeBytes: 5 })).status).toBe(404);
     await waitForJobs();
-    const members = await listGroupMembers(caseNumber.toLowerCase().replace(/[^a-z0-9]/g, ""));
+    const members = await listGroupMembers(groupChannelId(caseNumber, caseId));
     expect(members).not.toContain(await nexconnId("ravi@relaycare.test"));
     expect(members).toContain(await nexconnId(TECH2_EMAIL));
   });
