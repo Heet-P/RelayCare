@@ -20,7 +20,7 @@
     "video:score": "tsx remotion/score.ts",
     "demo:voice": "tsx scripts/demo/voice.ts",
     "demo:record": "tsx scripts/demo/record.ts",
-    "video:walkthrough": "remotion render Walkthrough out/relaycare-walkthrough.mp4"
+    "video:walkthrough": "remotion render Walkthrough out/walkthrough-raw.mp4 && ffmpeg -y -loglevel error -i out/walkthrough-raw.mp4 -c:v copy -af loudnorm=I=-14:TP=-1.5:LRA=11 -c:a aac -b:a 192k out/relaycare-walkthrough.mp4"
   },
   "dependencies": {
     "@base-ui/react": "^1.9.0",
