@@ -96,6 +96,7 @@ function TakeView({ take }: { take: Take }) {
         </AbsoluteFill>
       )}
       <ChapterPill scene={take.scene} />
+      <NexconnTag key={beat.id} beat={beat} />
       <Caption beat={beat} t={t} />
     </Stage>
   );
@@ -134,10 +135,43 @@ function BrowserWindow({ take, beat, enter }: { take: Take; beat: Beat; enter: n
 }
 
 const SIDE: Partial<Record<Scene, { who: string; lines: string[] }>> = {
-  customer: { who: "The customer", lines: ["Phone, in Gujarati", "Reports from her real order", "Chats with support"] },
-  ravi: { who: "Ravi, technician", lines: ["Phone, in Hindi", "Full handoff before the visit", "Report needs a photo"] },
-  confirm: { who: "The customer", lines: ["Reads the report in Gujarati", "Confirms it's fixed", "Rates the service"] },
+  customer: { who: "The customer", lines: ["Phone, in Gujarati", "Reports from her real order", "Nexconn chat with support"] },
+  ravi: { who: "Ravi, technician", lines: ["Phone, in Hindi", "Nexconn group chat, translated", "Report needs a photo"] },
+  confirm: { who: "The customer", lines: ["Update arrives on Nexconn", "Confirms it's fixed", "Rates the service"] },
 };
+
+/** Which Nexconn capability is doing the work in a beat; shown as a tag while it's narrated. */
+const NEXCONN: Record<string, string> = {
+  "intro-1": "Built on Nexconn",
+  "intro-2": "Every conversation runs on Nexconn",
+  "cust-7": "Nexconn Chat SDK",
+  "cust-8": "Nexconn direct chat + server-issued access token",
+  "maya-3": "Nexconn live translation",
+  "maya-4": "Nexconn live translation",
+  "arjun-3": "Nexconn Server API: group created, members added",
+  "ravi-2": "Nexconn group chat, translated to Hindi",
+  "ravi-5": "Nexconn webhooks, signed and deduplicated",
+  "conf-1": "Nexconn group message",
+  "close-2": "RelayCare on Nexconn",
+};
+
+/** A glass tag, top right, naming the Nexconn feature on screen. Enters when its beat starts. */
+function NexconnTag({ beat }: { beat: Beat }) {
+  const frame = useCurrentFrame();
+  const { fps } = useVideoConfig();
+  const label = NEXCONN[beat.id];
+  if (!label) return null;
+  const p = spring({ frame: frame - Math.round(beat.t * fps) - 4, fps, config: { damping: 200 } });
+  return (
+    <div
+      className="glass-strong absolute top-8 right-10 flex items-center gap-3 rounded-full py-2.5 pr-5 pl-2.5 text-xl font-semibold"
+      style={{ opacity: p, transform: `translateY(${(1 - p) * -16}px) scale(${0.96 + p * 0.04})`, filter: `blur(${(1 - p) * 6}px)` }}
+    >
+      <span className="grid size-8 place-items-center rounded-full bg-foreground text-sm font-bold text-background">N</span>
+      {label}
+    </div>
+  );
+}
 
 function SideNote({ take }: { take: Take }) {
   const frame = useCurrentFrame();
