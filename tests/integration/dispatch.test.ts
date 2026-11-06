@@ -98,9 +98,13 @@ describe("assigning", () => {
     expect((await assign("arjun", { technicianId: await raviId() })).status).toBe(409);
   });
 
-  it("the job shows up in Ravi's job list (RLS lets him read the case's customer)", async () => {
+  it("the job shows up in Ravi's job list (RLS lets him read the case's customer and order)", async () => {
     const page = await fetch(`${BASE_URL}/technician/jobs`, { headers: { cookie: await as("ravi") } });
     expect(await page.text()).toContain(caseNumber);
+    // ...and the job itself opens (RLS lets him read the case's order too)
+    const job = await fetch(`${BASE_URL}/technician/jobs/${caseId}`, { headers: { cookie: await as("ravi") } });
+    expect(job.status).toBe(200);
+    expect(await job.text()).toContain(caseNumber);
   });
 
   it("creates the real Nexconn group with customer, agent, dispatcher and technician", async () => {
