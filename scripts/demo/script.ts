@@ -15,7 +15,7 @@ export const BEATS: { id: string; scene: Scene; say: string }[] = [
   // The customer reports the fault (phone, Gujarati UI)
   { id: "cust-1", scene: "customer", say: "Let's start with the customer. She bought an AquaWash washing machine from Demo Electronics, and now it's leaking. Her purchases come straight from the store, so we already know the order, the serial number and the warranty." },
   { id: "cust-2", scene: "customer", say: "Notice the app is in Gujarati. That's her language, so that's what she sees. She taps Get help on the washing machine." },
-  { id: "cust-3", scene: "customer", say: "She picks what's wrong. A water leak." },
+  { id: "cust-3", scene: "customer", say: "She picks what kind of problem it is. The machine isn't working properly." },
   { id: "cust-4", scene: "customer", say: "And she describes it in her own words, in Gujarati." },
   { id: "cust-5", scene: "customer", say: "She also adds what she has already tried, so nobody asks her again later. The serial number is already filled in from the order." },
   { id: "cust-6", scene: "customer", say: "She checks everything once, and sends it." },

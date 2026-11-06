@@ -25,10 +25,19 @@ async function main() {
   if (!org) throw new Error("Demo org not found; run pnpm db:seed first");
 
   // Dismiss the Nexconn group chats of the cases being removed (rehearsals start clean).
-  const { dismissGroup } = await import("../lib/nexconn/server");
+  const { dismissGroup, clearDirectHistory } = await import("../lib/nexconn/server");
   const groups = await sql`select t.nexconn_group_id from chat_threads t join service_cases c on c.id = t.case_id
     where c.organization_id = ${org.id} and t.nexconn_group_id is not null`;
   for (const g of groups) await dismissGroup(g.nexconn_group_id).catch(() => undefined);
+
+  // Direct chats belong to a pair of people, not a case, so old messages would greet the next
+  // rehearsal. Clear both sides for every pair of demo people (a handful of users).
+  const people = await sql`select distinct u.nexconn_user_id from users u
+    left join organization_memberships m on m.user_id = u.id and m.organization_id = ${org.id}
+    left join customers c on c.user_id = u.id and c.organization_id = ${org.id}
+    where u.nexconn_user_id is not null and (m.user_id is not null or c.id is not null)`;
+  const ids = people.map((p) => p.nexconn_user_id as string);
+  for (const a of ids) for (const b of ids) if (a !== b) await clearDirectHistory(a, b).catch(() => undefined);
 
   const removed = await sql.begin(async (tx) => {
     const cases = tx`select id from service_cases where organization_id = ${org.id}`;
@@ -59,7 +68,7 @@ async function main() {
       files += paths.length;
     }
   }
-  console.log(`Dismissed ${groups.length} group chat(s). Removed ${removed} case(s) and ${files} evidence file(s). Next case number: ${String(NEXT_CASE).padStart(4, "0")}.`);
+  console.log(`Cleared direct chats between ${ids.length} people. Dismissed ${groups.length} group chat(s). Removed ${removed} case(s) and ${files} evidence file(s). Next case number: ${String(NEXT_CASE).padStart(4, "0")}.`);
 }
 
 main()

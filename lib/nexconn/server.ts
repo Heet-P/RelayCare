@@ -121,3 +121,11 @@ export async function sendDirectText(fromUserId: string, toUserId: string, text:
 export async function dismissGroup(channelId: string) {
   await call("/v4/group-channel/dismiss", { channelId });
 }
+
+/**
+ * Clear one side's history of a direct channel (demo reset). channelType 1 = direct;
+ * omitting `timestamp` clears everything (it rejects every timestamp format we tried).
+ */
+export async function clearDirectHistory(userId: string, otherUserId: string) {
+  await call("/v4/channel/message/history/delete", { channelType: 1, channelId: otherUserId, fromUserId: userId });
+}
